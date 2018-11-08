@@ -18,6 +18,10 @@ pipeline {
         durabilityHint('PERFORMANCE_OPTIMIZED')
     }
 
+    environment {
+        DOCKER_REGISTRY_CREDENTIALS = credentials("DOCKER_NEMEROSA")
+    }
+
     stages {
 
         stage('Setup') {
@@ -56,7 +60,7 @@ pipeline {
             agent {
                 dockerfile {
                     label "docker"
-                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock --network host"
                 }
             }
             steps {
@@ -64,11 +68,20 @@ pipeline {
 git checkout -B ${BRANCH_NAME}
 git clean -xfd
 '''
+                sh ''' ./gradlew clean versionDisplay versionFile'''
+                script {
+                    // Reads version information
+                    def props = readProperties(file: 'build/version.properties')
+                    version = props.VERSION_DISPLAY
+                    gitCommit = props.VERSION_COMMIT
+                    // If not a PR, create a build
+                    if (!pr) {
+                        ontrackBuild(project: projectName, branch: branchName, build: version, gitCommit: gitCommit)
+                    }
+                }
+                echo "Version = ${version}"
                 sh '''\
 ./gradlew \\
-    clean \\
-    versionDisplay \\
-    versionFile \\
     test \\
     build \\
     integrationTest \\
@@ -83,13 +96,6 @@ git clean -xfd
     --parallel \\
     --console plain
 '''
-                script {
-                    // Reads version information
-                    def props = readProperties(file: 'build/version.properties')
-                    version = props.VERSION_DISPLAY
-                    gitCommit = props.VERSION_COMMIT
-                }
-                echo "Version = ${version}"
                 sh """\
 echo "(*) Building the test extension..."
 cd ontrack-extension-test
@@ -103,21 +109,39 @@ cd ontrack-extension-test
     --profile \\
     --console plain
 """
+                echo "Pushing image to registry..."
+                sh """\
+echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+
+docker tag nemerosa/ontrack:${version} docker.nemerosa.net/nemerosa/ontrack:${version}
+docker tag nemerosa/ontrack-acceptance:${version} docker.nemerosa.net/nemerosa/ontrack-acceptance:${version}
+docker tag nemerosa/ontrack-extension-test:${version} docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
+
+docker push docker.nemerosa.net/nemerosa/ontrack:${version}
+docker push docker.nemerosa.net/nemerosa/ontrack-acceptance:${version}
+docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
+"""
             }
             post {
                 always {
-                    junit '**/build/test-results/**/*.xml'
-                }
-                success {
                     script {
+                        def results = junit '**/build/test-results/**/*.xml'
+                        // If not a PR, create a build validation stamp
                         if (!pr) {
-                            ontrackBuild(project: projectName, branch: branchName, build: version, gitCommit: gitCommit)
+                            ontrackValidate(
+                                    project: projectName,
+                                    branch: branchName,
+                                    build: version,
+                                    validationStamp: 'BUILD',
+                                    testResults: results,
+                            )
                         }
                     }
+                }
+                success {
                     stash name: "delivery", includes: "build/distributions/ontrack-*-delivery.zip"
                     stash name: "rpm", includes: "build/distributions/*.rpm"
                     stash name: "debian", includes: "build/distributions/*.deb"
-                    archiveArtifacts "build/distributions/ontrack-*-delivery.zip"
                 }
             }
         }
@@ -129,12 +153,18 @@ cd ontrack-extension-test
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
                 }
             }
+            environment {
+                ONTRACK_VERSION = "${version}"
+            }
             steps {
                 // Runs the acceptance tests
                 timeout(time: 25, unit: 'MINUTES') {
                     sh """\
 #!/bin/bash
 set -e
+
+echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+
 echo "Launching tests..."
 cd ontrack-acceptance/src/main/compose
 docker-compose --project-name local up --exit-code-from ontrack_acceptance
@@ -152,16 +182,15 @@ cp -r ontrack-acceptance/src/main/compose/build build/acceptance
 cd ontrack-acceptance/src/main/compose
 docker-compose --project-name local down --volumes
 """
-                    archiveArtifacts 'build/acceptance/**'
-                    junit 'build/acceptance/*.xml'
                     script {
+                        def results = junit('build/acceptance/*.xml')
                         if (!pr) {
                             ontrackValidate(
                                     project: projectName,
                                     branch: branchName,
                                     build: version,
                                     validationStamp: 'ACCEPTANCE',
-                                    buildResult: currentBuild.result,
+                                    testResults: results,
                             )
                         }
                     }
@@ -171,46 +200,6 @@ docker-compose --project-name local down --volumes
 
         // We stop here for pull requests and feature branches
 
-        // Docker push
-        stage('Docker publication') {
-            agent {
-                dockerfile {
-                    label "docker"
-                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
-                }
-            }
-            when {
-                branch 'release/*'
-            }
-            environment {
-                DOCKER_HUB = credentials("DOCKER_HUB")
-                ONTRACK_VERSION = "${version}"
-            }
-            steps {
-                script {
-                    sh '''\
-#!/bin/bash
-set -e
-docker login --username ${DOCKER_HUB_USR} --password ${DOCKER_HUB_PSW}
-docker push nemerosa/ontrack:${ONTRACK_VERSION}
-docker push nemerosa/ontrack-acceptance:${ONTRACK_VERSION}
-docker push nemerosa/ontrack-extension-test:${ONTRACK_VERSION}
-'''
-                }
-            }
-            post {
-                always {
-                    ontrackValidate(
-                            project: projectName,
-                            branch: branchName,
-                            build: version,
-                            validationStamp: 'DOCKER',
-                            buildResult: currentBuild.result,
-                    )
-                }
-            }
-        }
-
         // OS tests + DO tests in parallel
 
         stage('Platform tests') {
@@ -218,6 +207,7 @@ docker push nemerosa/ontrack-extension-test:${ONTRACK_VERSION}
                 ONTRACK_VERSION = "${version}"
             }
             when {
+                beforeAgent true
                 branch 'release/*'
             }
             parallel {
@@ -235,6 +225,8 @@ docker push nemerosa/ontrack-extension-test:${ONTRACK_VERSION}
                             sh """\
 #!/bin/bash
 set -e
+
+echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
 
 echo "Preparing environment..."
 DOCKER_DIR=ontrack-acceptance/src/main/compose/os/centos/7/docker
@@ -266,15 +258,16 @@ cp -r ontrack-acceptance/src/main/compose/build build/centos
 cd ontrack-acceptance/src/main/compose
 docker-compose --project-name centos --file docker-compose-centos-7.yml down --volumes
 """
-                            archiveArtifacts 'build/centos/**'
-                            junit 'build/centos/*.xml'
-                            ontrackValidate(
-                                    project: projectName,
-                                    branch: branchName,
-                                    build: version,
-                                    validationStamp: 'ACCEPTANCE.CENTOS.7',
-                                    buildResult: currentBuild.result,
-                            )
+                            script {
+                                def results = junit 'build/centos/*.xml'
+                                ontrackValidate(
+                                        project: projectName,
+                                        branch: branchName,
+                                        build: version,
+                                        validationStamp: 'ACCEPTANCE.CENTOS.7',
+                                        testResults: results,
+                                )
+                            }
                         }
                     }
                 }
@@ -292,6 +285,8 @@ docker-compose --project-name centos --file docker-compose-centos-7.yml down --v
                             sh """\
 #!/bin/bash
 set -e
+
+echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
 
 echo "Preparing environment..."
 DOCKER_DIR=ontrack-acceptance/src/main/compose/os/debian/docker
@@ -323,15 +318,16 @@ cp -r ontrack-acceptance/src/main/compose/build/* build/debian/
 cd ontrack-acceptance/src/main/compose
 docker-compose --project-name debian --file docker-compose-debian.yml down --volumes
 """
-                            archiveArtifacts 'build/debian/**'
-                            junit 'build/debian/*.xml'
-                            ontrackValidate(
-                                    project: projectName,
-                                    branch: branchName,
-                                    build: version,
-                                    validationStamp: 'ACCEPTANCE.DEBIAN',
-                                    buildResult: currentBuild.result,
-                            )
+                            script {
+                                def results = junit 'build/debian/*.xml'
+                                ontrackValidate(
+                                        project: projectName,
+                                        branch: branchName,
+                                        build: version,
+                                        validationStamp: 'ACCEPTANCE.DEBIAN',
+                                        testResults: results,
+                                )
+                            }
                         }
                     }
                 }
@@ -353,6 +349,9 @@ rm -rf ontrack-acceptance/src/main/compose/build
                             sh """\
 #!/bin/bash
 set -e
+
+echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+
 echo "Launching tests..."
 cd ontrack-acceptance/src/main/compose
 docker-compose --project-name ext --file docker-compose-ext.yml up --exit-code-from ontrack_acceptance
@@ -369,15 +368,16 @@ cp -r ontrack-acceptance/src/main/compose/build build/extension
 cd ontrack-acceptance/src/main/compose
 docker-compose --project-name ext --file docker-compose-ext.yml down --volumes
 """
-                            archiveArtifacts 'build/extension/**'
-                            junit 'build/extension/*.xml'
-                            ontrackValidate(
-                                    project: projectName,
-                                    branch: branchName,
-                                    build: version,
-                                    validationStamp: 'EXTENSIONS',
-                                    buildResult: currentBuild.result,
-                            )
+                            script {
+                                def results = junit 'build/extension/*.xml'
+                                ontrackValidate(
+                                        project: projectName,
+                                        branch: branchName,
+                                        build: version,
+                                        validationStamp: 'EXTENSIONS',
+                                        testResults: results,
+                                )
+                            }
                         }
                     }
                 }
@@ -390,7 +390,6 @@ docker-compose --project-name ext --file docker-compose-ext.yml down --volumes
                         }
                     }
                     environment {
-                        ONTRACK_VERSION = "${version}"
                         DROPLET_NAME = "ontrack-acceptance-${version}"
                         DO_TOKEN = credentials("DO_NEMEROSA_JENKINS2_BUILD")
                     }
@@ -427,6 +426,7 @@ export ONTRACK_ACCEPTANCE_TARGET_URL="http://${DROPLET_IP}:8080"
 
 echo "(*) Launching the remote Ontrack ecosystem..."
 eval $(docker-machine env --shell bash ${DROPLET_NAME})
+echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
 docker-compose \\
     --file ontrack-acceptance/src/main/compose/docker-compose-do-server.yml \\
     --project-name ontrack \\
@@ -434,6 +434,7 @@ docker-compose \\
 
 echo "(*) Running the tests..."
 eval $(docker-machine env --shell bash --unset)
+echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
 docker-compose \\
     --file ontrack-acceptance/src/main/compose/docker-compose-do-client.yml \\
     --project-name do \\
@@ -461,15 +462,16 @@ docker-compose \\
 echo "(*) Removing any previous machine: ${DROPLET_NAME}..."
 docker-machine rm --force ${DROPLET_NAME}
 '''
-                            archiveArtifacts 'build/do/**'
-                            junit 'build/do/*.xml'
-                            ontrackValidate(
-                                    project: projectName,
-                                    branch: branchName,
-                                    build: version,
-                                    validationStamp: 'ACCEPTANCE.DO',
-                                    buildResult: currentBuild.result,
-                            )
+                            script {
+                                def results = junit 'build/do/*.xml'
+                                ontrackValidate(
+                                        project: projectName,
+                                        branch: branchName,
+                                        build: version,
+                                        validationStamp: 'ACCEPTANCE.DO',
+                                        testResults: results,
+                                )
+                            }
                         }
                     }
                 }
@@ -480,13 +482,14 @@ docker-machine rm --force ${DROPLET_NAME}
 
         stage('Publication') {
             when {
+                beforeAgent true
                 branch 'release/*'
             }
             environment {
                 ONTRACK_VERSION = "${version}"
             }
             parallel {
-                stage('Docker push') {
+                stage('Docker Hub') {
                     agent {
                         dockerfile {
                             label "docker"
@@ -502,16 +505,32 @@ docker-machine rm --force ${DROPLET_NAME}
 #!/bin/bash
 set -e
 
-docker login --username ${DOCKER_HUB_USR} --password ${DOCKER_HUB_PSW}
+echo "Making sure the images are available on this node..."
 
-docker pull nemerosa/ontrack:${ONTRACK_VERSION}
+echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+docker image pull docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION}
 
-docker tag nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:2
-docker tag nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:latest
+echo "Publishing in Docker Hub..."
 
-docker push nemerosa/ontrack:2
-docker push nemerosa/ontrack:latest
+echo ${DOCKER_HUB_PSW} | docker login --username ${DOCKER_HUB_USR} --password-stdin
+
+docker image tag docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:${ONTRACK_VERSION}
+docker image tag docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:3
+
+docker image push nemerosa/ontrack:${ONTRACK_VERSION}
+docker image push nemerosa/ontrack:3
 '''
+                    }
+                    post {
+                        always {
+                            ontrackValidate(
+                                    project: projectName,
+                                    branch: branchName,
+                                    build: version,
+                                    validationStamp: 'DOCKER.HUB',
+                                    buildResult: currentBuild.result,
+                            )
+                        }
                     }
                 }
                 stage('Maven publication') {
@@ -560,6 +579,17 @@ set -e
     publicationMaven
 '''
                     }
+                    post {
+                        always {
+                            ontrackValidate(
+                                    project: projectName,
+                                    branch: branchName,
+                                    build: version,
+                                    validationStamp: 'MAVEN.CENTRAL',
+                                    buildResult: currentBuild.result,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -580,6 +610,7 @@ set -e
                 GITHUB = credentials("GITHUB_NEMEROSA_JENKINS2")
             }
             when {
+                beforeAgent true
                 branch 'release/*'
             }
             steps {
@@ -640,6 +671,7 @@ set -e
                 GITHUB = credentials("GITHUB_NEMEROSA_JENKINS2")
             }
             when {
+                beforeAgent true
                 branch 'release/*'
             }
             steps {
@@ -682,6 +714,118 @@ GITHUB_URI=`git config remote.origin.url`
                             build: version,
                             validationStamp: 'SITE',
                             buildResult: currentBuild.result,
+                    )
+                }
+            }
+        }
+
+        // Production
+
+        stage('Production') {
+            agent {
+                dockerfile {
+                    label "docker"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                branch 'release/3*'
+            }
+            environment {
+                ONTRACK_VERSION = "${version}"
+                ONTRACK_POSTGRES = credentials('ONTRACK_POSTGRES')
+            }
+            steps {
+                timeout(time: 15, unit: 'MINUTES') {
+                    script {
+                        sshagent(credentials: ['ONTRACK_SSH_KEY']) {
+                            sh '''\
+#!/bin/bash
+
+set -e
+
+SSH_OPTIONS=StrictHostKeyChecking=no
+
+SSH_HOST=${ONTRACK_IP}
+
+scp -o ${SSH_OPTIONS} compose/docker-compose-prod.yml root@${SSH_HOST}:/root
+ssh -o ${SSH_OPTIONS} root@${SSH_HOST} "ONTRACK_VERSION=${ONTRACK_VERSION}" "ONTRACK_POSTGRES_USER=${ONTRACK_POSTGRES_USR}" "ONTRACK_POSTGRES_PASSWORD=${ONTRACK_POSTGRES_PSW}" docker-compose --project-name prod --file /root/docker-compose-prod.yml up -d
+
+'''
+                        }
+                    }
+                }
+            }
+        }
+
+        // Production tests
+
+        stage('Production tests') {
+            agent {
+                dockerfile {
+                    label "docker"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                branch 'release/3*'
+            }
+            environment {
+                ONTRACK_VERSION = "${version}"
+                ONTRACK_ACCEPTANCE_ADMIN = credentials("ONTRACK_ACCEPTANCE_ADMIN")
+            }
+            steps {
+                timeout(time: 30, unit: 'MINUTES') {
+                    sh '''\
+#!/bin/bash
+set -e
+
+echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+
+echo "(*) Launching the tests..."
+docker-compose \\
+    --file ontrack-acceptance/src/main/compose/docker-compose-prod-client.yml \\
+    --project-name production \\
+    up --exit-code-from ontrack_acceptance
+'''
+                }
+            }
+            post {
+                always {
+                    sh '''\
+#!/bin/bash
+
+echo "(*) Copying the test results..."
+mkdir -p build
+cp -r ontrack-acceptance/src/main/compose/build build/production
+
+echo "(*) Removing the test environment..."
+docker-compose \\
+    --file ontrack-acceptance/src/main/compose/docker-compose-prod-client.yml \\
+    --project-name production \\
+    down
+
+'''
+                    archiveArtifacts 'build/production/**'
+                    script {
+                        def results = junit 'build/production/*.xml'
+                        ontrackValidate(
+                                project: projectName,
+                                branch: branchName,
+                                build: version,
+                                validationStamp: 'ONTRACK.SMOKE',
+                                testResults: results,
+                        )
+                    }
+                }
+                success {
+                    ontrackPromote(
+                            project: projectName,
+                            branch: branchName,
+                            build: version,
+                            promotionLevel: 'ONTRACK',
                     )
                 }
             }
