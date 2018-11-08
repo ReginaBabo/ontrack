@@ -94,101 +94,49 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-
-#          ports:
-#            - containerPort: 9082
-#              name: tcp
-#              protocol: TCP
-#            - containerPort: 8082
-#              name: console
-#              protocol: TCP
-#---
-#apiVersion: "v1"
-#kind: "Service"
-#metadata:
-#  name: "ontrack-h2-deployment-service"
-#  labels:
-#    app: "h2"
-#spec:
-#  ports:
-#  - protocol: "TCP"
-#    port: 9082
-#    targetPort: 9082
-#  selector:
-#    app: "h2"
-#  clusterIP: None
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: ontrack-v2-pvc
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  resources:
-#    requests:
-#      storage: 2Gi
-#---
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: ontrack-v2-deployment
-#  labels:
-#    app: "ontrack"
-#    major: "2"
-#spec:
-#  selector:
-#    matchLabels:
-#      app: "ontrack"
-#      major: "2"
-#  strategy:
-#      type: Recreate
-#  template:
-#    metadata:
-#      labels:
-#        app: "ontrack"
-#        major: "2"
-#    spec:
-#      volumes:
-#        - name: ontrack-v2-storage
-#          persistentVolumeClaim:
-#            claimName: ontrack-v2-pvc
-#      containers:
-#        - name: ontrack
-#          image: "nemerosa/ontrack:2.34.8"
-#          env:
-#            - name: ONTRACK_DB_URL
-#              value: "jdbc:h2:tcp://ontrack-h2-deployment-service:9082/ontrack;MODE=MYSQL"
-#          volumeMounts:
-#            - mountPath: /var/ontrack/data
-#              name: ontrack-v2-storage
-#          ports:
-#            - containerPort: 8080
-#              name: http
-#              protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              port: http
-#              path: /info
-#          readinessProbe:
-#            httpGet:
-#              port: http
-#              path: /info
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: ontrack-v2-service
-#  labels:
-#    app: "ontrack"
-#    major: "2"
-#spec:
-#  type: LoadBalancer
-#  ports:
-#    - port: 8080
-#      targetPort: http
-#      protocol: TCP
-#      name: http
-#  selector:
-#    app: "ontrack"
-#    major: "2"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ontrack-web-deployment
+  labels:
+    app: "ontrack"
+    component: "web"
+spec:
+  selector:
+    matchLabels:
+      app: "ontrack"
+      component: "web"
+  strategy:
+      type: Recreate
+  template:
+    metadata:
+      labels:
+        app: "ontrack"
+        component: "web"
+    spec:
+      volumes:
+        - name: ontrack-web-storage
+          persistentVolumeClaim:
+            claimName: ontrack-data-pvc
+      containers:
+        - name: ontrack
+          image: "nemerosa/ontrack:3.36.2"
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://ontrack-pg-service:5432/ontrack"
+          volumeMounts:
+            - mountPath: /var/ontrack/data
+              name: ontrack-web-storage
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /info
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /info
