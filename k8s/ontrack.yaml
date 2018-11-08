@@ -22,34 +22,44 @@ spec:
     requests:
       storage: 5Gi
   storageClassName: do-block-storage
-#---
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: ontrack-deployment
-#  labels:
-#    app: "h2"
-#spec:
-#  selector:
-#    matchLabels:
-#      app: "h2"
-#  strategy:
-#      type: Recreate
-#  template:
-#    metadata:
-#      labels:
-#        app: "h2"
-#    spec:
-#      volumes:
-#        - name: ontrack-h2-storage
-#          persistentVolumeClaim:
-#            claimName: ontrack-h2-pvc
-#      containers:
-#        - name: h2
-#          image: "nemerosa/h2:0.1.0"
-#          volumeMounts:
-#            - mountPath: /usr/lib/h2
-#              name: ontrack-h2-storage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ontrack-deployment
+  labels:
+    app: "ontrack"
+spec:
+  selector:
+    matchLabels:
+      app: "ontrack"
+  strategy:
+      type: Recreate
+  template:
+    metadata:
+      labels:
+        app: "ontrack"
+    spec:
+      volumes:
+        - name: ontrack-pg-storage
+          persistentVolumeClaim:
+            claimName: ontrack-db-pvc
+      containers:
+        - name: postgres
+          image: "postgres:10.5"
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: ontrack-pg-storage
+              subPath: db
+          env:
+            - name: ONTRACK_DB_URL
+              value: "jdbc:h2:tcp://ontrack-h2-deployment-service:9082/ontrack;MODE=MYSQL"
+            - name: POSTGRES_DB
+              value: ontrack
+            - name: POSTGRES_USER
+              value: ontrack
+            - name: POSTGRES_PASSWORD
+              value: ontrack
 #          ports:
 #            - containerPort: 9082
 #              name: tcp
