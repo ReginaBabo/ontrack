@@ -9,41 +9,59 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  storageClassName: do-block-storage
+  # storageClassName: do-block-storage
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ontrack-db-pvc
+  name: ontrack-pg-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi
-  storageClassName: do-block-storage
+  # storageClassName: do-block-storage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ontrack-pg-service
+  labels:
+    app: "ontrack"
+    component: "postgres"
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: "ontrack"
+    component: "postgres"
+  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ontrack-deployment
+  name: ontrack-pg-deployment
   labels:
     app: "ontrack"
+    component: "postgres"
 spec:
   selector:
     matchLabels:
       app: "ontrack"
+      component: "postgres"
   strategy:
       type: Recreate
   template:
     metadata:
       labels:
         app: "ontrack"
+        component: "postgres"
     spec:
       volumes:
         - name: ontrack-pg-storage
           persistentVolumeClaim:
-            claimName: ontrack-db-pvc
+            claimName: ontrack-pg-pvc
       containers:
         - name: postgres
           image: "postgres:10.5"
@@ -52,8 +70,6 @@ spec:
               name: ontrack-pg-storage
               subPath: db
           env:
-            - name: ONTRACK_DB_URL
-              value: "jdbc:h2:tcp://ontrack-h2-deployment-service:9082/ontrack;MODE=MYSQL"
             - name: POSTGRES_DB
               value: ontrack
             - name: POSTGRES_USER
