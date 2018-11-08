@@ -76,6 +76,25 @@ spec:
               value: ontrack
             - name: POSTGRES_PASSWORD
               value: ontrack
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ontrack-web-service
+  labels:
+    app: "ontrack"
+    component: "web"
+spec:
+  selector:
+    app: "ontrack"
+    component: "web"
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+
 #          ports:
 #            - containerPort: 9082
 #              name: tcp
