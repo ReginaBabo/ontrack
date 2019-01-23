@@ -55,3 +55,21 @@ Use the token displayed before to authenticate into the dashboard.
 > Reference: https://github.com/kubernetes/dashboard/
 
 ### Ontrack deployment
+
+> Without any further customisation, the deployments mentioned below will use the `default` namespace.
+
+To deploy Ontrack:
+
+```bash
+kubectl apply -f ontrack.yaml
+```
+
+> You can monitor the progress of the deployment in the dashboard.
+
+### Cleanup
+
+To undeploy Ontrack:
+
+```bash
+kubectl delete -f ontrack.yaml 
+```

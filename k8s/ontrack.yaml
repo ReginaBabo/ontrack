@@ -9,7 +9,7 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  # storageClassName: do-block-storage
+  storageClassName: do-block-storage
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -21,7 +21,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  # storageClassName: do-block-storage
+  storageClassName: do-block-storage
 ---
 apiVersion: v1
 kind: Service
@@ -116,7 +116,7 @@ spec:
         component: "web"
     spec:
       volumes:
-        - name: ontrack-web-storage
+        - name: ontrack-data-storage
           persistentVolumeClaim:
             claimName: ontrack-data-pvc
       containers:
@@ -127,16 +127,16 @@ spec:
               value: "jdbc:postgresql://ontrack-pg-service:5432/ontrack"
           volumeMounts:
             - mountPath: /var/ontrack/data
-              name: ontrack-web-storage
+              name: ontrack-data-storage
           ports:
             - containerPort: 8080
               name: http
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              port: http
-              path: /info
-          readinessProbe:
-            httpGet:
-              port: http
-              path: /info
+#          livenessProbe:
+#            httpGet:
+#              port: http
+#              path: /info
+#          readinessProbe:
+#            httpGet:
+#              port: http
+#              path: /info
