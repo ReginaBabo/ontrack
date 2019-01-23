@@ -130,15 +130,18 @@ spec:
               name: ontrack-data-storage
           ports:
             - containerPort: 8080
-              name: http
+              name: ontrack-port
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /manage/health
+              port: ontrack-port
+            initialDelaySeconds: 120
+            timeoutSeconds: 5
           livenessProbe:
             httpGet:
-              port: 8080
-              path: /manage/health
-            initialDelaySeconds: 3
-            periodSeconds: 3
-#          readinessProbe:
-#            httpGet:
-#              port: http
-#              path: /info
+              path: /info
+              port: ontrack-port
+            initialDelaySeconds: 130
+            timeoutSeconds: 10
+            failureThreshold: 10
