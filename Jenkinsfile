@@ -3,6 +3,8 @@ String gitCommit = ''
 String branchName = ''
 String projectName = 'ontrack'
 
+@Library("ontrack-jenkins-library@1.0.0") _
+
 boolean pr = false
 
 pipeline {
@@ -28,7 +30,14 @@ pipeline {
             agent {
                 dockerfile {
                     label "docker"
+                    dir "jenkins"
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                not {
+                    branch 'master'
                 }
             }
             steps {
@@ -44,7 +53,7 @@ pipeline {
                         echo "Ontrack setup for ${branchName}"
                         ontrackBranchSetup(project: projectName, branch: branchName, script: """
                             branch.config {
-                                gitBranch '${branchName}', [
+                                gitBranch '${BRANCH_NAME}', [
                                     buildCommitLink: [
                                         id: 'git-commit-property'
                                     ]
@@ -60,7 +69,14 @@ pipeline {
             agent {
                 dockerfile {
                     label "docker"
+                    dir "jenkins"
                     args "--volume /var/run/docker.sock:/var/run/docker.sock --network host"
+                }
+            }
+            when {
+                beforeAgent true
+                not {
+                    branch 'master'
                 }
             }
             steps {
@@ -150,7 +166,14 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
             agent {
                 dockerfile {
                     label "docker"
+                    dir "jenkins"
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                not {
+                    branch 'master'
                 }
             }
             environment {
@@ -216,6 +239,7 @@ docker-compose --project-name local down --volumes
                     agent {
                         dockerfile {
                             label "docker"
+                            dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
@@ -276,6 +300,7 @@ docker-compose --project-name centos --file docker-compose-centos-7.yml down --v
                     agent {
                         dockerfile {
                             label "docker"
+                            dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
@@ -336,6 +361,7 @@ docker-compose --project-name debian --file docker-compose-debian.yml down --vol
                     agent {
                         dockerfile {
                             label "docker"
+                            dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
@@ -386,6 +412,7 @@ docker-compose --project-name ext --file docker-compose-ext.yml down --volumes
                     agent {
                         dockerfile {
                             label "docker"
+                            dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
@@ -493,6 +520,7 @@ docker-machine rm --force ${DROPLET_NAME}
                     agent {
                         dockerfile {
                             label "docker"
+                            dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
@@ -515,10 +543,8 @@ echo "Publishing in Docker Hub..."
 echo ${DOCKER_HUB_PSW} | docker login --username ${DOCKER_HUB_USR} --password-stdin
 
 docker image tag docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:${ONTRACK_VERSION}
-docker image tag docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:3
 
 docker image push nemerosa/ontrack:${ONTRACK_VERSION}
-docker image push nemerosa/ontrack:3
 '''
                     }
                     post {
@@ -537,6 +563,7 @@ docker image push nemerosa/ontrack:3
                     agent {
                         dockerfile {
                             label "docker"
+                            dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
@@ -600,6 +627,7 @@ set -e
             agent {
                 dockerfile {
                     label "docker"
+                    dir "jenkins"
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
                 }
             }
@@ -646,6 +674,14 @@ set -e
 
             }
             post {
+                always {
+                    ontrackValidate(
+                            project: projectName,
+                            branch: branchName,
+                            build: version,
+                            validationStamp: 'GITHUB.RELEASE',
+                    )
+                }
                 success {
                     ontrackPromote(
                             project: projectName,
@@ -657,18 +693,19 @@ set -e
             }
         }
 
-        // Site
+        // Documentation
 
-        stage('Site') {
+        stage('Documentation') {
             agent {
                 dockerfile {
                     label "docker"
+                    dir "jenkins"
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
                 }
             }
             environment {
                 ONTRACK_VERSION = "${version}"
-                GITHUB = credentials("GITHUB_NEMEROSA_JENKINS2")
+                AMS3_DELIVERY = credentials("AMS3_DELIVERY")
             }
             when {
                 beforeAgent true
@@ -679,41 +716,260 @@ set -e
 
                 unstash name: "delivery"
                 sh '''\
-#!/bin/bash
-set -e
-unzip -n build/distributions/ontrack-${ONTRACK_VERSION}-delivery.zip -d ${WORKSPACE}
-unzip -n ${WORKSPACE}/ontrack-publication.zip -d publication
-'''
+                    unzip -n build/distributions/ontrack-${ONTRACK_VERSION}-delivery.zip -d ${WORKSPACE}
+                    unzip -n ${WORKSPACE}/ontrack-publication.zip -d publication
+                '''
 
                 sh '''\
-#!/bin/bash
-set -e
+                    ./gradlew \\
+                        --build-file publication.gradle \\
+                        --info \\
+                        --profile \\
+                        --console plain \\
+                        --stacktrace \\
+                        releaseDocPrepare
+                '''
 
-GITHUB_URI=`git config remote.origin.url`
-
-./gradlew \\
-    --build-file site.gradle \\
-    --info \\
-    --profile \\
-    --console plain \\
-    --stacktrace \\
-    -PontrackVersion=${ONTRACK_VERSION} \\
-    -PontrackGitHubUri=${GITHUB_URI} \\
-    -PontrackGitHubPages=gh-pages \\
-    -PontrackGitHubUser=${GITHUB_USR} \\
-    -PontrackGitHubPassword=${GITHUB_PSW} \\
-    site
-'''
+                sh '''
+                    s3cmd \\
+                        --access_key=${AMS3_DELIVERY_USR} \\
+                        --secret_key=${AMS3_DELIVERY_PSW} \\
+                        --host=ams3.digitaloceanspaces.com \\
+                        --host-bucket='%(bucket)s.ams3.digitaloceanspaces.com' \\
+                        put \\
+                        build/site/release/* \\
+                        s3://ams3-delivery-space/ontrack/release/${ONTRACK_VERSION}/docs/ \\
+                        --acl-public \\
+                        --add-header=Cache-Control:max-age=86400 \\
+                        --recursive
+                '''
 
             }
             post {
-                success {
+                always {
                     ontrackValidate(
                             project: projectName,
                             branch: branchName,
                             build: version,
+                            validationStamp: 'DOCUMENTATION',
+                    )
+                }
+            }
+        }
+
+        // Merge to master (for latest release only)
+
+        stage('Merge to master') {
+            agent any
+            when {
+                beforeAgent true
+                allOf {
+                    branch "release/3.*"
+                    expression {
+                        ontrackGetLastBranch(project: projectName, pattern: 'release-3\\..*') == branchName
+                    }
+                }
+            }
+            steps {
+                // Merge to master
+                sshagent (credentials: ['SSH_JENKINS_GITHUB']) {
+                    sh '''
+                        git config --local user.email "jenkins@nemerosa.net"
+                        git config --local user.name "Jenkins"
+                        git checkout master
+                        git merge $BRANCH_NAME
+                        git push origin master
+                    '''
+                }
+            }
+            post {
+                always {
+                    ontrackValidate(
+                            project: projectName,
+                            branch: branchName,
+                            build: version,
+                            validationStamp: 'MERGE',
+                    )
+                }
+            }
+        }
+
+        // Master setup
+
+        stage('Master setup') {
+            agent {
+                dockerfile {
+                    label "docker"
+                    dir "jenkins"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                branch 'master'
+            }
+            steps {
+                script {
+                    // Gets the latest tag
+                    env.ONTRACK_VERSION = sh(
+                            returnStdout: true,
+                            script: 'git describe --tags --abbrev=0'
+                    ).trim()
+                    // Version components
+                    env.ONTRACK_VERSION_MAJOR_MINOR = extractFromVersion(env.ONTRACK_VERSION as String, /(^\d+\.\d+)\.\d.*/)
+                    env.ONTRACK_VERSION_MAJOR = extractFromVersion(env.ONTRACK_VERSION as String, /(^\d+)\.\d+\.\d.*/)
+                    // Gets the corresponding branch
+                    def result = ontrackGraphQL(
+                            script: '''
+                                query BranchLookup($project: String!, $build: String!) {
+                                  builds(project: $project, buildProjectFilter: {buildExactMatch: true, buildName: $build}) {
+                                    branch {
+                                      name
+                                    }
+                                  }
+                                }
+                            ''',
+                            bindings: [
+                                    'project': projectName,
+                                    'build'  : env.ONTRACK_VERSION as String
+                            ],
+                    )
+                    env.ONTRACK_BRANCH_NAME = result.data.builds.first().branch.name as String
+                }
+            }
+        }
+
+        // Latest documentation
+
+        stage('Latest documentation') {
+            agent {
+                dockerfile {
+                    label "docker"
+                    dir "jenkins"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                branch 'master'
+            }
+            environment {
+                AMS3_DELIVERY = credentials("AMS3_DELIVERY")
+            }
+            steps {
+                sh '''
+                    s3cmd \\
+                        --access_key=${AMS3_DELIVERY_USR} \\
+                        --secret_key=${AMS3_DELIVERY_PSW} \\
+                        --host=ams3.digitaloceanspaces.com \\
+                        --host-bucket='%(bucket)s.ams3.digitaloceanspaces.com' \\
+                        --recursive \\
+                        --force \\
+                        cp \\
+                        s3://ams3-delivery-space/ontrack/release/${ONTRACK_VERSION}/docs/ \\
+                        s3://ams3-delivery-space/ontrack/release/latest/docs/
+                '''
+            }
+            post {
+                always {
+                    ontrackValidate(
+                            project: projectName,
+                            branch: env.ONTRACK_BRANCH_NAME as String,
+                            build: env.ONTRACK_VERSION as String,
+                            validationStamp: 'DOCUMENTATION.LATEST',
+                    )
+                }
+            }
+        }
+
+        // Docker latest images
+
+        stage('Docker Latest') {
+            agent {
+                dockerfile {
+                    label "docker"
+                    dir "jenkins"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                branch "master"
+            }
+            environment {
+                DOCKER_HUB = credentials("DOCKER_HUB")
+            }
+            steps {
+                sh '''\
+                    echo "Making sure the images are available on this node..."
+                    
+                    echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+                    docker image pull docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION}
+                    
+                    echo "Tagging..."
+                    
+                    docker image tag docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:${ONTRACK_VERSION_MAJOR_MINOR}
+                    docker image tag docker.nemerosa.net/nemerosa/ontrack:${ONTRACK_VERSION} nemerosa/ontrack:${ONTRACK_VERSION_MAJOR}
+                    
+                    echo "Publishing latest versions in Docker Hub..."
+                    
+                    echo ${DOCKER_HUB_PSW} | docker login --username ${DOCKER_HUB_USR} --password-stdin
+                    
+                    docker image push nemerosa/ontrack:${ONTRACK_VERSION_MAJOR_MINOR}
+                    docker image push nemerosa/ontrack:${ONTRACK_VERSION_MAJOR}
+                '''
+            }
+            post {
+                always {
+                    ontrackValidate(
+                            project: projectName,
+                            branch: env.ONTRACK_BRANCH_NAME as String,
+                            build: env.ONTRACK_VERSION as String,
+                            validationStamp: 'DOCKER.LATEST',
+                    )
+                }
+            }
+        }
+
+        // Site generation
+
+        stage('Site generation') {
+            agent {
+                dockerfile {
+                    label "docker"
+                    dir "jenkins"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            environment {
+                // GitHub OAuth token
+                GRGIT_USER = credentials("JENKINS_GITHUB_TOKEN")
+                GITHUB_URI = 'https://github.com/nemerosa/ontrack.git'
+            }
+            when {
+                beforeAgent true
+                branch 'master'
+            }
+            steps {
+                echo "Getting list of releases and publishing the site..."
+                sh '''\
+                    ./gradlew \\
+                        --build-file site.gradle \\
+                        --info \\
+                        --profile \\
+                        --console plain \\
+                        --stacktrace \\
+                        -PontrackVersion=${ONTRACK_VERSION} \\
+                        -PontrackGitHubUri=${GITHUB_URI} \\
+                        site
+                '''
+            }
+            post {
+                always {
+                    ontrackValidate(
+                            project: projectName,
+                            branch: env.ONTRACK_BRANCH_NAME as String,
+                            build: env.ONTRACK_VERSION as String,
                             validationStamp: 'SITE',
-                            buildResult: currentBuild.result,
                     )
                 }
             }
@@ -725,18 +981,20 @@ GITHUB_URI=`git config remote.origin.url`
             agent {
                 dockerfile {
                     label "docker"
+                    dir "jenkins"
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
                 }
             }
             when {
                 beforeAgent true
-                branch 'release/3*'
+                branch "master"
             }
             environment {
-                ONTRACK_VERSION = "${version}"
                 ONTRACK_POSTGRES = credentials('ONTRACK_POSTGRES')
             }
             steps {
+                echo "Deploying ${ONTRACK_VERSION} from branch ${ONTRACK_BRANCH_NAME} in production"
+                // Running the deployment
                 timeout(time: 15, unit: 'MINUTES') {
                     script {
                         sshagent(credentials: ['ONTRACK_SSH_KEY']) {
@@ -765,15 +1023,15 @@ ssh -o ${SSH_OPTIONS} root@${SSH_HOST} "ONTRACK_VERSION=${ONTRACK_VERSION}" "ONT
             agent {
                 dockerfile {
                     label "docker"
+                    dir "jenkins"
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
                 }
             }
             when {
                 beforeAgent true
-                branch 'release/3*'
+                branch "master"
             }
             environment {
-                ONTRACK_VERSION = "${version}"
                 ONTRACK_ACCEPTANCE_ADMIN = credentials("ONTRACK_ACCEPTANCE_ADMIN")
             }
             steps {
@@ -813,8 +1071,8 @@ docker-compose \\
                         def results = junit 'build/production/*.xml'
                         ontrackValidate(
                                 project: projectName,
-                                branch: branchName,
-                                build: version,
+                                branch: env.ONTRACK_BRANCH_NAME as String,
+                                build: env.ONTRACK_VERSION as String,
                                 validationStamp: 'ONTRACK.SMOKE',
                                 testResults: results,
                         )
@@ -823,8 +1081,8 @@ docker-compose \\
                 success {
                     ontrackPromote(
                             project: projectName,
-                            branch: branchName,
-                            build: version,
+                            branch: env.ONTRACK_BRANCH_NAME as String,
+                            build: env.ONTRACK_VERSION as String,
                             promotionLevel: 'ONTRACK',
                     )
                 }
@@ -833,4 +1091,15 @@ docker-compose \\
 
     }
 
+}
+
+@SuppressWarnings("GrMethodMayBeStatic")
+@NonCPS
+String extractFromVersion(String version, String pattern) {
+    def matcher = (version =~ pattern)
+    if (matcher.matches()) {
+        return matcher.group(1)
+    } else {
+        throw new IllegalAccessException("Version $version does not match pattern: $pattern")
+    }
 }

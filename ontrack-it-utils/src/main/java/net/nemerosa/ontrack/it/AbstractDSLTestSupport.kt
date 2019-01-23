@@ -5,6 +5,7 @@ import net.nemerosa.ontrack.model.security.SecurityService
 import net.nemerosa.ontrack.model.security.ValidationRunCreate
 import net.nemerosa.ontrack.model.security.ValidationRunStatusChange
 import net.nemerosa.ontrack.model.structure.*
+import net.nemerosa.ontrack.model.support.OntrackConfigProperties
 import net.nemerosa.ontrack.test.TestUtils.uid
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.reflect.KClass
@@ -13,6 +14,19 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
 
     @Autowired
     protected lateinit var securityService: SecurityService
+
+    @Autowired
+    protected lateinit var ontrackConfigProperties: OntrackConfigProperties
+
+    fun <T> withDisabledConfigurationTest(code: () -> T): T {
+        val configurationTest = ontrackConfigProperties.isConfigurationTest
+        ontrackConfigProperties.isConfigurationTest = false
+        return try {
+            code()
+        } finally {
+            ontrackConfigProperties.isConfigurationTest = configurationTest
+        }
+    }
 
     fun project(init: Project.() -> Unit = {}): Project {
         val project = doCreateProject()
@@ -40,7 +54,7 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
         return branch.init()
     }
 
-    fun Branch.promotionLevel(name: String): PromotionLevel =
+    fun Branch.promotionLevel(name: String = uid("P")): PromotionLevel =
             doCreatePromotionLevel(this, NameDescription.nd(name, ""))
 
     /**
@@ -56,7 +70,7 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
     ): ValidationStamp =
             doCreateValidationStamp(this, NameDescription.nd(name, ""), validationDataTypeConfig)
 
-    fun Branch.build(name: String, init: (Build.() -> Unit)? = {}): Build {
+    fun Branch.build(name: String = uid("B"), init: (Build.() -> Unit)? = {}): Build {
         val build = doCreateBuild(this, NameDescription.nd(name, ""))
         if (init != null) {
             build.init()
