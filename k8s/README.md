@@ -66,6 +66,14 @@ kubectl apply -f ontrack.yaml
 
 > You can monitor the progress of the deployment in the dashboard.
 
+### Upgrade of Ontrack
+
+Change the version of the Ontrack Docker image in `ontrack.yaml` and redeploy:
+
+```bash
+kubectl apply -f ontrack.yaml
+```
+
 ### Cleanup
 
 To undeploy Ontrack:

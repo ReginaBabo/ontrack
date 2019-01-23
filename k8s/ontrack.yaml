@@ -121,7 +121,7 @@ spec:
             claimName: ontrack-data-pvc
       containers:
         - name: ontrack
-          image: "nemerosa/ontrack:3.36.2"
+          image: "nemerosa/ontrack:3.37.7"
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:postgresql://ontrack-pg-service:5432/ontrack"
