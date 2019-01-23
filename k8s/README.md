@@ -1,4 +1,6 @@
-## Digital Ocean setup
+## Digital Ocean K8S deployment
+
+### Setup
 
 Download the configuration file as `config.yaml`.
 
@@ -22,6 +24,7 @@ Create the roles:
 kubectl apply -f admin.yaml
 ```
 
+### Dashboard deployment
 
 Extract the tokens:
 
@@ -51,25 +54,4 @@ Use the token displayed before to authenticate into the dashboard.
 
 > Reference: https://github.com/kubernetes/dashboard/
 
-## Deploying
-
-    kubectl create namespace test
-    kubectl apply --namespace test -f ontrack.yaml
-
-## Deploying on Minikube
-
-To open in a browser:
-
-    minikube service --namespace test ontrack-v2-service
-
-Or to get its URL:
-
-    minikube service --namespace test --url ontrack-v2-service
-
-## Upgrading the version of Ontrack
-
-Change the Ontrack version in `ontrack.yml`.
-
-Redeploy:
-
-    kubectl apply --namespace test -f ontrack.yaml
+### Ontrack deployment
