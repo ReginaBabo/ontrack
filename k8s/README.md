@@ -66,7 +66,7 @@ kubectl apply -f ontrack.yaml
 
 > You can monitor the progress of the deployment in the dashboard.
 
-### Upgrade of Ontrack
+#### Upgrade of Ontrack
 
 Change the version of the Ontrack Docker image in `ontrack.yaml` and redeploy:
 
@@ -74,10 +74,38 @@ Change the version of the Ontrack Docker image in `ontrack.yaml` and redeploy:
 kubectl apply -f ontrack.yaml
 ```
 
-### Cleanup
+#### Cleanup
 
 To undeploy Ontrack:
 
 ```bash
 kubectl delete -f ontrack.yaml 
+```
+
+### Monitoring
+
+Quick start:
+
+```bash
+kubectl apply \
+  --filename https://raw.githubusercontent.com/giantswarm/kubernetes-prometheus/master/manifests-all.yaml
+```
+
+> See https://github.com/giantswarm/prometheus
+
+By default, the Grafana service is not exposed. For testing purpose, you can expose it using:
+
+```bash
+kubectl --namespace monitoring \
+    expose service grafana \
+    --port=3000 \
+    --target-port=3000 \
+    --type=LoadBalancer \
+    --name=grafana-exposed
+```
+
+To remove it after usage:
+
+```bash
+kubectl --namespace monitoring delete service grafana-exposed
 ```
