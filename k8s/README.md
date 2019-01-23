@@ -2,26 +2,39 @@
 
 Download the configuration file as `config.yaml`.
 
+> To set this configuration as a default configuration, use:
+
+```bash
+export KUBECONFIG=`pwd`/config.yaml
+```
+
+Check that everything is in order by running:
+
+```bash
+kubectl config view
+```
+
 Adapt the user name in `admin.yaml` accordingly.
 
 Create the roles:
 
 ```bash
-kubectl --kubeconfig "config.yaml" apply -f admin.yaml
+kubectl apply -f admin.yaml
 ```
+
 
 Extract the tokens:
 
 ```bash
-kubectl --kubeconfig="config.yaml" get secret -n kube-system
+kubectl get secret -n kube-system
 # Note the secret for your cluster name
-kubectl --kubeconfig="config.yaml" describe secret  <token> -n kube-system
+kubectl describe secret  <token> -n kube-system
 ```
 
 Deploy the dashboard:
 
 ```bash
-kubectl --kubeconfig config.yaml apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
 ```
 
 To access the dashboard:
