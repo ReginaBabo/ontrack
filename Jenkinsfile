@@ -89,7 +89,8 @@ pipeline {
                                         size : "s-1vcpu-2gb"
                                 ]]
                 ) { cluster ->
-
+                    echo "K8S ID = ${cluster.id}"
+                    echo "K8S config = ${cluster.config}"
                 }
             }
         }
