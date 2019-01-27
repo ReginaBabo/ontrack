@@ -78,7 +78,7 @@ pipeline {
             steps {
                 withDigitalOceanK8SCluster(
                         destroy: true,
-                        name: "",
+                        name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
                         region: "ams3",
                         version: "1.13.1-do.2",
                         pools: [[
