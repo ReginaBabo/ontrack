@@ -1,6 +1,7 @@
 # Base
 FROM openjdk:8u181-jdk
 
+
 # Makes sure all tools for the build are installed
 RUN apt-get update && apt-get install -y \
     git \
@@ -9,7 +10,15 @@ RUN apt-get update && apt-get install -y \
     rsync \
     graphviz \
     python-setuptools \
-    && rm -rf /var/lib/apt/lists/*
+    apt-transport-https
+
+# Installing kubectl
+RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
+RUN apt-get update && apt-get install -y kubectl
+
+# Cleanup of layer
+RUN rm -rf /var/lib/apt/lists/*
 
 # S3 Cmd line tool
 RUN curl --fail --silent -L https://github.com/s3tools/s3cmd/releases/download/v2.0.2/s3cmd-2.0.2.tar.gz --output s3cmd.tar.gz \
