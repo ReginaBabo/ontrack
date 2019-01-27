@@ -68,7 +68,13 @@ pipeline {
 
         // TODO Stage to move into the platform acceptance tests
         stage('K8S') {
-            agent any
+            agent {
+                dockerfile {
+                    label "docker"
+                    dir "jenkins"
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
             when {
                 beforeAgent true
                 not {
