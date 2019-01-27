@@ -12,12 +12,18 @@ import net.nemerosa.ontrack.client.OTHttpClient
  */
 class OntrackClientImpl(
         val httpClient: OTHttpClient
-) {
+) : OntrackClient {
 
     private val jsonClient: JsonClient = JsonClientImpl(httpClient)
 
-    fun get(url: String): JsonNode {
+    override fun get(url: String): JsonNode {
         return jsonClient.get(url)
     }
 
+    override fun post(url: String, data: Any): JsonNode {
+        return jsonClient.post(
+                data,
+                url
+        )
+    }
 }

@@ -6,4 +6,6 @@ interface OntrackClient {
 
     fun get(url: String): JsonNode
 
+    fun post(url: String, data: Any): JsonNode
+
 }
