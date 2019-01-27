@@ -103,7 +103,8 @@ pipeline {
                                 ]]
                 ) { cluster ->
                     echo "K8S ID = ${cluster.id}"
-                    sh 'kubectl --kubeconfig .kubeconfig version'
+
+                    sh 'kubectl --kubeconfig .kubeconfig apply -f k8s/ontrack.yml'
                 }
             }
         }
