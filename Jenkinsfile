@@ -97,7 +97,6 @@ pipeline {
                                 ]]
                 ) { cluster ->
                     echo "K8S ID = ${cluster.id}"
-                    echo "K8S config = ${cluster.config}"
                 }
             }
         }
