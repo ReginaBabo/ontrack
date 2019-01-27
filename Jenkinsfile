@@ -78,6 +78,7 @@ pipeline {
             steps {
                 withDigitalOceanK8SCluster(
                         logging: true,
+                        verbose: true,
                         destroy: true,
                         credentials: "DO_NEMEROSA_JENKINS2_BUILD",
                         name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
