@@ -82,7 +82,7 @@ pipeline {
                         region: "ams3",
                         version: "1.13.1-do.2",
                         pools: [[
-                                        name : "poc-k8s-pool",
+                                        name : "jenkins-${branchName}-${env.BUILD_NUMBER}-pool",
                                         count: 2,
                                         size : "s-1vcpu-2gb"
                                 ]]
