@@ -83,6 +83,12 @@ pipeline {
                         name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
                         region: "ams3",
                         version: "1.13.1-do.2",
+                        tags: [
+                                "jenkins",
+                                "jenkins:project:ontrack",
+                                "jenkins:branch:$branchName",
+                                "jenkins:build:${env.BUILD_NUMBER}",
+                        ],
                         pools: [[
                                         name : "jenkins-${branchName}-${env.BUILD_NUMBER}-pool",
                                         count: 2,
