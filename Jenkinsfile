@@ -3,7 +3,8 @@ String gitCommit = ''
 String branchName = ''
 String projectName = 'ontrack'
 
-@Library("ontrack-jenkins-library@1.0.0") _
+@Library("ontrack-jenkins-library@1.0.0")
+@Library("digital-ocean-jenkins-library@master") _
 
 boolean pr = false
 
@@ -61,6 +62,32 @@ pipeline {
                             }
                         """)
                     }
+                }
+            }
+        }
+
+        // TODO Stage to move into the platform acceptance tests
+        stage('K8S') {
+            agent any
+            when {
+                beforeAgent true
+                not {
+                    branch 'master'
+                }
+            }
+            steps {
+                withDigitalOceanK8SCluster(
+                        destroy: true,
+                        name: "",
+                        region: "ams3",
+                        version: "1.13.1-do.2",
+                        pools: [[
+                                        name : "poc-k8s-pool",
+                                        count: 2,
+                                        size : "s-1vcpu-2gb"
+                                ]]
+                ) { cluster ->
+
                 }
             }
         }
@@ -772,7 +799,7 @@ set -e
             }
             steps {
                 // Merge to master
-                sshagent (credentials: ['SSH_JENKINS_GITHUB']) {
+                sshagent(credentials: ['SSH_JENKINS_GITHUB']) {
                     sh '''
                         git config --local user.email "jenkins@nemerosa.net"
                         git config --local user.name "Jenkins"
