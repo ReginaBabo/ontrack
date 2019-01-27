@@ -104,7 +104,10 @@ pipeline {
             when {
                 beforeAgent true
                 not {
-                    branch 'master'
+                    anyOf {
+                        branch 'master'
+                        branch 'experimental/k8s'
+                    }
                 }
             }
             steps {
@@ -201,7 +204,10 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
             when {
                 beforeAgent true
                 not {
-                    branch 'master'
+                    anyOf {
+                        branch 'master'
+                        branch 'experimental/k8s'
+                    }
                 }
             }
             environment {
