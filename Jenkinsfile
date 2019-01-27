@@ -77,6 +77,7 @@ pipeline {
             }
             steps {
                 withDigitalOceanK8SCluster(
+                        logging: true,
                         destroy: true,
                         name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
                         region: "ams3",
