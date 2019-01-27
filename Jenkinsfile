@@ -79,6 +79,7 @@ pipeline {
                 withDigitalOceanK8SCluster(
                         logging: true,
                         destroy: true,
+                        credentials: "DO_NEMEROSA_JENKINS2_BUILD",
                         name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
                         region: "ams3",
                         version: "1.13.1-do.2",
