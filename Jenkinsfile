@@ -103,6 +103,7 @@ pipeline {
                                 ]]
                 ) { cluster ->
                     echo "K8S ID = ${cluster.id}"
+                    sh 'kubectl --kubeconfig .kubeconfig version'
                 }
             }
         }
