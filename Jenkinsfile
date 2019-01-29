@@ -85,7 +85,8 @@ pipeline {
                 withDigitalOceanK8SCluster(
                         logging: true,
                         verbose: true,
-                        destroy: true,
+                        // TODO K8S Destroy the cluster when done
+                        destroy: false,
                         credentials: "DO_NEMEROSA_JENKINS2_BUILD",
                         name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
                         region: "ams3",
