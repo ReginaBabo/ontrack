@@ -81,6 +81,9 @@ pipeline {
                     branch 'master'
                 }
             }
+            environment {
+                KUBECONFIG = "${env.WORKSPACE}/.kubeconfig"
+            }
             steps {
                 withDigitalOceanK8SCluster(
                         logging: true,
@@ -104,8 +107,6 @@ pipeline {
                                 ]]
                 ) { cluster ->
                     echo "K8S ID = ${cluster.id}"
-
-                    env.KUBECONFIG = "${env.WORKSPACE}/.kubeconfig"
 
                     sh 'kubectl apply -f k8s/ontrack.yaml'
 
