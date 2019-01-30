@@ -81,15 +81,11 @@ pipeline {
                     branch 'master'
                 }
             }
-            environment {
-                KUBECONFIG = "${env.WORKSPACE}/.kubeconfig"
-            }
             steps {
                 withDigitalOceanK8SCluster(
                         logging: true,
                         verbose: true,
-                        // TODO K8S Destroy the cluster when done
-                        destroy: false,
+                        destroy: true,
                         credentials: "DO_NEMEROSA_JENKINS2_BUILD",
                         name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
                         region: "ams3",
@@ -107,16 +103,16 @@ pipeline {
                                 ]]
                 ) { cluster ->
                     echo "K8S ID = ${cluster.id}"
+                    withDeployment(file: "k8s/ontrack.yaml", delete: true) {
 
-                    sh 'kubectl apply -f k8s/ontrack.yaml'
+                        waitForDigitalOceanLoadBalancer(
+                                service: "ontrack-web-service",
+                                outputVariable: "ONTRACK_IP",
+                                logging: true,
+                        )
 
-                    waitForDigitalOceanLoadBalancer(
-                            service: "ontrack-web-service",
-                            outputVariable: "ONTRACK_IP",
-                            logging: true,
-                    )
-
-                    echo "Ontrack IP = ${env.ONTRACK_IP}"
+                        echo "Ontrack IP = ${env.ONTRACK_IP}"
+                    }
                 }
             }
         }
