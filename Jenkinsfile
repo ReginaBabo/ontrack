@@ -121,6 +121,7 @@ pipeline {
                             int status = sh(script: 'kubectl get service ontrack-web-service --output json > service.json', returnStatus: true)
                             if (status == 0) {
                                 def json = readJSON(file: "service.json")
+                                echo "JSON = $json"
                                 ip = json.status?.loadBalancer?.ingress?.first()?.ip?.text()
                                 if (!ip) {
                                     sleep(time: interval, unit: 'SECONDS')
