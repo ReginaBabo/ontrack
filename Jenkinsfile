@@ -144,6 +144,7 @@ pipeline {
                         echo "(*) Copying the test results..."
                         mkdir -p build
                         rm -rf build/k8s
+                        mkdir -p build/k8s
                         cp -r ontrack-acceptance/src/main/compose/build build/k8s
                         
                         echo "(*) Removing the test environment..."
