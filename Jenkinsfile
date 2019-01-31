@@ -151,6 +151,7 @@ pipeline {
                         fi
                         
                         echo "(*) Removing the test environment..."
+                        cd ontrack-acceptance/src/main/compose
                         docker-compose \\
                             --project-name k8s \\
                             --file docker-compose-k8s-client.yml \\
