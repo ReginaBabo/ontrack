@@ -75,6 +75,11 @@ pipeline {
                     args "--volume /var/run/docker.sock:/var/run/docker.sock"
                 }
             }
+            environment {
+                // TODO Current version
+                ONTRACK_VERSION = "3.38.0"
+                // ONTRACK_VERSION = "${version}"
+            }
             when {
                 beforeAgent true
                 not {
@@ -112,6 +117,50 @@ pipeline {
                         )
 
                         echo "Ontrack IP = ${env.ONTRACK_IP}"
+
+                        // Runs the acceptance tests
+                        timeout(time: 25, unit: 'MINUTES') {
+                            sh '''\
+                                echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+                                
+                                export ONTRACK_ACCEPTANCE_TARGET_URL="http://${ONTRACK_IP}"
+                                echo "(*) Testing against ${ONTRACK_ACCEPTANCE_TARGET_URL}"
+                                
+                                echo "(*) Launching tests..."
+                                cd ontrack-acceptance/src/main/compose
+                                docker-compose \\
+                                    --project-name k8s \\
+                                    --file docker-compose-k8s-client.yml \\
+                                    up \\
+                                    --exit-code-from ontrack_acceptance
+                            '''
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    sh '''\
+                        echo "(*) Copying the test results..."
+                        mkdir -p build
+                        rm -rf build/k8s
+                        cp -r ontrack-acceptance/src/main/compose/build build/k8s
+                        
+                        echo "(*) Removing the test environment..."
+                        docker-compose \\
+                            --project-name k8s \\
+                            --file docker-compose-k8s-client.yml \\
+                            down
+                        '''
+                    script {
+                        def results = junit 'build/k8s/*.xml'
+                        ontrackValidate(
+                                project: projectName,
+                                branch: branchName,
+                                build: version,
+                                validationStamp: 'ACCEPTANCE.K8S',
+                                testResults: results,
+                        )
                     }
                 }
             }
