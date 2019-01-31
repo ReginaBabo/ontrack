@@ -145,7 +145,10 @@ pipeline {
                         mkdir -p build
                         rm -rf build/k8s
                         mkdir -p build/k8s
-                        cp -r ontrack-acceptance/src/main/compose/build build/k8s
+                        if [ -d ontrack-acceptance/src/main/compose/build ]
+                        then
+                            cp -r ontrack-acceptance/src/main/compose/build build/k8s
+                        fi
                         
                         echo "(*) Removing the test environment..."
                         docker-compose \\
