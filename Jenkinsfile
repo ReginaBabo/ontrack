@@ -77,10 +77,7 @@ pipeline {
             when {
                 beforeAgent true
                 not {
-                    anyOf {
-                        branch 'master'
-                        branch 'experimental/k8s'
-                    }
+                    branch 'master'
                 }
             }
             steps {
@@ -179,6 +176,7 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                 not {
                     anyOf {
                         branch 'master'
+                        // TODO K8S Cleanup
                         branch 'experimental/k8s'
                     }
                 }
@@ -576,7 +574,7 @@ docker-machine rm --force ${DROPLET_NAME}
                                         echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
                                         
                                         export ONTRACK_ACCEPTANCE_TARGET_URL="http://${ONTRACK_IP}"
-                                        echo "(*) Testing against ${ONTRACK_ACCEPTANCE_TARGET_URL}"
+                                        echo "(*) Testing against ${ONTRACK_ACCEPTANCE_TARGET_URL} (version ${ONTRACK_VERSION})"
                                         
                                         echo "(*) Launching tests..."
                                         cd ontrack-acceptance/src/main/compose
