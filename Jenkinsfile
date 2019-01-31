@@ -577,10 +577,9 @@ docker-machine rm --force ${DROPLET_NAME}
                                         echo "(*) Testing against ${ONTRACK_ACCEPTANCE_TARGET_URL} (version ${ONTRACK_VERSION})"
                                         
                                         echo "(*) Launching tests..."
-                                        cd ontrack-acceptance/src/main/compose
                                         docker-compose \\
                                             --project-name k8s \\
-                                            --file docker-compose-k8s-client.yml \\
+                                            --file ontrack-acceptance/src/main/compose/docker-compose-k8s-client.yml \\
                                             up \\
                                             --exit-code-from ontrack_acceptance
                                     '''
@@ -597,14 +596,13 @@ docker-machine rm --force ${DROPLET_NAME}
                                 mkdir -p build/k8s
                                 if [ -d ontrack-acceptance/src/main/compose/build ]
                                 then
-                                    cp -r ontrack-acceptance/src/main/compose/build build/k8s
+                                    cp -r ontrack-acceptance/src/main/compose/build/* build/k8s/
                                 fi
                                 
                                 echo "(*) Removing the test environment..."
-                                cd ontrack-acceptance/src/main/compose
                                 docker-compose \\
                                     --project-name k8s \\
-                                    --file docker-compose-k8s-client.yml \\
+                                    --file ontrack-acceptance/src/main/compose/docker-compose-k8s-client.yml \\
                                     down
                                 '''
                             script {
