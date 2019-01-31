@@ -66,111 +66,6 @@ pipeline {
             }
         }
 
-        // TODO Stage to move into the platform acceptance tests
-        stage('K8S') {
-            agent {
-                dockerfile {
-                    label "docker"
-                    dir "jenkins"
-                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
-                }
-            }
-            environment {
-                // TODO Current version
-                ONTRACK_VERSION = "3.38.0"
-                // ONTRACK_VERSION = "${version}"
-            }
-            when {
-                beforeAgent true
-                not {
-                    branch 'master'
-                }
-            }
-            steps {
-                withDigitalOceanK8SCluster(
-                        logging: true,
-                        verbose: true,
-                        destroy: true,
-                        credentials: "DO_NEMEROSA_JENKINS2_BUILD",
-                        name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
-                        region: "ams3",
-                        version: "1.13.1-do.2",
-                        tags: [
-                                "jenkins",
-                                "jenkins:project:ontrack",
-                                "jenkins:branch:$branchName",
-                                "jenkins:build:${env.BUILD_NUMBER}",
-                        ],
-                        pools: [[
-                                        name : "jenkins-${branchName}-${env.BUILD_NUMBER}-pool",
-                                        count: 2,
-                                        size : "s-1vcpu-2gb"
-                                ]]
-                ) { cluster ->
-                    echo "K8S ID = ${cluster.id}"
-                    withDeployment(file: "k8s/ontrack.yaml", delete: true) {
-
-                        waitForDigitalOceanLoadBalancer(
-                                service: "ontrack-web-service",
-                                outputVariable: "ONTRACK_IP",
-                                logging: true,
-                        )
-
-                        echo "Ontrack IP = ${env.ONTRACK_IP}"
-
-                        // Runs the acceptance tests
-                        timeout(time: 25, unit: 'MINUTES') {
-                            sh '''\
-                                echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
-                                
-                                export ONTRACK_ACCEPTANCE_TARGET_URL="http://${ONTRACK_IP}"
-                                echo "(*) Testing against ${ONTRACK_ACCEPTANCE_TARGET_URL}"
-                                
-                                echo "(*) Launching tests..."
-                                cd ontrack-acceptance/src/main/compose
-                                docker-compose \\
-                                    --project-name k8s \\
-                                    --file docker-compose-k8s-client.yml \\
-                                    up \\
-                                    --exit-code-from ontrack_acceptance
-                            '''
-                        }
-                    }
-                }
-            }
-            post {
-                always {
-                    sh '''\
-                        echo "(*) Copying the test results..."
-                        mkdir -p build
-                        rm -rf build/k8s
-                        mkdir -p build/k8s
-                        if [ -d ontrack-acceptance/src/main/compose/build ]
-                        then
-                            cp -r ontrack-acceptance/src/main/compose/build build/k8s
-                        fi
-                        
-                        echo "(*) Removing the test environment..."
-                        cd ontrack-acceptance/src/main/compose
-                        docker-compose \\
-                            --project-name k8s \\
-                            --file docker-compose-k8s-client.yml \\
-                            down
-                        '''
-                    script {
-                        def results = junit 'build/k8s/*.xml'
-                        ontrackValidate(
-                                project: projectName,
-                                branch: branchName,
-                                build: version,
-                                validationStamp: 'ACCEPTANCE.K8S',
-                                testResults: results,
-                        )
-                    }
-                }
-            }
-        }
-
         stage('Build') {
             agent {
                 dockerfile {
@@ -341,10 +236,6 @@ docker-compose --project-name local down --volumes
             environment {
                 ONTRACK_VERSION = "${version}"
             }
-            when {
-                beforeAgent true
-                branch 'release/*'
-            }
             parallel {
                 // CentOS7
                 stage('CentOS7') {
@@ -354,6 +245,10 @@ docker-compose --project-name local down --volumes
                             dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
+                    }
+                    when {
+                        beforeAgent true
+                        branch 'release/*'
                     }
                     steps {
                         unstash name: "rpm"
@@ -416,6 +311,10 @@ docker-compose --project-name centos --file docker-compose-centos-7.yml down --v
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
+                    when {
+                        beforeAgent true
+                        branch 'release/*'
+                    }
                     steps {
                         unstash name: "debian"
                         timeout(time: 25, unit: 'MINUTES') {
@@ -477,6 +376,10 @@ docker-compose --project-name debian --file docker-compose-debian.yml down --vol
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
                     }
+                    when {
+                        beforeAgent true
+                        branch 'release/*'
+                    }
                     steps {
                         timeout(time: 25, unit: 'MINUTES') {
                             // Cleanup
@@ -527,6 +430,10 @@ docker-compose --project-name ext --file docker-compose-ext.yml down --volumes
                             dir "jenkins"
                             args "--volume /var/run/docker.sock:/var/run/docker.sock"
                         }
+                    }
+                    when {
+                        beforeAgent true
+                        branch 'release/*'
                     }
                     environment {
                         DROPLET_NAME = "ontrack-acceptance-${version}"
@@ -608,6 +515,107 @@ docker-machine rm --force ${DROPLET_NAME}
                                         branch: branchName,
                                         build: version,
                                         validationStamp: 'ACCEPTANCE.DO',
+                                        testResults: results,
+                                )
+                            }
+                        }
+                    }
+                }
+                // Kubernetes
+                stage('K8S') {
+                    agent {
+                        dockerfile {
+                            label "docker"
+                            dir "jenkins"
+                            args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                        }
+                    }
+                    when {
+                        beforeAgent true
+                        // TODO Cleanup
+                        anyOf {
+                            branch 'release/*'
+                            branch 'experimental/k8s'
+                        }
+                    }
+                    steps {
+                        withDigitalOceanK8SCluster(
+                                logging: true,
+                                verbose: true,
+                                destroy: true,
+                                credentials: "DO_NEMEROSA_JENKINS2_BUILD",
+                                name: "jenkins-${branchName}-${env.BUILD_NUMBER}",
+                                region: "ams3",
+                                version: "1.13.1-do.2",
+                                tags: [
+                                        "jenkins",
+                                        "jenkins:project:ontrack",
+                                        "jenkins:branch:$branchName",
+                                        "jenkins:build:${env.BUILD_NUMBER}",
+                                ],
+                                pools: [[
+                                                name : "jenkins-${branchName}-${env.BUILD_NUMBER}-pool",
+                                                count: 2,
+                                                size : "s-1vcpu-2gb"
+                                        ]]
+                        ) { cluster ->
+                            echo "K8S ID = ${cluster.id}"
+                            withDeployment(file: "k8s/ontrack.yaml", delete: true) {
+
+                                waitForDigitalOceanLoadBalancer(
+                                        service: "ontrack-web-service",
+                                        outputVariable: "ONTRACK_IP",
+                                        logging: true,
+                                )
+
+                                echo "Ontrack IP = ${env.ONTRACK_IP}"
+
+                                // Runs the acceptance tests
+                                timeout(time: 25, unit: 'MINUTES') {
+                                    sh '''\
+                                        echo ${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username ${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+                                        
+                                        export ONTRACK_ACCEPTANCE_TARGET_URL="http://${ONTRACK_IP}"
+                                        echo "(*) Testing against ${ONTRACK_ACCEPTANCE_TARGET_URL}"
+                                        
+                                        echo "(*) Launching tests..."
+                                        cd ontrack-acceptance/src/main/compose
+                                        docker-compose \\
+                                            --project-name k8s \\
+                                            --file docker-compose-k8s-client.yml \\
+                                            up \\
+                                            --exit-code-from ontrack_acceptance
+                                    '''
+                                }
+                            }
+                        }
+                    }
+                    post {
+                        always {
+                            sh '''\
+                                echo "(*) Copying the test results..."
+                                mkdir -p build
+                                rm -rf build/k8s
+                                mkdir -p build/k8s
+                                if [ -d ontrack-acceptance/src/main/compose/build ]
+                                then
+                                    cp -r ontrack-acceptance/src/main/compose/build build/k8s
+                                fi
+                                
+                                echo "(*) Removing the test environment..."
+                                cd ontrack-acceptance/src/main/compose
+                                docker-compose \\
+                                    --project-name k8s \\
+                                    --file docker-compose-k8s-client.yml \\
+                                    down
+                                '''
+                            script {
+                                def results = junit 'build/k8s/*.xml'
+                                ontrackValidate(
+                                        project: projectName,
+                                        branch: branchName,
+                                        build: version,
+                                        validationStamp: 'ACCEPTANCE.K8S',
                                         testResults: results,
                                 )
                             }
