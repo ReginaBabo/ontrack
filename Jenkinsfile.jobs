@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    stages {
+        stage("Generate jobs") {
+            steps {
+                echo "Generating jobs for branch $BRANCH_NAME"
+                jobDsl(
+                        lookupStrategy: 'JENKINS_ROOT',
+                        targets: '.jobs/*.groovy',
+                        unstableOnDeprecation: true,
+                        additionalParameters: [
+                                BRANCH_NAME: BRANCH_NAME,
+                        ],
+                )
+            }
+        }
+    }
+}
