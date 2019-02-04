@@ -20,7 +20,7 @@ pipeline {
                         verbose: true,
                         destroy: false,
                         credentials: "DO_NEMEROSA_JENKINS2_BUILD",
-                        name: "${BRANCH_NAME}",
+                        name: "${branchName}",
                         region: "ams3",
                         version: "1.13.1-do.2",
                         tags: [
