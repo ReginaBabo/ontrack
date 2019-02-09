@@ -32,6 +32,12 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
     @Autowired
     protected lateinit var buildFilterService: BuildFilterService
 
+    @Autowired
+    protected lateinit var projectPackageService: ProjectPackageService
+
+    @Autowired
+    protected lateinit var packageService: PackageService
+
     fun <T> withDisabledConfigurationTest(code: () -> T): T {
         val configurationTest = ontrackConfigProperties.isConfigurationTest
         ontrackConfigProperties.isConfigurationTest = false
@@ -252,6 +258,40 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
                     results.map { it.id }
             )
         }
+    }
+
+    protected fun Project.packageIds(code: PackageIdsSetter.() -> Unit) {
+        val setter = PackageIdsSetter(this)
+        setter.code()
+        setter.set()
+    }
+
+    protected fun genericPackageId(id: String): PackageId {
+        val type = packageService.getPackageType("net.nemerosa.ontrack.service.GenericPackageType")
+                ?: throw IllegalStateException("Cannot find generic package type")
+        return PackageId(
+                type,
+                id
+        )
+    }
+
+    protected inner class PackageIdsSetter(private val project: Project) {
+
+        private val packageIds = mutableListOf<PackageId>()
+
+        fun generic(id: String) {
+            packageIds.add(genericPackageId(id))
+        }
+
+        fun set() {
+            asAdmin().execute {
+                projectPackageService.setPackagesForProject(
+                        project,
+                        packageIds
+                )
+            }
+        }
+
     }
 
 }
