@@ -22,11 +22,13 @@ const val GRAPHQL_PROJECT_BRANCHES_USE_MODEL_ARG = "useModel"
 class GQLTypeProject(
         private val structureService: StructureService,
         private val projectLabelManagementService: ProjectLabelManagementService,
+        private val projectPackageService: ProjectPackageService,
         creation: GQLTypeCreation,
         private val branch: GQLTypeBranch,
         projectEntityFieldContributors: List<GQLProjectEntityFieldContributor>,
         private val projectEntityInterface: GQLProjectEntityInterface,
         private val label: GQLTypeLabel,
+        private val packageId: GQLTypePackageId,
         private val branchFavouriteService: BranchFavouriteService,
         private val branchModelMatcherService: BranchModelMatcherService
 ) : AbstractGQLProjectEntity<Project>(
@@ -79,6 +81,16 @@ class GQLTypeProject(
                             .dataFetcher { environment ->
                                 val project: Project = environment.getSource()
                                 projectLabelManagementService.getLabelsForProject(project)
+                            }
+                }
+                // Package IDs for this project
+                .field {
+                    it.name("packageIds")
+                            .description("Package IDs for this project")
+                            .type(stdList(packageId.typeRef))
+                            .dataFetcher { environment ->
+                                val project: Project = environment.getSource()
+                                projectPackageService.getPackagesForProject(project)
                             }
                 }
                 // OK
