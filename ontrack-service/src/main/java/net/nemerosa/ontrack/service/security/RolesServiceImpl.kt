@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.service.security
 
 import net.nemerosa.ontrack.model.labels.LabelManagement
 import net.nemerosa.ontrack.model.labels.ProjectLabelManagement
+import net.nemerosa.ontrack.model.labels.ProjectPackageManagement
 import net.nemerosa.ontrack.model.security.*
 import net.nemerosa.ontrack.model.support.StartupService
 import org.springframework.beans.factory.annotation.Autowired
@@ -126,6 +127,7 @@ constructor(
         projectManagerFunctions.add(BranchEdit::class.java)
         projectManagerFunctions.add(BranchDelete::class.java)
         projectManagerFunctions.add(ProjectLabelManagement::class.java)
+        projectManagerFunctions.add(ProjectPackageManagement::class.java)
         register(Roles.PROJECT_MANAGER, "Project manager",
                 "The project manager can promote existing builds, manage the validation stamps, " + "manage the shared build filters, manage the branches and edit some properties.",
                 projectManagerFunctions

@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.model.security;
 
 import net.nemerosa.ontrack.model.labels.LabelManagement;
 import net.nemerosa.ontrack.model.labels.ProjectLabelManagement;
+import net.nemerosa.ontrack.model.labels.ProjectPackageManagement;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -66,7 +67,8 @@ public interface RolesService {
             ValidationRunStatusChange.class,
             PromotionRunCreate.class,
             PromotionRunDelete.class,
-            ProjectLabelManagement.class
+            ProjectLabelManagement.class,
+            ProjectPackageManagement.class
     );
 
     /**

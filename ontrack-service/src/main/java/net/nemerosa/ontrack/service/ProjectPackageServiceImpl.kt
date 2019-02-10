@@ -1,6 +1,6 @@
 package net.nemerosa.ontrack.service
 
-import net.nemerosa.ontrack.model.security.ProjectEdit
+import net.nemerosa.ontrack.model.labels.ProjectPackageManagement
 import net.nemerosa.ontrack.model.security.ProjectView
 import net.nemerosa.ontrack.model.security.SecurityService
 import net.nemerosa.ontrack.model.structure.*
@@ -34,8 +34,7 @@ class ProjectPackageServiceImpl(
     }
 
     override fun setPackagesForProject(project: Project, packages: List<PackageId>) {
-        // FIXME #650 Project function for edition of packages id, for project manager role
-        securityService.checkProjectFunction(project, ProjectEdit::class.java)
+        securityService.checkProjectFunction(project, ProjectPackageManagement::class.java)
         projectPackageRepository.setPackagesForProject(
                 project.id(),
                 packages.map {
