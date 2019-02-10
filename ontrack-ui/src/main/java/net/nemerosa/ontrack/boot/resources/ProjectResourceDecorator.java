@@ -123,14 +123,9 @@ public class ProjectResourceDecorator extends AbstractLinkResourceDecorator<Proj
                                 project -> on(LabelController.class).getCreationForm(),
                                 (project, resourceContext) -> resourceContext.isGlobalFunctionGranted(LabelManagement.class)
                         ),
-                        // List of package Ids
-                        link(
-                                "_packageIds",
-                                project -> on(ProjectPackageController.class).getPackageIdsForProject(project.getId())
-                        ),
                         // Edition of package Ids
                         link(
-                                "_packageIdsEdition",
+                                "_packageIds",
                                 project -> on(ProjectPackageController.class).getPackageIdsFormForProject(project.getId()),
                                 withProjectFn(ProjectPackageManagement.class)
                         ),
