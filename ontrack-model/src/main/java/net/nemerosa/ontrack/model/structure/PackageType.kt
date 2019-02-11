@@ -1,6 +1,8 @@
 package net.nemerosa.ontrack.model.structure
 
-interface PackageType {
+import net.nemerosa.ontrack.model.extension.Extension
+
+interface PackageType : Extension {
 
     val name: String
     val description: String

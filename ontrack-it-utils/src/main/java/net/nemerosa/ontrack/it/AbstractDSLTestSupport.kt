@@ -266,8 +266,8 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
         setter.set()
     }
 
-    protected fun genericPackageId(id: String): PackageId {
-        val type = packageService.getPackageType("net.nemerosa.ontrack.service.GenericPackageType")
+    protected fun testPackageId(id: String): PackageId {
+        val type = packageService.getPackageType("net.nemerosa.ontrack.it.TestPackageType")
                 ?: throw IllegalStateException("Cannot find generic package type")
         return PackageId(
                 type,
@@ -279,8 +279,8 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
 
         private val packageIds = mutableListOf<PackageId>()
 
-        fun generic(id: String) {
-            packageIds.add(genericPackageId(id))
+        fun test(id: String) {
+            packageIds.add(testPackageId(id))
         }
 
         fun set() {
