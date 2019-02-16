@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class TestPackageType(extensionFeature: TestExtensionFeature) : AbstractExtension(extensionFeature), PackageType {
-    override val name: String = "test"
+    override val name: String = "Test"
     override val description: String = "Test package"
 }

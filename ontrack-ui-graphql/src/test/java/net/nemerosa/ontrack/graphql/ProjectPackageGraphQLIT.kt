@@ -31,14 +31,14 @@ class ProjectPackageGraphQLIT : AbstractQLKTITSupport() {
                             mapOf(
                                     "type" to mapOf(
                                             "id" to "net.nemerosa.ontrack.it.TestPackageType",
-                                            "name" to "Generic"
+                                            "name" to "Test"
                                     ),
                                     "id" to "one"
                             ),
                             mapOf(
                                     "type" to mapOf(
                                             "id" to "net.nemerosa.ontrack.it.TestPackageType",
-                                            "name" to "Generic"
+                                            "name" to "Test"
                                     ),
                                     "id" to "two"
                             )
