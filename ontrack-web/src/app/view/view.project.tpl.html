@@ -164,7 +164,15 @@
                 </div>
             </div>
 
-            <ot-section-title>Package identifiers</ot-section-title>
+            <ot-section-title>
+                Package identifiers
+                <span
+                        class="fa fa-pencil ot-command"
+                        title="Edition of package identifiers"
+                        ng-if="project.links._packageIds"
+                        ng-click="editProjectPackageIds()"
+                ></span>
+            </ot-section-title>
             <div class="row" ng-if="!project.packageIds.length">
                 <div class="col-md-12">
                     <div class="ot-alert-info">
