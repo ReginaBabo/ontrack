@@ -63,6 +63,7 @@ angular.module('ot.view.project', [
                   _labels
                   _labelFromToken
                   _labelsCreate
+                  _packageIds
                 }
                 favouriteBranches: branches(favourite: true) {
                   id
@@ -224,6 +225,15 @@ angular.module('ot.view.project', [
                         cls: 'ot-command-project-labels',
                         action: () => {
                             $scope.editProjectLabels();
+                        }
+                    },
+                    {
+                        condition: () => $scope.project.links._packageIds,
+                        id: "packageIdsProject",
+                        name: "Package Ids",
+                        cls: "ot-command-project-package-ids",
+                        action: () => {
+                            $scope.editProjectPackageIds();
                         }
                     },
                     {

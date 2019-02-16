@@ -163,6 +163,19 @@
                     <ot-entity-properties entity="{_properties: project.links._properties}"></ot-entity-properties>
                 </div>
             </div>
+
+            <ot-section-title>Package identifiers</ot-section-title>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ot-alert-info">
+                        No package identifier for this project.
+                        <span ng-if="project.links._packageIds">
+                            To create one, click <a class="ot-action" ng-click="editProjectPackageIds()">here</a>.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <ot-section-title>Extra information</ot-section-title>
             <div class="row">
                 <div class="col-md-12">
