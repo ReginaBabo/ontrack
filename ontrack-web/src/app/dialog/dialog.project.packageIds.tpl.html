@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h3>
+        "{{config.project.name}}" project package identifiers
+    </h3>
+</div>
+<form name="thisForm" class="form-horizontal" ng-submit="submit(thisForm.$valid)" novalidate="novalidate">
+    <div class="modal-body">
+        <table class="table table-condensed table-hover">
+            <tbody>
+            <tr ng-repeat="packageId in packageIds">
+                <td>
+                    <ot-package-id package-id="packageId"></ot-package-id>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <div class="ot-alert-{{message.type}} alert-dismissable" ng-show="message">
+            <span>{{message.content}}</span>
+        </div>
+        <button class="btn btn-primary" type="submit" ng-disabled="thisForm.$invalid">OK</button>
+        <button class="btn btn-link" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</form>

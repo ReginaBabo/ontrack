@@ -5,7 +5,8 @@ angular.module('ot.view.project', [
     'ot.service.copy',
     'ot.service.graphql',
     'ot.service.label',
-    'ot.dialog.project.labels'
+    'ot.dialog.project.labels',
+    'ot.dialog.project.packageIds'
 ])
     .config(function ($stateProvider) {
         $stateProvider.state('project', {
@@ -357,6 +358,43 @@ angular.module('ot.view.project', [
 
         $scope.projectLabelFilter = (label) => {
             location.href = '#/home?label=' + otLabelService.formatLabel(label);
+        };
+
+        $scope.editProjectPackageIds = () => {
+            if ($scope.project.links._packageIds) {
+                const query = `{
+                    packageTypes {
+                        id
+                        name
+                        description
+                        feature {
+                            id
+                        }
+                    }
+                }`;
+                otGraphqlService.pageGraphQLCall(query).then(resultPackageTypes => {
+                    return $modal.open({
+                        templateUrl: 'app/dialog/dialog.project.packageIds.tpl.html',
+                        controller: 'otDialogProjectPackageIds',
+                        resolve: {
+                            config: function () {
+                                return {
+                                    packageTypes: resultPackageTypes.packageTypes,
+                                    project: $scope.project,
+                                    submit: function (packageIds) {
+                                        // FIXME #650 Submit the package Ids
+                                        // const request = {
+                                        //     labels: labels.filter(it => it.selected)
+                                        //         .map(it => it.id)
+                                        // };
+                                        // return ot.call($http.put($scope.project.links._labels, request));
+                                    }
+                                };
+                            }
+                        }
+                    }).result;
+                }).then(loadProject);
+            }
         };
 
         $scope.editProjectLabels = () => {
