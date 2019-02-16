@@ -1,10 +1,17 @@
-<div class="ot-alert-warning" ng-if="infosLoading">
-    Loading the extra information...
+<div class="row" ng-show="infosLoading">
+    <div class="col-md-12">
+        <div class="ot-alert-info">
+            <span class="ot-loading-indicator"></span>
+            Loading the extra information...
+        </div>
+    </div>
 </div>
-<div ng-hide="infosLoading">
-    <ot-noentry list="infos.resources">
-        No extra information attached.
-    </ot-noentry>
+<div class="row" ng-hide="infosLoading" ng-if="!infos.resources.length">
+    <div class="col-md-12">
+        <div class="ot-alert-info">
+            No extra information attached.
+        </div>
+    </div>
 </div>
 <div class="row" ng-repeat="entityInformation in infos.resources">
     <div class="col-md-12">
