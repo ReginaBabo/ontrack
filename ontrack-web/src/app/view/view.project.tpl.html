@@ -165,7 +165,7 @@
             </div>
 
             <ot-section-title>Package identifiers</ot-section-title>
-            <div class="row">
+            <div class="row" ng-if="!project.packageIds.length">
                 <div class="col-md-12">
                     <div class="ot-alert-info">
                         No package identifier for this project.
@@ -175,6 +175,15 @@
                     </div>
                 </div>
             </div>
+            <table class="table table-condensed" ng-if="project.packageIds.length">
+                <tbody>
+                <tr ng-repeat="packageId in project.packageIds">
+                    <td>
+                        <ot-package-id package-id="packageId"></ot-package-id>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
             <ot-section-title>Extra information</ot-section-title>
             <div class="row">

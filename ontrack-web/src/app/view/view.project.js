@@ -47,6 +47,17 @@ angular.module('ot.view.project', [
                     name
                   }
                 }
+                packageIds {
+                  id
+                  type {
+                    id
+                    name
+                    description
+                    feature {
+                      id
+                    }
+                  }
+                }
                 links {
                   _self
                   _createBranch
