@@ -10,8 +10,8 @@ class ProjectPackageGraphQLIT : AbstractQLKTITSupport() {
     fun `Project package ids`() {
         project {
             packageIds {
-                generic("one")
-                generic("two")
+                test("one")
+                test("two")
             }
             val data = run("""{
                 projects(id: ${this.id}) {
@@ -30,15 +30,15 @@ class ProjectPackageGraphQLIT : AbstractQLKTITSupport() {
                     listOf(
                             mapOf(
                                     "type" to mapOf(
-                                            "id" to "net.nemerosa.ontrack.service.GenericPackageType",
-                                            "name" to "Generic"
+                                            "id" to "net.nemerosa.ontrack.it.TestPackageType",
+                                            "name" to "Test"
                                     ),
                                     "id" to "one"
                             ),
                             mapOf(
                                     "type" to mapOf(
-                                            "id" to "net.nemerosa.ontrack.service.GenericPackageType",
-                                            "name" to "Generic"
+                                            "id" to "net.nemerosa.ontrack.it.TestPackageType",
+                                            "name" to "Test"
                                     ),
                                     "id" to "two"
                             )

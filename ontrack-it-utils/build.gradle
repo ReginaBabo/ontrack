@@ -4,6 +4,7 @@ dependencies {
     compile project(':ontrack-test-utils')
     compile project(':ontrack-extension-support')
     compile project(':ontrack-ui-support')
+    compile project(':ontrack-extension-api').sourceSets.test.output
     compile 'org.springframework:spring-context'
     compile 'org.springframework:spring-jdbc'
     compile 'org.springframework:spring-test'
