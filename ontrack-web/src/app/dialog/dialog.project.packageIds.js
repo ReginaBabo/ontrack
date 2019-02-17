@@ -33,7 +33,11 @@ angular.module('ot.dialog.project.packageIds', [
                     $scope.selectedPackageId.id = $scope.package.id;
                     $scope.clearPackageId();
                 } else {
-
+                    $scope.packageIds.push({
+                        id: $scope.package.id,
+                        type: $scope.packageTypes.find(it => it.id === $scope.package.type)
+                    });
+                    $scope.clearPackageId();
                 }
             }
         };
