@@ -11,6 +11,10 @@
                 <td>
                     <ot-package-id package-id="packageId"></ot-package-id>
                 </td>
+                <td>
+                   <span class="fa fa-pencil ot-command" title="Edit this package identifier" ng-click="editPackageId(packageId)"></span>
+                   <span class="fa fa-trash ot-command" title="Deletes this package identifier" ng-click="deletePackageId(packageId)"></span>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -25,7 +29,9 @@
                         <input type="text" class="form-control" ng-model="package.id" placeholder="Package identifier"/>
                     </div>
                     <div class="form-group col-md-2">
-                        <button type="button" class="btn btn-primary" ng-disabled="!package.type || !package.id">Add</button>
+                        <button type="button" class="btn btn-primary" ng-hide="selectedPackageId" ng-disabled="!selectedPackageId && (!package.type || !package.id)" ng-click="savePackageId()">Add</button>
+                        <button type="button" class="btn btn-primary" ng-show="selectedPackageId" ng-disabled="selectedPackageId && (!package.type || !package.id)" ng-click="savePackageId()">Update</button>
+                        <button type="button" class="btn btn-default" ng-click="clearPackageId()">Clear</button>
                     </div>
                 </form>
             </div>
