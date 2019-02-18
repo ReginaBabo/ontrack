@@ -13,6 +13,10 @@ Downloads the ZIP:
 curl --user admin:admin http://localhost:8080/extension/neo4j/export/$UUID --output neo.zip
 ```
 
+## Importing in a local Neo4J container
+
+> All steps below are available in the `src/main/script/import.sh`. Just put the `neo.zip` file into the `src/main/script` directory, and run the `./import.sh` script in this directory. 
+
 Unzips the files:
 
 ```bash
