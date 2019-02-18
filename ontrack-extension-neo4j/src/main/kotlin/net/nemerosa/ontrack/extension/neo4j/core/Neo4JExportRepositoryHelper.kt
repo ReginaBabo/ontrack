@@ -6,4 +6,6 @@ interface Neo4JExportRepositoryHelper {
 
     fun promotions(exporter: (Neo4JPromotion) -> Unit)
 
+    fun promotedBuilds(exporter: (Neo4JPromotedBuild) -> Unit)
+
 }

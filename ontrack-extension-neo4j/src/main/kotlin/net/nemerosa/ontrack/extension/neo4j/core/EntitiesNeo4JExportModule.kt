@@ -84,10 +84,25 @@ class EntitiesNeo4JExportModule(
                     id { it.uuid }
                     column("name" to Neo4JPromotion::name)
                     column("description" to Neo4JPromotion::description)
+                    // TODO creator
+                    // TODO creation
                 }
                 rel("PROMOTION_OF") {
                     start { it.uuid }
                     end { entityId<Project>(it.project) }
+                }
+            }
+            // Promoted builds
+            extractor<Neo4JPromotedBuild> {
+                recorder { exporter ->
+                    neo4JExportRepositoryHelper.promotedBuilds(exporter)
+                }
+                rel("PROMOTED_TO") {
+                    start { entityId<Build>(it.build) }
+                    end { it.promotionUuid }
+                    column("description" to Neo4JPromotedBuild::description)
+                    // TODO creator
+                    // TODO creation
                 }
             }
         }

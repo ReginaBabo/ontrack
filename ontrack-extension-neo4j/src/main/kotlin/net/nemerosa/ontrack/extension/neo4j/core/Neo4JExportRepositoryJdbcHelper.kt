@@ -36,4 +36,24 @@ class Neo4JExportRepositoryJdbcHelper(dataSource: DataSource) : AbstractJdbcRepo
             )
         }
     }
+
+    override fun promotedBuilds(exporter: (Neo4JPromotedBuild) -> Unit) {
+        namedParameterJdbcTemplate.jdbcOperations.query(
+                """
+                    SELECT r.BUILDID, r.CREATION, r.CREATOR, r.DESCRIPTION, p.NAME, b.PROJECTID
+                    FROM PROMOTION_RUNS r
+                    INNER JOIN PROMOTION_LEVELS p ON p.ID = r.PROMOTIONLEVELID
+                    INNER JOIN BRANCHES b ON b.ID = p.BRANCHID
+                """
+        ) { rs ->
+            exporter(
+                    Neo4JPromotedBuild(
+                            build = rs.getInt("BUILDID"),
+                            description = rs.getString("DESCRIPTION") ?: "",
+                            promotion = rs.getString("NAME"),
+                            project = rs.getInt("PROJECTID")
+                    )
+            )
+        }
+    }
 }

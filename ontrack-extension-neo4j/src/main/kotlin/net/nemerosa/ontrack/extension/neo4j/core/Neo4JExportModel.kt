@@ -12,3 +12,14 @@ data class Neo4JPromotion(
 ) {
     val uuid: String = "$project-$name"
 }
+
+data class Neo4JPromotedBuild(
+        val build: Int,
+        // TODO Creation
+        // TODO Creator
+        val description: String,
+        val promotion: String,
+        val project: Int
+) {
+    val promotionUuid: String = Neo4JPromotion(project, promotion, "").uuid
+}
