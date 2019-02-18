@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.extension.general.validation
 
 import net.nemerosa.ontrack.extension.general.GeneralExtensionFeature
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature
 import net.nemerosa.ontrack.json.toJson
 import net.nemerosa.ontrack.model.structure.ValidationRunStatusID
 import org.junit.Test
@@ -9,7 +10,7 @@ import kotlin.test.assertNotNull
 
 class CHMLValidationDataTypeTest {
 
-    private val dataType = CHMLValidationDataType(GeneralExtensionFeature())
+    private val dataType = CHMLValidationDataType(GeneralExtensionFeature(Neo4JExtensionFeature()))
 
     private val config = CHMLValidationDataTypeConfig(
             CHMLLevel(CHML.HIGH, 1),

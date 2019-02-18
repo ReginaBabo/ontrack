@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.extension.general
 
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import kotlin.test.assertFalse
@@ -8,7 +9,7 @@ import kotlin.test.assertTrue
 class LinkPropertyTypeTest {
 
     private val type: LinkPropertyType = LinkPropertyType(
-            GeneralExtensionFeature()
+            GeneralExtensionFeature(Neo4JExtensionFeature())
     )
 
     @Test

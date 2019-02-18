@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.extension.general.validation
 
 import com.fasterxml.jackson.databind.node.TextNode
 import net.nemerosa.ontrack.extension.general.GeneralExtensionFeature
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature
 import net.nemerosa.ontrack.json.JsonUtils
 import net.nemerosa.ontrack.test.assertIs
 import org.junit.Test
@@ -9,7 +10,7 @@ import kotlin.test.assertEquals
 
 class TextValidationDataTypeTest {
 
-    private val dataType = TextValidationDataType(GeneralExtensionFeature())
+    private val dataType = TextValidationDataType(GeneralExtensionFeature(Neo4JExtensionFeature()))
 
     @Test
     fun toJson() {

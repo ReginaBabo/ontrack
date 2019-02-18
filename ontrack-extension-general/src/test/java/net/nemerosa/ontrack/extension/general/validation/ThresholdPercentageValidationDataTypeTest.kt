@@ -1,13 +1,14 @@
 package net.nemerosa.ontrack.extension.general.validation
 
 import net.nemerosa.ontrack.extension.general.GeneralExtensionFeature
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature
 import net.nemerosa.ontrack.model.structure.ValidationRunStatusID
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class ThresholdPercentageValidationDataTypeTest {
 
-    private val dataType = ThresholdPercentageValidationDataType(GeneralExtensionFeature())
+    private val dataType = ThresholdPercentageValidationDataType(GeneralExtensionFeature(Neo4JExtensionFeature()))
 
     @Test
     fun `Threshold of 0% with success being 0%`() {

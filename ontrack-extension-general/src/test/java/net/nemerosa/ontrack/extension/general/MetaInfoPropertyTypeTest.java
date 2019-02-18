@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.extension.general;
 
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class MetaInfoPropertyTypeTest {
 
     private MetaInfoPropertyType type = new MetaInfoPropertyType(
-            new GeneralExtensionFeature()
+            new GeneralExtensionFeature(new Neo4JExtensionFeature())
     );
 
     @Test

@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.extension.general.validation
 
 import net.nemerosa.ontrack.extension.general.GeneralExtensionFeature
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature
 import net.nemerosa.ontrack.json.jsonOf
 import net.nemerosa.ontrack.model.exceptions.ValidationRunDataInputException
 import net.nemerosa.ontrack.model.structure.ValidationRunStatusID
@@ -11,7 +12,7 @@ import kotlin.test.assertNull
 
 class FractionValidationDataTypeTest {
 
-    private val dataType = FractionValidationDataType(GeneralExtensionFeature())
+    private val dataType = FractionValidationDataType(GeneralExtensionFeature(Neo4JExtensionFeature()))
 
     @Test
     fun toJson() {

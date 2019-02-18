@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.extension.general;
 
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature;
 import net.nemerosa.ontrack.model.structure.StructureService;
 import net.nemerosa.ontrack.ui.controller.MockURIBuilder;
 import org.junit.Before;
@@ -17,7 +18,7 @@ public class BuildLinkSearchExtensionTest {
     public void before() {
         StructureService structureService = mock(StructureService.class);
         extension = new BuildLinkSearchExtension(
-                new GeneralExtensionFeature(),
+                new GeneralExtensionFeature(new Neo4JExtensionFeature()),
                 new MockURIBuilder(),
                 structureService);
     }

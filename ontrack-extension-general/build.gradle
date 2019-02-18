@@ -5,6 +5,7 @@ apply plugin: 'groovy'
 
 dependencies {
     compile project(':ontrack-extension-support')
+    compile project(':ontrack-extension-neo4j')
 
     testCompile 'org.codehaus.groovy:groovy-all'
     testCompile project(':ontrack-it-utils')

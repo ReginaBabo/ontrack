@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.extension.neo4j.model
 
+import net.nemerosa.ontrack.extension.neo4j.Neo4JNodeContributor
 import net.nemerosa.ontrack.extension.neo4j.core.entityId
 import net.nemerosa.ontrack.model.structure.ProjectEntity
 
@@ -83,6 +84,21 @@ class NodeContext<T>(private val name: String) : AbstractGraphContext<T>() {
 
     fun id(idProvider: (T) -> String) {
         column(":ID" to idProvider)
+    }
+
+    /**
+     * Gets all the contributors for this node
+     */
+    inline fun <reified P> nodeContributors(contributors: Collection<Neo4JNodeContributor<*>>) {
+        contributors
+                .filter { it.appliesFor(P::class.java) }
+                .map {
+                    @Suppress("UNCHECKED_CAST")
+                    it as Neo4JNodeContributor<T>
+                }
+                .forEach { contributor ->
+                    contributor(this)
+                }
     }
 
     override fun getRecordDef() = Neo4JExportRecordDef(

@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.extension.general
 
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -9,7 +10,7 @@ import kotlin.test.assertTrue
 class ReleasePropertyTypeTest {
 
     private val type = ReleasePropertyType(
-            GeneralExtensionFeature()
+            GeneralExtensionFeature(Neo4JExtensionFeature())
     )
 
     @Test

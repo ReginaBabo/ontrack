@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.extension.general.validation
 
 import net.nemerosa.ontrack.extension.general.GeneralExtensionFeature
+import net.nemerosa.ontrack.extension.neo4j.Neo4JExtensionFeature
 import net.nemerosa.ontrack.json.jsonOf
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -9,7 +10,7 @@ import kotlin.test.assertNull
 
 class ThresholdNumberValidationDataTypeTest {
 
-    private val dataType = ThresholdNumberValidationDataType(GeneralExtensionFeature())
+    private val dataType = ThresholdNumberValidationDataType(GeneralExtensionFeature(Neo4JExtensionFeature()))
 
     @Test
     fun `Null config from JSON`() {
