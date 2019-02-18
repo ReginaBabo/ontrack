@@ -19,6 +19,12 @@ Unzips the files:
 unzip neo.zip -d csv
 ```
 
+Remove old database:
+
+```bash
+rm -rf db/ontrack.db
+```
+
 Creates a database:
 
 ```bash
@@ -28,7 +34,8 @@ docker container run --rm \
     neo4j:3.5.3 \
     neo4j-admin import \
     --database ontrack.db \
-    --nodes /var/lib/neo4j/import/csv/node/Project.csv
+    --nodes /var/lib/neo4j/import/csv/node/Project.csv \
+    --nodes /var/lib/neo4j/import/csv/node/Branch.csv
 ```
 
 > The database is created at `db/ontrack.db`
@@ -38,6 +45,12 @@ Move this database to the correct location:
 ```bash
 rm -rf ~/neo4j/data/databases/ontrack.db
 cp -r db/ontrack.db ~/neo4j/data/databases/
+```
+
+Make sure the database is down:
+
+```bash
+docker container rm -fv neo4j
 ```
 
 Now, run a Neo4J database from this database:
