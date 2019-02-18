@@ -15,9 +15,11 @@ docker container run --rm \
     --nodes /var/lib/neo4j/import/csv/node/Project.csv \
     --nodes /var/lib/neo4j/import/csv/node/Branch.csv \
     --nodes /var/lib/neo4j/import/csv/node/Build.csv \
+    --nodes /var/lib/neo4j/import/csv/node/Promotion.csv \
     --relationships /var/lib/neo4j/import/csv/rel/BRANCH_OF.csv \
     --relationships /var/lib/neo4j/import/csv/rel/BUILD_OF.csv \
     --relationships /var/lib/neo4j/import/csv/rel/DEPENDS_ON.csv \
+    --relationships /var/lib/neo4j/import/csv/rel/PROMOTION_OF.csv \
     --database ontrack.db
 
 echo "Move this database to the correct location"
