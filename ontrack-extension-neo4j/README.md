@@ -33,9 +33,10 @@ docker container run --rm \
     --volume `pwd`/db:/var/lib/neo4j/data/databases \
     neo4j:3.5.3 \
     neo4j-admin import \
-    --database ontrack.db \
     --nodes /var/lib/neo4j/import/csv/node/Project.csv \
-    --nodes /var/lib/neo4j/import/csv/node/Branch.csv
+    --nodes /var/lib/neo4j/import/csv/node/Branch.csv \
+    --relationships /var/lib/neo4j/import/csv/rel/BRANCH_OF.csv \
+    --database ontrack.db
 ```
 
 > The database is created at `db/ontrack.db`
