@@ -3,10 +3,9 @@ package net.nemerosa.ontrack.extension.neo4j.core
 import net.nemerosa.ontrack.extension.neo4j.model.Neo4JExportModule
 import net.nemerosa.ontrack.extension.neo4j.model.extractors
 import net.nemerosa.ontrack.extension.neo4j.model.rel
-import net.nemerosa.ontrack.model.structure.Branch
-import net.nemerosa.ontrack.model.structure.Project
-import net.nemerosa.ontrack.model.structure.StructureService
+import net.nemerosa.ontrack.model.structure.*
 import org.springframework.stereotype.Component
+import java.util.function.Predicate
 
 @Component
 class EntitiesNeo4JExportModule(
@@ -34,7 +33,31 @@ class EntitiesNeo4JExportModule(
                 // TODO creator
                 // TODO creation
             }
-            rel("BRANCH_OF", { b -> b.project })
+            rel("BRANCH_OF") { b -> b.project }
+        }
+        extractor<Build> {
+            recorder { exporter ->
+                structureService.projectList.asSequence()
+                        .flatMap { structureService.getBranchesForProject(it.id).asSequence() }
+                        .forEach { branch ->
+                            structureService.findBuild(
+                                    branch.id,
+                                    Predicate { build ->
+                                        exporter(build)
+                                        false
+                                    },
+                                    BuildSortDirection.FROM_OLDEST
+                            )
+                        }
+            }
+            node("Build") {
+                id(entityId())
+                column("name" to Build::getName)
+                column("description" to Build::getDescription)
+                // TODO creator
+                // TODO creation
+            }
+            rel("BUILD_OF") { b -> b.branch }
         }
     }
 }

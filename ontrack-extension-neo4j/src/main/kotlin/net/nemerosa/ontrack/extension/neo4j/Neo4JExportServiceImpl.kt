@@ -135,10 +135,9 @@ class Neo4JExportServiceImpl(
      * using the list of [record definitions][Neo4JExportRecordExtractor.recordDefinitions].
      */
     private fun <T> export(exportContext: Neo4JExportContext, recordExtractor: Neo4JExportRecordExtractor<T>) {
-        // Gets the list of items
-        val items = recordExtractor.collectionSupplier()
-        // Exports each items
-        items.forEach { o -> export(exportContext, recordExtractor, o) }
+        recordExtractor.export { item ->
+            export(exportContext, recordExtractor, item)
+        }
     }
 
     /**

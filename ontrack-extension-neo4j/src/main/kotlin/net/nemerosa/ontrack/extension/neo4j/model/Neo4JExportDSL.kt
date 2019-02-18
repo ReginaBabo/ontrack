@@ -22,8 +22,13 @@ class ExtractorsContext {
 }
 
 class ExtractorContext<T> {
+    private var recorder: (((T) -> Unit) -> Unit)? = null
     private var items: () -> Sequence<T> = { emptySequence() }
     private val recordDefinitions = mutableListOf<Neo4JExportRecordDef<T>>()
+
+    fun recorder(recorder: (exporter: (T) -> Unit) -> Unit) {
+        this.recorder = recorder
+    }
 
     fun records(items: () -> Sequence<T>) {
         this.items = items
@@ -43,10 +48,11 @@ class ExtractorContext<T> {
                 .apply { recordDefinitions += this }
     }
 
-    fun getRecordExtractor() = Neo4JExportRecordExtractor(
-            items,
-            recordDefinitions.toList()
-    )
+    fun getRecordExtractor(): Neo4JExportRecordExtractor<T> {
+        return recorder?.let {
+            RecorderNeo4JExportRecordExtractor(it, recordDefinitions.toList())
+        } ?: SequenceNeo4JExportRecordExtractor(items, recordDefinitions.toList())
+    }
 }
 
 inline fun <reified T : ProjectEntity, reified U : ProjectEntity> ExtractorContext<T>.rel(name: String, crossinline to: (T) -> U) {
