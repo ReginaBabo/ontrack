@@ -1,9 +1,6 @@
 package net.nemerosa.ontrack.extension.neo4j.core
 
-import net.nemerosa.ontrack.model.structure.Branch
-import net.nemerosa.ontrack.model.structure.Build
-import net.nemerosa.ontrack.model.structure.Project
-import net.nemerosa.ontrack.model.structure.ProjectEntity
+import net.nemerosa.ontrack.model.structure.*
 
 val ids = mapOf(
         Project::class to 1,
@@ -12,6 +9,11 @@ val ids = mapOf(
 )
 
 const val ENTITY_PSEUDO_UUID = "00000000-0000-0000-%04d-%012d"
+
+inline fun <reified T : ProjectEntity> entityId(id: Int): String {
+    val typeId = ids[T::class] ?: throw IllegalArgumentException("Project entity not managed: ${T::class}")
+    return ENTITY_PSEUDO_UUID.format(typeId, id)
+}
 
 inline fun <reified T : ProjectEntity> entityId(): (T) -> String {
     val typeId = ids[T::class] ?: throw IllegalArgumentException("Project entity not managed: ${T::class}")

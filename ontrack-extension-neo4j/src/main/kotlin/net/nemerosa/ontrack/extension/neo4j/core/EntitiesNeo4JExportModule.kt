@@ -9,7 +9,8 @@ import java.util.function.Predicate
 
 @Component
 class EntitiesNeo4JExportModule(
-        private val structureService: StructureService
+        private val structureService: StructureService,
+        private val neo4JExportRepositoryHelper: Neo4JExportRepositoryHelper
 ) : Neo4JExportModule {
     override val recordExtractors = extractors {
         extractor<Project> {
@@ -58,6 +59,15 @@ class EntitiesNeo4JExportModule(
                 // TODO creation
             }
             rel("BUILD_OF") { b -> b.branch }
+        }
+        extractor<Neo4JBuildLink> {
+            recorder { exporter ->
+                neo4JExportRepositoryHelper.buildLinks(exporter)
+            }
+            rel("DEPENDS_ON") {
+                start { link -> entityId<Build>(link.from) }
+                end { link -> entityId<Build>(link.to) }
+            }
         }
     }
 }

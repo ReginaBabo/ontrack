@@ -4,6 +4,7 @@ apply plugin: OntrackExtensionPlugin
 
 dependencies {
     compile project(':ontrack-extension-support')
+    compile project(':ontrack-repository-support')
 
     testCompile project(':ontrack-it-utils')
     testCompile 'org.apache.commons:commons-csv:1.5'
