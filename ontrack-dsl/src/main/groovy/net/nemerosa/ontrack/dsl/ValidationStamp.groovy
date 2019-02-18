@@ -2,7 +2,6 @@ package net.nemerosa.ontrack.dsl
 
 import net.nemerosa.ontrack.dsl.doc.DSL
 import net.nemerosa.ontrack.dsl.doc.DSLMethod
-import net.nemerosa.ontrack.dsl.properties.ProjectEntityProperties
 import net.nemerosa.ontrack.dsl.properties.ValidationStampProperties
 
 @DSL
@@ -29,7 +28,8 @@ class ValidationStamp extends AbstractProjectResource {
         closure()
     }
 
-    ProjectEntityProperties getConfig() {
+    @DSLMethod("Access to the validation stamp properties")
+    ValidationStampProperties getConfig() {
         new ValidationStampProperties(ontrack, this)
     }
 
@@ -54,5 +54,118 @@ class ValidationStamp extends AbstractProjectResource {
     @DSLMethod("Gets the validation stamp weather decoration.")
     def getValidationStampWeatherDecoration() {
         getDecoration('net.nemerosa.ontrack.extension.general.ValidationStampWeatherDecorationExtension')
+    }
+
+    @DSLMethod("Sets a data type for the validation stamp")
+    def setDataType(String id, Object config) {
+        ontrack.put(
+                link("update"),
+                [
+                        name       : name,
+                        description: description,
+                        dataType   : [
+                                id  : id,
+                                data: config,
+                        ],
+                ]
+        )
+    }
+
+    @DSLMethod("Gets the data type for the validation stamp, map with `id` and `config`, or null if not defined.")
+    def getDataType() {
+        if (node.dataType) {
+            return [
+                    id    : node.dataType.descriptor.id,
+                    config: node.dataType.config
+            ]
+        } else {
+            return null
+        }
+    }
+
+    @DSLMethod("Sets the data type for this validation stamp to 'text'.")
+    def setTextDataType() {
+        setDataType(
+                "net.nemerosa.ontrack.extension.general.validation.TextValidationDataType",
+                [:]
+        )
+    }
+
+    @DSLMethod("Sets the data type for this validation stamp to 'CHML' (number of critical / high / medium / low issues).")
+    def setCHMLDataType(
+            String warningLevel,
+            Integer warningValue,
+            String failedLevel,
+            Integer failedValue
+    ) {
+        setDataType(
+                "net.nemerosa.ontrack.extension.general.validation.CHMLValidationDataType",
+                [
+                        warningLevel: warningLevel,
+                        warningValue: warningValue,
+                        failedLevel : failedLevel,
+                        failedValue : failedValue
+                ]
+        )
+    }
+
+    @DSLMethod(value = "Sets the data type for this validation stamp to 'Number'.", count = 3)
+    def setNumberDataType(
+            Integer warningThreshold = null,
+            Integer failureThreshold = null,
+            boolean okIfGreater = true
+    ) {
+        setDataType(
+                "net.nemerosa.ontrack.extension.general.validation.ThresholdNumberValidationDataType",
+                [
+                        warningThreshold: warningThreshold,
+                        failureThreshold: failureThreshold,
+                        okIfGreater     : okIfGreater,
+                ]
+        )
+    }
+
+    @DSLMethod(value = "Sets the data type for this validation stamp to 'Percentage'.", count = 3)
+    def setPercentageDataType(
+            Integer warningThreshold = null,
+            Integer failureThreshold = null,
+            boolean okIfGreater = true
+    ) {
+        setDataType(
+                "net.nemerosa.ontrack.extension.general.validation.ThresholdPercentageValidationDataType",
+                [
+                        warningThreshold: warningThreshold,
+                        failureThreshold: failureThreshold,
+                        okIfGreater     : okIfGreater,
+                ]
+        )
+    }
+
+    @DSLMethod(value = "Sets the data type for this validation stamp to 'Fraction'.", count = 3)
+    def setFractionDataType(
+            Integer warningThreshold = null,
+            Integer failureThreshold = null,
+            boolean okIfGreater = true
+    ) {
+        setDataType(
+                "net.nemerosa.ontrack.extension.general.validation.FractionValidationDataType",
+                [
+                        warningThreshold: warningThreshold,
+                        failureThreshold: failureThreshold,
+                        okIfGreater     : okIfGreater,
+                ]
+        )
+    }
+
+    @DSLMethod(value = "Sets the data type for this validation stamp to 'TestSummary'.", count = 1)
+    def setTestSummaryDataType(
+            boolean warningIfSkipped = false
+    ) {
+        setDataType(
+                "net.nemerosa.ontrack.extension.general.validation.TestSummaryValidationDataType",
+                [
+                        warningIfSkipped: warningIfSkipped,
+                ]
+        )
     }
 }

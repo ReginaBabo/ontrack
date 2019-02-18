@@ -1,3 +1,12 @@
+<div class="alert alert-warning" ng-if="!!invalidBuildFilterResource">
+    <p>Current build filter {{invalidBuildFilterResource.name}} is invalid and cannot be used any longer:</p>
+    <p><i>{{invalidBuildFilterMessage}}</i></p>
+    <p>It has been replaced by the default filter.</p>
+    <p ng-if="!invalidBuildFilterResource.shared || branch._buildFilterShare">
+        You should <a href ng-click="buildFilterRemove(invalidBuildFilterResource)">delete</a> this filter.
+    </p>
+</div>
+
 <table class="ot-branch-build-view">
     <thead>
     <tr>
@@ -168,6 +177,7 @@
             <!-- VS filter edition OFF -->
             <span ng-if="!validationStampFilter || !validationStampFilter._update || !validationStampFilterEdition">
                 <ot-entity-image entity="validationStamp"
+                                 title="{{validationStamp.name}} - {{validationStamp.description}}"
                                  link="#/validationStamp/{{validationStamp.id}}"></ot-entity-image>
             </span>
         </th>
@@ -206,6 +216,10 @@
             <div class="ot-branch-build-view-build-signature">
                 {{build.creation.time | date:'mediumDate'}}
                 {{build.creation.time | date:'shortTime'}}
+                <!-- Run info - run time if available -->
+                <span ng-if="build.runInfo.runTime" title="{{build.runInfo.runTime}} seconds">
+                    &nbsp;-&nbsp;<ot-duration duration="build.runInfo.runTime" detail="false"></ot-duration>
+                </span>
             </div>
         </td>
         <!-- Promotion runs -->
@@ -225,16 +239,16 @@
         <td ng-repeat="validation in build.validations | filter:validationStampRunViewFilter"
             class="ot-branch-build-view-validation">
             <!-- Not run and validation enabled -->
-            <span ng-if="validation.validationRuns.length == 0 && build.links._validate" class="ot-command"
+            <span id="validation-{{build.id}}-{{validation.validationStamp.id}}-validate" ng-if="validation.validationRuns.length == 0 && build.links._validate" class="ot-command"
                   ng-click="createValidationRun(build, validation.validationStamp)">
                 <ot-validation-run-status-none></ot-validation-run-status-none>
             </span>
             <!-- Not run and validation not enabled -->
-            <span ng-if="validation.validationRuns.length == 0 && !build.links._validate">
+            <span id="validation-{{build.id}}-{{validation.validationStamp.id}}-none" ng-if="validation.validationRuns.length == 0 && !build.links._validate">
                 <ot-validation-run-status-none></ot-validation-run-status-none>
             </span>
             <!-- Last status -->
-            <span ng-if="validation.validationRuns.length > 0">
+            <span id="validation-{{build.id}}-{{validation.validationStamp.id}}-list" ng-if="validation.validationRuns.length > 0">
                 <span class="ot-action" ng-click="displayValidationRuns(build, validation.validationStamp)">
                     <ot-validation-run-status status="validation.validationRuns[0].validationRunStatuses[0]"></ot-validation-run-status>
                 </span>

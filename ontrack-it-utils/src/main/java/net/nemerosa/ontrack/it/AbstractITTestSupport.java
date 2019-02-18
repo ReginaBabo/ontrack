@@ -6,6 +6,7 @@ import net.nemerosa.ontrack.json.ObjectMapperFactory;
 import net.nemerosa.ontrack.model.structure.NameDescription;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -35,6 +36,7 @@ public abstract class AbstractITTestSupport extends AbstractTransactionalJUnit4S
     @Configuration
     @Profile(RunProfile.UNIT_TEST)
     @ComponentScan("net.nemerosa.ontrack")
+    @EnableAutoConfiguration
     public static class AbstractIntegrationTestConfiguration {
     }
 

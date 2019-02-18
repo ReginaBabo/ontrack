@@ -13,6 +13,12 @@ const ontrack = angular.module('ontrack', [
         'ot.directive.field',
         'ot.directive.properties',
         'ot.directive.health',
+        'ot.directive.duration',
+        'ot.directive.creation',
+        'ot.directive.validationRunData',
+        'ot.directive.validationDataTypeConfig',
+        'ot.directive.validationDataTypeDecoration',
+        'ot.directive.projectLabel',
         // Dialogs
         'ot.dialog.applicationInfo',
         // Services
@@ -23,6 +29,7 @@ const ontrack = angular.module('ontrack', [
         'ot.service.form',
         'ot.service.configuration',
         'ot.service.graphql',
+        'ot.service.label',
         // Views
         'ot.view.api',
         'ot.view.api-doc',
@@ -42,6 +49,7 @@ const ontrack = angular.module('ontrack', [
         'ot.view.admin.health',
         'ot.view.admin.extensions',
         'ot.view.admin.jobs',
+        'ot.view.admin.labels',
         'ot.view.admin.log-entries',
         'ot.view.admin.predefined-validation-stamps',
         'ot.view.admin.predefined-promotion-levels'
@@ -188,8 +196,8 @@ const ontrack = angular.module('ontrack', [
                 });
             };
 
-            $scope.displayVersionInfo = function (versionInfo) {
-                otInfoService.displayVersionInfo(versionInfo);
+            $scope.displayVersionInfo = function (info) {
+                otInfoService.displayVersionInfo(info);
             };
 
             /**

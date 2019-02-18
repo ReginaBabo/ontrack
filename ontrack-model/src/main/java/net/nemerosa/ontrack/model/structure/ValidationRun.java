@@ -1,17 +1,22 @@
 package net.nemerosa.ontrack.model.structure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.ImmutableMap;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Wither;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class ValidationRun implements ProjectEntity {
+public class ValidationRun implements RunnableEntity {
 
     private final ID id;
     @JsonView({ValidationRun.class, ValidationStampRunView.class})
@@ -22,6 +27,49 @@ public class ValidationRun implements ProjectEntity {
      * The run order is the order of run for the build. It starts with 1 for the first run.
      */
     private final int runOrder;
+
+    @NotNull
+    @Override
+    @JsonIgnore
+    public RunnableEntityType getRunnableEntityType() {
+        return RunnableEntityType.validation_run;
+    }
+
+    @NotNull
+    @Override
+    @JsonIgnore
+    public String getRunMetricName() {
+        return build.getName();
+    }
+
+    @NotNull
+    @Override
+    @JsonIgnore
+    public Map<String, String> getRunMetricTags() {
+        return ImmutableMap.of(
+                "project", validationStamp.getBranch().getProject().getName(),
+                "branch", validationStamp.getBranch().getName(),
+                "validationStamp", validationStamp.getName(),
+                "status", getLastStatusId()
+        );
+    }
+
+    /**
+     * Gets the name of the last status
+     */
+    private String getLastStatusId() {
+        if (validationRunStatuses.isEmpty()) {
+            return "";
+        } else {
+            return validationRunStatuses.get(0).getStatusID().getId();
+        }
+    }
+
+    /**
+     * Data used for the link to an optional {@link ValidationDataType} and its data
+     */
+    @Wither
+    private final ValidationRunData<?> data;
 
     /**
      * Must always contain at least one validation run status at creation time.
@@ -37,6 +85,7 @@ public class ValidationRun implements ProjectEntity {
                 build,
                 validationStamp,
                 runOrder,
+                data,
                 Collections.unmodifiableList(statuses)
         );
     }
@@ -85,6 +134,7 @@ public class ValidationRun implements ProjectEntity {
                 build,
                 validationStamp,
                 runOrder,
+                null,
                 statuses
         );
     }
@@ -95,6 +145,7 @@ public class ValidationRun implements ProjectEntity {
                 build,
                 validationStamp,
                 runOrder,
+                data,
                 validationRunStatuses
         );
     }

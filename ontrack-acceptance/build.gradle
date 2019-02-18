@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
@@ -11,7 +11,7 @@ apply plugin: 'groovy'
 apply plugin: 'org.springframework.boot'
 
 ext {
-    seleniumVersion = '3.3.1'
+    seleniumVersion = '3.11.0'
 }
 
 dependencies {
@@ -21,6 +21,8 @@ dependencies {
     testCompile project(':ontrack-test-utils')
     testCompile 'org.codehaus.groovy:groovy-all'
     testCompile 'org.springframework.boot:spring-boot-starter'
+
+    testCompile 'org.influxdb:influxdb-java'
 
     testCompile "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
     testCompile "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"

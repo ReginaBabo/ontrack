@@ -3,7 +3,7 @@ package net.nemerosa.ontrack.service.security;
 import net.nemerosa.ontrack.extension.api.ExtensionManager;
 import net.nemerosa.ontrack.model.extension.*;
 import net.nemerosa.ontrack.model.support.StartupService;
-import org.jgrapht.alg.CycleDetector;
+import org.jgrapht.alg.cycle.CycleDetector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.TopologicalOrderIterator;
@@ -37,7 +37,7 @@ public class ExtensionManagerImpl implements ExtensionManager, StartupService {
 
     @Override
     public int startupOrder() {
-        return 2;
+        return SYSTEM;
     }
 
     /**

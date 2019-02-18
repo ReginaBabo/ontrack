@@ -46,14 +46,14 @@ class Build extends AbstractProjectResource {
         run
     }
 
-    @DSLMethod(id = "validate", count = 2)
-    ValidationRun validate(String validationStamp, String validationStampStatus = 'PASSED') {
+    @DSLMethod(id = "validate", count = 3)
+    ValidationRun validate(String validationStamp, String validationStampStatus = 'PASSED', String description = "") {
         new ValidationRun(
                 ontrack,
                 ontrack.post(link('validate'), [
                         validationStampName  : validationStamp,
                         validationRunStatusId: validationStampStatus,
-                        description          : ''
+                        description          : description
                 ])
         )
     }
@@ -63,6 +63,97 @@ class Build extends AbstractProjectResource {
         def run = validate(validationStamp, validationStampStatus)
         run(closure)
         run
+    }
+
+    @DSLMethod(value = "Associates some data with the validation.", count = 4)
+    ValidationRun validateWithData(String validationStamp, Object data, String dataType = null, String status = null) {
+        new ValidationRun(
+                ontrack,
+                ontrack.post(
+                        link("validate"),
+                        [
+                                validationStampData  : [
+                                        id  : validationStamp,
+                                        type: dataType,
+                                        data: data,
+                                ],
+                                validationRunStatusId: status
+                        ]
+                )
+        )
+    }
+
+    @DSLMethod("Associates some text with the validation. The validation stamp must be configured to accept text as validation data.")
+    ValidationRun validateWithText(String validationStamp, String status, String text) {
+        return validateWithData(
+                validationStamp,
+                [value: text],
+                'net.nemerosa.ontrack.extension.general.validation.TextValidationDataType',
+                status
+        )
+    }
+
+    @DSLMethod(count = 6, value = """
+        Associates some critical / high / medium / low issue counts with the validation. The
+        validation stamp must be configured to accept CHML as validation data.""")
+    ValidationRun validateWithCHML(String validationStamp, int critical = 0, int high = 0, int medium = 0, int low = 0, String status = null) {
+        return validateWithData(validationStamp, [
+                CRITICAL: critical,
+                HIGH    : high,
+                MEDIUM  : medium,
+                LOW     : low,
+        ], 'net.nemerosa.ontrack.extension.general.validation.CHMLValidationDataType', status)
+    }
+
+    @DSLMethod(count = 3, value = """
+        Associates some number with the validation. The
+        validation stamp must be configured to accept number as validation data.""")
+    ValidationRun validateWithNumber(String validationStamp, int value, String status = null) {
+        return validateWithData(
+                validationStamp,
+                [value: value],
+                'net.nemerosa.ontrack.extension.general.validation.ThresholdNumberValidationDataType',
+                status
+        )
+    }
+
+    @DSLMethod(count = 3, value = """
+        Associates some percentage with the validation. The
+        validation stamp must be configured to accept percentage as validation data.""")
+    ValidationRun validateWithPercentage(String validationStamp, int value, String status = null) {
+        return validateWithData(
+                validationStamp,
+                [value: value],
+                'net.nemerosa.ontrack.extension.general.validation.ThresholdPercentageValidationDataType',
+                status
+        )
+    }
+
+    @DSLMethod(count = 4, value = """
+        Associates some fraction with the validation. The
+        validation stamp must be configured to accept fraction as validation data.""")
+    ValidationRun validateWithFraction(String validationStamp, int numerator, int denominator, String status = null) {
+        return validateWithData(
+                validationStamp, [
+                numerator  : numerator,
+                denominator: denominator,
+        ],
+                'net.nemerosa.ontrack.extension.general.validation.FractionValidationDataType',
+                status
+        )
+    }
+
+    @DSLMethod(count = 4, value = """Associates some test results with the validation.""")
+    ValidationRun validateWithTestSummary(String validationStamp, TestSummary testSummary, String status = null) {
+        return validateWithData(
+                validationStamp, [
+                passed : testSummary.passed,
+                skipped: testSummary.skipped,
+                failed : testSummary.failed,
+        ],
+                'net.nemerosa.ontrack.extension.general.validation.TestSummaryValidationDataType',
+                status
+        )
     }
 
     @DSLMethod("Gets the list of promotion runs for this build")
@@ -90,6 +181,7 @@ class Build extends AbstractProjectResource {
      *
      * Date is expected to be UTC.
      */
+    @DSLMethod(id = "signature", count = 2)
     def signature(String user = null, Date date = null) {
         ontrack.put(
                 link('signature'),
@@ -104,6 +196,7 @@ class Build extends AbstractProjectResource {
      * Previous build
      * @return Null if none
      */
+    @DSLMethod("Returns the previous build in the same branch, or `null` if there is none.")
     Build getPreviousBuild() {
         def json = ontrack.get(link('previous'))
         if (json) {
@@ -117,6 +210,7 @@ class Build extends AbstractProjectResource {
      * Next build
      * @return Null if none
      */
+    @DSLMethod("Returns the next build in the same branch, or `null` if there is none.")
     Build getNextBuild() {
         def json = ontrack.get(link('next'))
         if (json) {
@@ -132,6 +226,7 @@ class Build extends AbstractProjectResource {
      * If no change log is available, because the associated branch is not configured for example,
      * null is returned.
      */
+    @DSLMethod("Computes the <<changelogs,change log>> between this build and the one given in parameter.")
     ChangeLog getChangeLog(Build otherBuild) {
         try {
             return new ChangeLog(
@@ -154,6 +249,7 @@ class Build extends AbstractProjectResource {
     /**
      * Release decoration
      */
+    @DSLMethod("Returns any label associated with this build.")
     String getReleaseDecoration() {
         getDecoration('net.nemerosa.ontrack.extension.general.ReleaseDecorationExtension') as String
     }
@@ -161,6 +257,7 @@ class Build extends AbstractProjectResource {
     /**
      * Build links decorations.
      */
+    @DSLMethod("Returns the build links associated with this build")
     List<?> getBuildLinkDecorations() {
         getDecorations('net.nemerosa.ontrack.extension.general.BuildLinkDecorationExtension')
     }
@@ -198,4 +295,18 @@ class Build extends AbstractProjectResource {
         getDecoration('net.nemerosa.ontrack.extension.svn.SVNRevisionDecorationExtension') as Long
     }
 
+    @DSLMethod("Gets the associated run info with this build, or `null` if none")
+    RunInfo getRunInfo() {
+        def result = ontrack.get(link("runInfo"))
+        def info = new RunInfo(ontrack, result)
+        return info.id != 0 ? info : null
+    }
+
+    @DSLMethod("Sets the run info for this build.")
+    void setRunInfo(Map<String, ?> info) {
+        ontrack.put(
+                link("runInfo"),
+                info
+        )
+    }
 }

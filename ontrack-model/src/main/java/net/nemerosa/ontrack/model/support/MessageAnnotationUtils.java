@@ -12,11 +12,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 public final class MessageAnnotationUtils {
 
     public static String annotate(String text, List<? extends MessageAnnotator> messageAnnotators) {
+        if (StringUtils.isBlank(text)) return "";
         Node<Markup> root = annotateAsNode(text, messageAnnotators);
         final StringBuilder html = new StringBuilder();
         root.visit(new NodeVisitor<Markup>() {

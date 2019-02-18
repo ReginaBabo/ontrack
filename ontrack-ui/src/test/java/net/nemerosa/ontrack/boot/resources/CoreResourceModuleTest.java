@@ -31,6 +31,7 @@ public class CoreResourceModuleTest {
     private SecurityService securityService;
     private StructureService structureService;
     private ProjectFavouriteService projectFavouriteService;
+    private BranchFavouriteService branchFavouriteService;
 
     @Before
     public void before() {
@@ -38,13 +39,14 @@ public class CoreResourceModuleTest {
         structureService = mock(StructureService.class);
         ResourceDecorationContributorService resourceDecorationContributorService = mock(ResourceDecorationContributorService.class);
         projectFavouriteService = mock(ProjectFavouriteService.class);
+        branchFavouriteService = mock(BranchFavouriteService.class);
         mapper = new ResourceObjectMapperFactory().resourceObjectMapper(
                 Collections.singletonList(
                         new DefaultResourceModule(
                                 Arrays.asList(
                                         new ConnectedAccountResourceDecorator(),
                                         new ProjectResourceDecorator(resourceDecorationContributorService, projectFavouriteService),
-                                        new BranchResourceDecorator(resourceDecorationContributorService, structureService),
+                                        new BranchResourceDecorator(resourceDecorationContributorService, structureService, branchFavouriteService),
                                         new PromotionLevelResourceDecorator(),
                                         new ValidationStampResourceDecorator(),
                                         new BuildResourceDecorator(resourceDecorationContributorService),
@@ -731,6 +733,7 @@ public class CoreResourceModuleTest {
                         .with("_next", "urn:test:net.nemerosa.ontrack.boot.ui.BuildController#getNextBuild:1")
                         .with("_buildLinksFrom", "urn:test:net.nemerosa.ontrack.boot.ui.BuildController#getBuildLinksFrom:1")
                         .with("_buildLinksTo", "urn:test:net.nemerosa.ontrack.boot.ui.BuildController#getBuildLinksTo:1")
+                        .with("_runInfo", "urn:test:net.nemerosa.ontrack.boot.ui.RunInfoController#getRunInfo:build,1")
                         .with("_page", "urn:test:#:entity:BUILD:1")
                         .end(),
                 build

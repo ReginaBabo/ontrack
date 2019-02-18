@@ -1,24 +1,28 @@
 package net.nemerosa.ontrack.graphql.schema
 
 import graphql.Scalars
+import graphql.Scalars.GraphQLInt
 import graphql.schema.DataFetcher
+import graphql.schema.GraphQLArgument
 import graphql.schema.GraphQLFieldDefinition.newFieldDefinition
 import graphql.schema.GraphQLObjectType
 import graphql.schema.GraphQLObjectType.newObject
 import graphql.schema.GraphQLTypeReference
 import net.nemerosa.ontrack.graphql.support.GraphqlUtils
+import net.nemerosa.ontrack.graphql.support.pagination.GQLPaginatedListFactory
 import net.nemerosa.ontrack.model.structure.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class GQLTypeValidationStamp @Autowired
-constructor(private val structureService: StructureService,
-            creation: GQLTypeCreation,
-            private val projectEntityInterface: GQLProjectEntityInterface,
-            private val validationRun: GQLTypeValidationRun,
-            projectEntityFieldContributors: List<GQLProjectEntityFieldContributor>
+class GQLTypeValidationStamp(
+        private val structureService: StructureService,
+        creation: GQLTypeCreation,
+        private val projectEntityInterface: GQLProjectEntityInterface,
+        private val paginatedListFactory: GQLPaginatedListFactory,
+        private val validationRun: GQLTypeValidationRun,
+        private val validationDataTypeConfig: GQLTypeValidationDataTypeConfig,
+        projectEntityFieldContributors: List<GQLProjectEntityFieldContributor>
 ) : AbstractGQLProjectEntity<ValidationStamp>(
         ValidationStamp::class.java,
         ProjectEntityType.VALIDATION_STAMP,
@@ -39,6 +43,12 @@ constructor(private val structureService: StructureService,
                             .description("Flag to indicate if an image is associated")
                             .type(Scalars.GraphQLBoolean)
                 }
+                // Data type
+                .field {
+                    it.name("dataType")
+                            .description("Data definition associated with the validation stamp")
+                            .type(validationDataTypeConfig.typeRef)
+                }
                 // Ref to branch
                 .field(
                         newFieldDefinition()
@@ -46,6 +56,52 @@ constructor(private val structureService: StructureService,
                                 .description("Reference to branch")
                                 .type(GraphQLTypeReference(GQLTypeBranch.BRANCH))
                                 .build()
+                )
+                // Paginated list of validation runs
+                .field(
+                        paginatedListFactory.createPaginatedField<ValidationStamp, ValidationRun>(
+                                cache = cache,
+                                fieldName = "validationRunsPaginated",
+                                fieldDescription = "Paginated list of validation runs",
+                                itemType = validationRun,
+                                itemListCounter = { environment, validationStamp ->
+                                    val buildId: Int? = environment.getArgument<Int>("buildId")
+                                    if (buildId != null) {
+                                        structureService.getValidationRunsCountForBuildAndValidationStamp(
+                                                ID.of(buildId),
+                                                validationStamp.id
+                                        )
+                                    } else {
+                                        structureService.getValidationRunsCountForValidationStamp(
+                                                validationStamp.id
+                                        )
+                                    }
+                                },
+                                itemListProvider = { environment, validationStamp, offset, size ->
+                                    val buildId: Int? = environment.getArgument<Int>("buildId")
+                                    if (buildId != null) {
+                                        structureService.getValidationRunsForBuildAndValidationStamp(
+                                                ID.of(buildId),
+                                                validationStamp.id,
+                                                offset,
+                                                size
+                                        )
+                                    } else {
+                                        structureService.getValidationRunsForValidationStamp(
+                                                validationStamp.id,
+                                                offset,
+                                                size
+                                        )
+                                    }
+                                },
+                                arguments = listOf(
+                                        GraphQLArgument.newArgument()
+                                                .name("buildId")
+                                                .description("Validation runs for this build only")
+                                                .type(GraphQLInt)
+                                                .build()
+                                )
+                        )
                 )
                 // Validation runs
                 .field(
