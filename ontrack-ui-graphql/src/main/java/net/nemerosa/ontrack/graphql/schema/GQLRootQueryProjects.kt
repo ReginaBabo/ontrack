@@ -9,9 +9,7 @@ import net.nemerosa.ontrack.common.and
 import net.nemerosa.ontrack.graphql.support.GraphqlUtils
 import net.nemerosa.ontrack.graphql.support.GraphqlUtils.checkArgList
 import net.nemerosa.ontrack.graphql.support.GraphqlUtils.stdList
-import net.nemerosa.ontrack.model.structure.ID
-import net.nemerosa.ontrack.model.structure.Project
-import net.nemerosa.ontrack.model.structure.StructureService
+import net.nemerosa.ontrack.model.structure.*
 import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 
@@ -19,7 +17,9 @@ import org.springframework.stereotype.Component
 class GQLRootQueryProjects(
         private val structureService: StructureService,
         private val project: GQLTypeProject,
-        private val propertyFilter: GQLInputPropertyFilter
+        private val propertyFilter: GQLInputPropertyFilter,
+        private val projectPackageService: ProjectPackageService,
+        private val packageService: PackageService
 ) : GQLRootQuery {
 
     override fun getFieldDefinition(): GraphQLFieldDefinition {
@@ -45,6 +45,11 @@ class GQLRootQueryProjects(
                             .description("Favourite projects only")
                             .type(GraphQLBoolean)
                 }
+                .argument {
+                    it.name(ARG_PACKAGE_ID)
+                            .description("Package ID of the project")
+                            .type(GraphQLString)
+                }
                 .argument(propertyFilter.asArgument())
                 .dataFetcher(projectFetcher())
                 .build()
@@ -55,6 +60,9 @@ class GQLRootQueryProjects(
             val id: Int? = environment.getArgument(ARG_ID)
             val name: String? = environment.getArgument(ARG_NAME)
             val favourites = GraphqlUtils.getBooleanArgument(environment, ARG_FAVOURITES, false)
+            val packageId: PackageId? = environment.getArgument<String>(ARG_PACKAGE_ID)?.let {
+                packageService.toPackageId(it, true)
+            }
             // Per ID
             when {
                 id != null -> {
@@ -78,6 +86,11 @@ class GQLRootQueryProjects(
                     checkArgList(environment, ARG_FAVOURITES)
                     return@DataFetcher structureService.projectFavourites
                 }
+                packageId != null -> {
+                    // No other argument is expected
+                    checkArgList(environment, ARG_PACKAGE_ID)
+                    return@DataFetcher projectPackageService.findProjectsWithPackageIdentifier(packageId)
+                }
                 else -> {
                     // Filter to use
                     var filter: (Project) -> Boolean = { _ -> true }
@@ -98,11 +111,9 @@ class GQLRootQueryProjects(
     }
 
     companion object {
-        @JvmField
-        val ARG_ID = "id"
-        @JvmField
-        val ARG_NAME = "name"
-        @JvmField
-        val ARG_FAVOURITES = "favourites"
+        const val ARG_ID = "id"
+        const val ARG_NAME = "name"
+        const val ARG_FAVOURITES = "favourites"
+        const val ARG_PACKAGE_ID = "packageId"
     }
 }

@@ -2,7 +2,9 @@ package net.nemerosa.ontrack.graphql
 
 import net.nemerosa.ontrack.json.toJson
 import net.nemerosa.ontrack.test.TestUtils
+import net.nemerosa.ontrack.test.TestUtils.uid
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class ProjectPackageGraphQLIT : AbstractQLKTITSupport() {
 
@@ -46,6 +48,30 @@ class ProjectPackageGraphQLIT : AbstractQLKTITSupport() {
                     packages
             )
         }
+    }
+
+    @Test
+    fun `List of projects for a package ID`() {
+        val prefix = uid("P")
+        val p1 = project {
+            packageIds {
+                test("$prefix-one")
+            }
+        }
+        project {
+            packageIds {
+                test("$prefix-two")
+            }
+        }
+        val data = run("""{
+                projects(packageId: "net.nemerosa.ontrack.it.TestPackageType:$prefix-one") {
+                    id
+                }
+            }""")
+        val projects = data["projects"]
+        assertEquals(1, projects.size())
+        val project = projects[0]
+        assertEquals(p1.id(), project["id"].asInt())
     }
 
 }
