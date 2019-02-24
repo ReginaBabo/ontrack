@@ -41,6 +41,13 @@ angular.module('ot.dialog.project.packageIds', [
                 }
             }
         };
+        // Deletes a package ID
+        $scope.deletePackageId = (packageId) => {
+            let i = $scope.packageIds.indexOf(packageId);
+            if (i >= 0) {
+                $scope.packageIds.splice(i, 1);
+            }
+        };
         // Cancelling the dialog
         $scope.cancel = () => {
             $modalInstance.dismiss('cancel');
