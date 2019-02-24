@@ -57,7 +57,7 @@ angular.module('ot.dialog.project.packageIds', [
             if (isValid) {
                 otFormService.submitDialog(
                     config.submit,
-                    $scope.data,
+                    $scope.packageIds,
                     $modalInstance,
                     $scope
                 );

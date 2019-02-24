@@ -382,12 +382,14 @@ angular.module('ot.view.project', [
                                     packageTypes: resultPackageTypes.packageTypes,
                                     project: $scope.project,
                                     submit: function (packageIds) {
-                                        // FIXME #650 Submit the package Ids
-                                        // const request = {
-                                        //     labels: labels.filter(it => it.selected)
-                                        //         .map(it => it.id)
-                                        // };
-                                        // return ot.call($http.put($scope.project.links._labels, request));
+                                        console.log("packageIds=", packageIds);
+                                        const request = {
+                                            packages: packageIds.map(packageId => ({
+                                                id: packageId.id,
+                                                type: packageId.type.id
+                                            }))
+                                        };
+                                        return ot.call($http.put($scope.project.links._packageIds, request));
                                     }
                                 };
                             }
