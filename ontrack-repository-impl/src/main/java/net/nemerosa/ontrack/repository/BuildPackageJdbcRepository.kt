@@ -73,6 +73,7 @@ class BuildPackageJdbcRepository(dataSource: DataSource) : AbstractJdbcRepositor
                 """
                     SELECT *
                     FROM BUILD_PACKAGE_VERSIONS
+                    WHERE TARGET IS NULL
                     ORDER BY BUILD, PACKAGE_TYPE, PACKAGE_ID, PACKAGE_VERSION
                 """
         ) { rs, _ -> toBuildPackageVersion(rs) }
