@@ -1,0 +1,20 @@
+@startuml
+
+control BuildLinkJob
+participant BuildLinkService
+participant StructureService
+database BuildPackageRepository
+
+BuildLinkJob -> BuildLinkService: collect package versions
+
+BuildLinkService -> BuildPackageRepository: get list of all unassigned package versions
+BuildPackageRepository --> BuildLinkService: list of package versions
+
+loop For all package version
+    BuildLinkService -> StructureService: finds target build for package version
+    alt If target build exists
+        BuildLinkService -> StructureService: saves build link
+    end
+end
+
+@enduml

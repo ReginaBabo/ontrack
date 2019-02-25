@@ -21,10 +21,12 @@ BuildLinkController -> BuildLinkService: uploads(document)
 BuildLinkService -> BuildLinkService: parsing in list of ""PackageVersion""
 
 loop For all package version
-    BuildLinkService -> BuildPackageRepository: save package version
     BuildLinkService -> StructureService: finds target build for package version
     alt If target build exists
         BuildLinkService -> StructureService: saves build link
+        BuildLinkService -> BuildPackageRepository: save package version (assigned to target build)
+    else
+        BuildLinkService -> BuildPackageRepository: save package version (unassigned)
     end
 end
 
