@@ -1,0 +1,31 @@
+@startuml
+
+actor Uploader
+control BuildLinkController
+participant BuildLinkService
+participant StructureService
+database BuildPackageRepository
+
+Uploader -> BuildLinkController: uploads
+
+note right
+Optional parameter: ""type"" - package type to use by default
+
+Content: Ini file
+
+- section (optional) - package type
+- lines: ""id:version""
+end note
+
+BuildLinkController -> BuildLinkService: uploads(document)
+BuildLinkService -> BuildLinkService: parsing in list of ""PackageVersion""
+
+loop For all package version
+    BuildLinkService -> BuildPackageRepository: save package version
+    BuildLinkService -> StructureService: finds target build for package version
+    alt If target build exists
+        BuildLinkService -> StructureService: saves build link
+    end
+end
+
+@enduml
