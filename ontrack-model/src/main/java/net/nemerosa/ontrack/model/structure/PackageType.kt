@@ -9,4 +9,6 @@ interface PackageType : Extension {
 
     val id: String get() = this::class.java.name
 
+    fun toId(id: String) = PackageId(this, id)
+
 }

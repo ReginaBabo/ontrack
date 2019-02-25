@@ -11,20 +11,49 @@ import javax.sql.DataSource
 class BuildPackageJdbcRepository(dataSource: DataSource) : AbstractJdbcRepository(dataSource), BuildPackageRepository {
 
     override fun saveBuildPackage(record: TBuildPackageVersion) {
-        namedParameterJdbcTemplate.update(
-                """
-                    INSERT INTO BUILD_PACKAGE_VERSIONS(BUILD, PACKAGE_TYPE, PACKAGE_ID, PACKAGE_VERSION, CREATION, TARGET)
-                    VALUES (:build, :type, :id, :version, :creation, :target)
-                    ON CONFLICT (BUILD, PACKAGE_TYPE, PACKAGE_ID, PACKAGE_VERSION) DO
-                    UPDATE SET CREATION = :creation, TARGET = :target
-                """,
+        // Identification parameters
+        val params =
                 params("build", record.parent)
                         .addValue("type", record.type)
                         .addValue("id", record.id)
                         .addValue("version", record.version)
-                        .addValue("creation", dateTimeForDB(record.creation))
-                        .addValue("target", record.target)
-        )
+        // Gets an existing record
+        val records = namedParameterJdbcTemplate.query(
+                """
+                    SELECT *
+                    FROM BUILD_PACKAGE_VERSIONS
+                    WHERE BUILD = :build
+                    AND PACKAGE_TYPE = :type
+                    AND PACKAGE_ID = :id
+                    AND PACKAGE_VERSION = :version
+                """,
+                params
+        ) { rs, _ -> toBuildPackageVersion(rs) }
+        if (records.size > 0) {
+            namedParameterJdbcTemplate.update(
+                    """
+                    UPDATE BUILD_PACKAGE_VERSIONS
+                    SET CREATION = :creation, TARGET = :target
+                    WHERE BUILD = :build
+                    AND PACKAGE_TYPE = :type
+                    AND PACKAGE_ID = :id
+                    AND PACKAGE_VERSION = :version
+                """,
+                    params
+                            .addValue("creation", dateTimeForDB(record.creation))
+                            .addValue("target", record.target)
+            )
+        } else {
+            namedParameterJdbcTemplate.update(
+                    """
+                    INSERT INTO BUILD_PACKAGE_VERSIONS(BUILD, PACKAGE_TYPE, PACKAGE_ID, PACKAGE_VERSION, CREATION, TARGET)
+                    VALUES (:build, :type, :id, :version, :creation, :target)
+                """,
+                    params
+                            .addValue("creation", dateTimeForDB(record.creation))
+                            .addValue("target", record.target)
+            )
+        }
     }
 
     override fun getBuildPackages(parent: Build): List<TBuildPackageVersion> {
