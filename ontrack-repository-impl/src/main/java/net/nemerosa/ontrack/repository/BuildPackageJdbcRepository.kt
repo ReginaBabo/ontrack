@@ -68,15 +68,19 @@ class BuildPackageJdbcRepository(dataSource: DataSource) : AbstractJdbcRepositor
         ) { rs, _ -> toBuildPackageVersion(rs) }
     }
 
-    override fun getUnassignedPackages(): List<TBuildPackageVersion> {
-        return namedParameterJdbcTemplate.query(
+    override fun onUnassignedPackages(project: Int, code: (TBuildPackageVersion) -> Unit) {
+        namedParameterJdbcTemplate.query(
                 """
                     SELECT *
-                    FROM BUILD_PACKAGE_VERSIONS
-                    WHERE TARGET IS NULL
+                    FROM BUILD_PACKAGE_VERSIONS v
+                    INNER JOIN BUILDS bd ON bd.ID = v.BUILD
+                    INNER JOIN BRANCHES b ON b.ID = bd.BRANCHID
+                    WHERE b.PROJECTID = :project
+                    AND TARGET IS NULL
                     ORDER BY BUILD, PACKAGE_TYPE, PACKAGE_ID, PACKAGE_VERSION
-                """
-        ) { rs, _ -> toBuildPackageVersion(rs) }
+                """,
+                params("project", project)
+        ) { rs -> code(toBuildPackageVersion(rs)) }
     }
 
     private fun toBuildPackageVersion(rs: ResultSet): TBuildPackageVersion {

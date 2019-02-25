@@ -19,8 +19,10 @@ interface BuildPackageRepository {
     fun getBuildPackages(parent: Build): List<TBuildPackageVersion>
 
     /**
-     * Gets all unassigned packages.
+     * Loops on all unassigned packages.
+     *
+     * @param code Code to run on each record.
      */
-    fun getUnassignedPackages(): List<TBuildPackageVersion>
+    fun onUnassignedPackages(project: Int, code: (TBuildPackageVersion) -> Unit)
 
 }

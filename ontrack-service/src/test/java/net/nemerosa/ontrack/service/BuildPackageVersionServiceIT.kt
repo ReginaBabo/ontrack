@@ -48,7 +48,7 @@ class BuildPackageVersionServiceIT : AbstractDSLTestSupport() {
     }
 
     @Test
-    fun unassignedPackages() {
+    fun onUnassignedPackages() {
         val id1 = testPackageId("id1")
         val id2 = testPackageId("id2")
         project project@{
@@ -61,7 +61,7 @@ class BuildPackageVersionServiceIT : AbstractDSLTestSupport() {
                     packageVersion(id2, "2.0.0", ref2)
                 }
                 // Two versions, two with reference
-                val parent2 = build {
+                build {
                     packageVersion(id1, "1.0.0", ref1)
                     packageVersion(id2, "2.0.0", ref2)
                 }
@@ -70,19 +70,15 @@ class BuildPackageVersionServiceIT : AbstractDSLTestSupport() {
                     packageVersion(id1, "1.0.0", null)
                     packageVersion(id2, "2.0.0", null)
                 }
-                // Gets the list of unassigned packages
-                val packages = buildPackageVersionService.getUnassignedPackages()
-                        // Filtered on this project
-                        .filter { link -> link.parent.project.id() == this@project.id() }
 
-                val result = packages.flatMap { link ->
-                    link.packages.map { p ->
-                        link.parent to p
-                    }
-                }.map { (build, record) ->
-                    "${build.id()}::${record.packageVersion.packageId.id}::${record.packageVersion.version}::${record.target?.id()
-                            ?: "-"}"
-                }.toSet()
+                // Loops on the list of unassigned packages
+                val result = mutableSetOf<String>()
+                buildPackageVersionService.onUnassignedPackages(this@project) { build, p ->
+                    result.add(
+                            "${build.id()}::${p.packageVersion.packageId.id}::${p.packageVersion.version}::${p.target?.id()
+                                    ?: "-"}"
+                    )
+                }
 
                 assertEquals(
                         setOf(

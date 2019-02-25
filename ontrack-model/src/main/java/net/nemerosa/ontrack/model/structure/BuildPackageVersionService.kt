@@ -16,8 +16,8 @@ interface BuildPackageVersionService {
     fun getBuildPackages(parent: Build): List<BuildPackageVersion>
 
     /**
-     * Gets all unassigned packages.
+     * Loops on all unassigned packages.
      */
-    fun getUnassignedPackages(): List<BuildPackageVersionLink>
+    fun onUnassignedPackages(project: Project, code: (Build, BuildPackageVersion) -> Unit)
 
 }

@@ -28,28 +28,14 @@ class BuildPackageVersionServiceImpl(
                 }
     }
 
-    override fun getUnassignedPackages(): List<BuildPackageVersionLink> {
-        val unassignedPackages = buildPackageRepository.getUnassignedPackages()
-        return unassignedPackages
-                // Grouping by parent ID
-                .groupBy { record -> record.parent }
-                // Transforms records in actual package lines
-                .mapValues { (_, records) ->
-                    records.mapNotNull { record ->
-                        record.toBuildPackageVersion()
-                    }
-                }
-                // Filters out the empty collections
-                .filter { (_, records) ->
-                    !records.isEmpty()
-                }
-                // Loading the parent build
-                .map { (id, packages) ->
-                    BuildPackageVersionLink(
-                            parent = structureService.getBuild(ID.of(id)),
-                            packages = packages
-                    )
-                }
+    override fun onUnassignedPackages(project: Project, code: (Build, BuildPackageVersion) -> Unit) {
+        buildPackageRepository.onUnassignedPackages(project.id()) { record ->
+            val version = record.toBuildPackageVersion()
+            if (version != null) {
+                val build = structureService.getBuild(ID.of(record.parent))
+                code(build, version)
+            }
+        }
     }
 
     private fun TBuildPackageVersion.toBuildPackageVersion() =
