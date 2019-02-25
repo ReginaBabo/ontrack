@@ -69,4 +69,77 @@ class PackageServiceIT : AbstractDSLTestSupport() {
         }
     }
 
+    @Test
+    fun toPackageVersion_null() {
+        assertNull(packageService.toPackageVersion(null, true))
+    }
+
+    @Test
+    fun toPackageVersion_empty() {
+        assertNull(packageService.toPackageVersion("", true))
+    }
+
+    @Test
+    fun toPackageVersion_blank() {
+        assertNull(packageService.toPackageVersion(" ", true))
+    }
+
+    @Test
+    fun toPackageVersion_one_token_no_error() {
+        assertNull(packageService.toPackageVersion("type", false))
+    }
+
+    @Test
+    fun toPackageVersion_one_token_with_error() {
+        assertFailsWith<IllegalArgumentException> {
+            assertNull(packageService.toPackageVersion("type", true))
+        }
+    }
+
+    @Test
+    fun toPackageVersion_two_token_no_error() {
+        assertNull(packageService.toPackageVersion("type:id", false))
+    }
+
+    @Test
+    fun toPackageVersion_two_token_with_error() {
+        assertFailsWith<IllegalArgumentException> {
+            assertNull(packageService.toPackageVersion("type:id", true))
+        }
+    }
+
+    @Test
+    fun toPackageVersion_four_tokens_no_error() {
+        assertNull(packageService.toPackageVersion("type:id:one:two", false))
+    }
+
+    @Test
+    fun toPackageVersion_four_tokens_with_error() {
+        assertFailsWith<IllegalArgumentException> {
+            assertNull(packageService.toPackageVersion("type:id:one:two", true))
+        }
+    }
+
+    @Test
+    fun toPackageVersion_unknown_type_no_error() {
+        assertNull(packageService.toPackageVersion("type:id:one", false))
+    }
+
+    @Test
+    fun toPackageVersion_unknown_type_with_error() {
+        assertFailsWith<IllegalArgumentException> {
+            assertNull(packageService.toPackageVersion("type:id:one", true))
+        }
+    }
+
+    @Test
+    fun toPackageVersion() {
+        assertNotNull(packageService.toPackageVersion("net.nemerosa.ontrack.it.TestPackageType:id:one", true)) {
+            assertEquals("net.nemerosa.ontrack.it.TestPackageType", it.packageId.type.id)
+            assertEquals("Test", it.packageId.type.name)
+            assertEquals("id", it.packageId.id)
+            assertEquals("one", it.version)
+        }
+    }
+
 }

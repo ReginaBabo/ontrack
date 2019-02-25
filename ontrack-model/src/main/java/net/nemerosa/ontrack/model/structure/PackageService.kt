@@ -15,4 +15,13 @@ interface PackageService {
      */
     fun toPackageId(s: String?, errorOnParsingFailure: Boolean): PackageId?
 
+    /**
+     * Converts a string having the format `type:id:version` into a genuine [PackageVersion].
+     * If [errorOnParsingFailure] is `true` and if the i) the string cannot be parsed or ii) the
+     * type is not found, an error is thrown. If `false`, `null` is returned instead.
+     *
+     * `null` is always returned if the string is either `null` or blank.
+     */
+    fun toPackageVersion(s: String?, errorOnParsingFailure: Boolean): PackageVersion?
+
 }
