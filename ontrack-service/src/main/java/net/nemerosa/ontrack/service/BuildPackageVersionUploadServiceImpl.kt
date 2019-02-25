@@ -34,6 +34,9 @@ class BuildPackageVersionUploadServiceImpl(
         // Gets the list of projects designed by this package ID
         val projects = projectPackageService.findProjectsWithPackageIdentifier(packageId)
         // Gets the list of matching builds
+        // TODO Use ProjectBuildSearch contributors
+        // NOP --> .withBuildName(packageVersion.version).withBuildExactMatch(true)`
+        // Also BuildLinkDisplayPropertyType to contribute
         val builds = projects.flatMap { project ->
             structureService.buildSearch(
                     project.id,
