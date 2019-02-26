@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional
 class BuildPackageVersionUploadServiceImpl(
         private val structureService: StructureService,
         private val buildPackageVersionService: BuildPackageVersionService,
-        private val projectPackageService: ProjectPackageService
+        private val projectPackageService: ProjectPackageService,
+        private val contributors: List<ProjectBuildSearchContributor>
 ) : BuildPackageVersionUploadService {
 
     override fun uploadAndResolvePackageVersions(parent: Build, packages: List<PackageVersion>) {
@@ -34,16 +35,16 @@ class BuildPackageVersionUploadServiceImpl(
         // Gets the list of projects designed by this package ID
         val projects = projectPackageService.findProjectsWithPackageIdentifier(packageId)
         // Gets the list of matching builds
-        // TODO Use ProjectBuildSearch contributors
-        // NOP --> .withBuildName(packageVersion.version).withBuildExactMatch(true)`
-        // Also BuildLinkDisplayPropertyType to contribute
         val builds = projects.flatMap { project ->
+            // Gets the name search form for this project
+            val searchForm = ProjectBuildSearchContributorUtils.getSearchForm(
+                    project,
+                    packageVersion.version,
+                    contributors
+            ).withMaximumCount(1)
             structureService.buildSearch(
                     project.id,
-                    BuildSearchForm().withBuildExactMatch(true)
-                            .withMaximumCount(1)
-                            // TODO Use label when needed
-                            .withBuildName(packageVersion.version)
+                    searchForm
             )
         }
         // OK it only ONE build
