@@ -5,7 +5,9 @@ import net.nemerosa.ontrack.model.security.BuildConfig
 import net.nemerosa.ontrack.model.structure.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.AccessDeniedException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
@@ -81,6 +83,26 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
         }
     }
 
+    @Test
+    fun `Cannot upload if not authorized`() {
+        project {
+            branch {
+                build {
+                    assertFailsWith<AccessDeniedException> {
+                        asUserWithView(this).execute {
+                            buildPackageVersionUploadService.uploadAndResolvePackageVersions(
+                                    this,
+                                    arrayOf(testPackageVersion("net.nemerosa.ontrack:ontrack-model", "3.38.5"),
+                                            testPackageVersion("org.apache.commons:commons-lang", "3.8.1")
+                                    ).toList()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun testPackageVersion(id: String, version: String): PackageVersion =
             testPackageId(id).toVersion(version)
 
@@ -100,8 +122,9 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
      * Gets the packages associated with a build
      */
     private val Build.packageVersions: List<BuildPackageVersion>
-        get() =
+        get() = asUserWithView(this).call {
             buildPackageVersionService.getBuildPackages(this)
+        }
 
 
 }

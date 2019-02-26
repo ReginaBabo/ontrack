@@ -1,5 +1,8 @@
 package net.nemerosa.ontrack.service
 
+import net.nemerosa.ontrack.model.security.BuildConfig
+import net.nemerosa.ontrack.model.security.ProjectView
+import net.nemerosa.ontrack.model.security.SecurityService
 import net.nemerosa.ontrack.model.structure.*
 import net.nemerosa.ontrack.repository.BuildPackageRepository
 import net.nemerosa.ontrack.repository.TBuildPackageVersion
@@ -11,20 +14,24 @@ import org.springframework.transaction.annotation.Transactional
 class BuildPackageVersionServiceImpl(
         private val structureService: StructureService,
         private val packageService: PackageService,
-        private val buildPackageRepository: BuildPackageRepository
+        private val buildPackageRepository: BuildPackageRepository,
+        private val securityService: SecurityService
 ) : BuildPackageVersionService {
 
     override fun clearBuildPackages(parent: Build) {
+        securityService.checkProjectFunction(parent, BuildConfig::class.java)
         buildPackageRepository.clearBuildPackages(parent)
     }
 
     override fun saveBuildPackage(parent: Build, buildPackageVersion: BuildPackageVersion) {
+        securityService.checkProjectFunction(parent, BuildConfig::class.java)
         buildPackageRepository.saveBuildPackage(
                 TBuildPackageVersion(parent, buildPackageVersion)
         )
     }
 
     override fun getBuildPackages(parent: Build): List<BuildPackageVersion> {
+        securityService.checkProjectFunction(parent, ProjectView::class.java)
         return buildPackageRepository
                 .getBuildPackages(parent)
                 .mapNotNull { record ->
@@ -33,6 +40,7 @@ class BuildPackageVersionServiceImpl(
     }
 
     override fun onUnassignedPackages(project: Project, code: (Build, BuildPackageVersion) -> Unit) {
+        securityService.checkProjectFunction(project, ProjectView::class.java)
         buildPackageRepository.onUnassignedPackages(project.id()) { record ->
             val version = record.toBuildPackageVersion()
             if (version != null) {
