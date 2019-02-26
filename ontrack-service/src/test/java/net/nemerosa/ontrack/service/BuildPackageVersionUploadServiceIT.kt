@@ -34,26 +34,30 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
             branch {
                 // Creates a build...
                 val build = build()
-                // ... and uploads some package versions
-                build.uploadPackageVersions(
-                        // Matching dependency
-                        testPackageVersion("net.nemerosa.ontrack:ontrack-model", "3.38.5"),
-                        // Unmatching dependency
-                        testPackageVersion("org.apache.commons:commons-lang", "3.8.1")
-                )
-                // Gets the package versions
-                val packageVersions = build.packageVersions
-                assertEquals(2, packageVersions.size)
-                // Matching
-                val matching = packageVersions[0]
-                assertEquals("net.nemerosa.ontrack:ontrack-model", matching.packageVersion.packageId.id)
-                assertEquals("3.38.5", matching.packageVersion.version)
-                assertEquals(ref.id(), matching.target?.id())
-                // Unmatching
-                val unmatching = packageVersions[1]
-                assertEquals("org.apache.commons:commons-lang", unmatching.packageVersion.packageId.id)
-                assertEquals("3.8.1", unmatching.packageVersion.version)
-                assertNull(unmatching.target)
+                withGrantViewToAll {
+                    // ... and uploads some package versions
+                    build.uploadPackageVersions(
+                            // Matching dependency
+                            testPackageVersion("net.nemerosa.ontrack:ontrack-model", "3.38.5"),
+                            // Unmatching dependency
+                            testPackageVersion("org.apache.commons:commons-lang", "3.8.1")
+                    )
+                    asUserWithView(build).execute {
+                        // Gets the package versions
+                        val packageVersions = build.packageVersions
+                        assertEquals(2, packageVersions.size)
+                        // Matching
+                        val matching = packageVersions[0]
+                        assertEquals("net.nemerosa.ontrack:ontrack-model", matching.packageVersion.packageId.id)
+                        assertEquals("3.38.5", matching.packageVersion.version)
+                        assertEquals(ref.id(), matching.target?.id())
+                        // Unmatching
+                        val unmatching = packageVersions[1]
+                        assertEquals("org.apache.commons:commons-lang", unmatching.packageVersion.packageId.id)
+                        assertEquals("3.8.1", unmatching.packageVersion.version)
+                        assertNull(unmatching.target)
+                    }
+                }
             }
         }
     }
@@ -69,15 +73,19 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
                             testPackageVersion("org.apache.commons:commons-lang", "3.8.1")
                     )
                     // Checks that only 2 versions are checked
-                    var versions = this.packageVersions
-                    assertEquals(2, versions.size)
+                    asUserWithView(this).execute {
+                        val versions = this.packageVersions
+                        assertEquals(2, versions.size)
+                    }
                     // Uploads some other versions
                     uploadPackageVersions(
                             testPackageVersion("net.nemerosa.ontrack:ontrack-model", "3.38.5")
                     )
                     // Checks that only 1 versions are checked
-                    versions = this.packageVersions
-                    assertEquals(1, versions.size, "Versions should have been cleared")
+                    asUserWithView(this).execute {
+                        val versions = this.packageVersions
+                        assertEquals(1, versions.size, "Versions should have been cleared")
+                    }
                 }
             }
         }
@@ -103,6 +111,54 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
         }
     }
 
+    @Test
+    fun `Upload needs only rights on parent build`() {
+        // Project and build acting as a reference
+        val ref: Build = project<Build> {
+            packageIds {
+                test("net.nemerosa.ontrack:ontrack-model")
+            }
+            branch<Build> {
+                build("3.38.5")
+            }
+        }
+        // Make sure to disable the "view all"
+        withNoGrantViewToAll {
+            // Source project
+            project {
+                branch {
+                    // Creates a build...
+                    val build = build()
+                    // ... and uploads some package versions
+                    build.uploadPackageVersions(
+                            testPackageVersion("net.nemerosa.ontrack:ontrack-model", "3.38.5")
+                    )
+                    // Gets the package versions using a view role on ref project
+                    asUserWithView(ref).withView(build).execute {
+                        val packageVersions = build.packageVersions
+                        assertEquals(1, packageVersions.size)
+                        // Matching
+                        val matching = packageVersions[0]
+                        assertEquals("net.nemerosa.ontrack:ontrack-model", matching.packageVersion.packageId.id)
+                        assertEquals("3.38.5", matching.packageVersion.version)
+                        assertEquals(ref.id(), matching.target?.id(), "Ref build has been set")
+                    }
+                    // Gets the package versions not having a view role on ref project
+                    asUserWithView(build).execute {
+                        val packageVersions = build.packageVersions
+                        assertEquals(1, packageVersions.size)
+                        // Matching
+                        val matching = packageVersions[0]
+                        assertEquals("net.nemerosa.ontrack:ontrack-model", matching.packageVersion.packageId.id)
+                        assertEquals("3.38.5", matching.packageVersion.version)
+                        // Reference build is not visible
+                        assertNull(matching.target, "Ref build not visible")
+                    }
+                }
+            }
+        }
+    }
+
     private fun testPackageVersion(id: String, version: String): PackageVersion =
             testPackageId(id).toVersion(version)
 
@@ -122,9 +178,7 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
      * Gets the packages associated with a build
      */
     private val Build.packageVersions: List<BuildPackageVersion>
-        get() = asUserWithView(this).call {
-            buildPackageVersionService.getBuildPackages(this)
-        }
+        get() = buildPackageVersionService.getBuildPackages(this)
 
 
 }

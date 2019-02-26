@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.service
 import net.nemerosa.ontrack.model.security.BuildConfig
 import net.nemerosa.ontrack.model.security.ProjectView
 import net.nemerosa.ontrack.model.security.SecurityService
+import net.nemerosa.ontrack.model.security.callAsAdmin
 import net.nemerosa.ontrack.model.structure.*
 import net.nemerosa.ontrack.repository.BuildPackageRepository
 import net.nemerosa.ontrack.repository.TBuildPackageVersion
@@ -55,7 +56,11 @@ class BuildPackageVersionServiceImpl(
                 BuildPackageVersion(
                         packageVersion = type.toId(id).toVersion(version),
                         target = target?.let {
-                            structureService.getBuild(ID.of(it))
+                            securityService.callAsAdmin {
+                                structureService.getBuild(ID.of(it))
+                            }.takeIf { build ->
+                                securityService.isProjectFunctionGranted(build, ProjectView::class.java)
+                            }
                         }
                 )
             }

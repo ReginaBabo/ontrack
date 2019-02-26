@@ -1,5 +1,7 @@
 package net.nemerosa.ontrack.service
 
+import net.nemerosa.ontrack.model.security.BuildConfig
+import net.nemerosa.ontrack.model.security.SecurityService
 import net.nemerosa.ontrack.model.structure.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -8,15 +10,20 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class BuildPackageVersionUploadServiceImpl(
         private val structureService: StructureService,
+        private val securityService: SecurityService,
         private val buildPackageVersionService: BuildPackageVersionService,
         private val projectPackageService: ProjectPackageService,
         private val contributors: List<ProjectBuildSearchContributor>
 ) : BuildPackageVersionUploadService {
 
     override fun uploadAndResolvePackageVersions(parent: Build, packages: List<PackageVersion>) {
+        securityService.checkProjectFunction(parent, BuildConfig::class.java)
         buildPackageVersionService.clearBuildPackages(parent)
-        packages.forEach {
-            uploadAndResolvePackageVersion(parent, it)
+        // Other projects might not be visible by current user, so running as admin
+        securityService.asAdmin {
+            packages.forEach {
+                uploadAndResolvePackageVersion(parent, it)
+            }
         }
     }
 
