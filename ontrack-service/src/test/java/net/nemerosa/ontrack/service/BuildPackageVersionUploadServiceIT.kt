@@ -56,6 +56,31 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
         }
     }
 
+    @Test
+    fun `Upload of packages clears previous versions`() {
+        project {
+            branch {
+                build {
+                    // Uploads some versions
+                    uploadPackageVersions(
+                            testPackageVersion("net.nemerosa.ontrack:ontrack-model", "3.38.5"),
+                            testPackageVersion("org.apache.commons:commons-lang", "3.8.1")
+                    )
+                    // Checks that only 2 versions are checked
+                    var versions = this.packageVersions
+                    assertEquals(2, versions.size)
+                    // Uploads some other versions
+                    uploadPackageVersions(
+                            testPackageVersion("net.nemerosa.ontrack:ontrack-model", "3.38.5")
+                    )
+                    // Checks that only 1 versions are checked
+                    versions = this.packageVersions
+                    assertEquals(1, versions.size, "Versions should have been cleared")
+                }
+            }
+        }
+    }
+
     private fun testPackageVersion(id: String, version: String): PackageVersion =
             testPackageId(id).toVersion(version)
 

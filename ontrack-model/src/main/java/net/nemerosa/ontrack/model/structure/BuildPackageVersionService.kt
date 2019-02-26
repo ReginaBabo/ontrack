@@ -20,4 +20,9 @@ interface BuildPackageVersionService {
      */
     fun onUnassignedPackages(project: Project, code: (Build, BuildPackageVersion) -> Unit)
 
+    /**
+     * Clears all packages for the build
+     */
+    fun clearBuildPackages(parent: Build)
+
 }

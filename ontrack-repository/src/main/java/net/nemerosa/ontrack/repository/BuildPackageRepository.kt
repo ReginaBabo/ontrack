@@ -25,4 +25,9 @@ interface BuildPackageRepository {
      */
     fun onUnassignedPackages(project: Int, code: (TBuildPackageVersion) -> Unit)
 
+    /**
+     * Clears all packages for the build
+     */
+    fun clearBuildPackages(parent: Build)
+
 }

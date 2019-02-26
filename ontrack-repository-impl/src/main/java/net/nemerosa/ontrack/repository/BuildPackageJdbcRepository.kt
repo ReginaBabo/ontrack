@@ -83,6 +83,16 @@ class BuildPackageJdbcRepository(dataSource: DataSource) : AbstractJdbcRepositor
         ) { rs -> code(toBuildPackageVersion(rs)) }
     }
 
+    override fun clearBuildPackages(parent: Build) {
+        namedParameterJdbcTemplate.update(
+                """
+                    DELETE FROM BUILD_PACKAGE_VERSIONS
+                    WHERE BUILD = :build
+                """,
+                params("build", parent.id())
+        )
+    }
+
     private fun toBuildPackageVersion(rs: ResultSet): TBuildPackageVersion {
         return TBuildPackageVersion(
                 parent = rs.getInt("BUILD"),

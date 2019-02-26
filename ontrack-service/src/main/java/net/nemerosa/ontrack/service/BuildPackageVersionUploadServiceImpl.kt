@@ -14,7 +14,7 @@ class BuildPackageVersionUploadServiceImpl(
 ) : BuildPackageVersionUploadService {
 
     override fun uploadAndResolvePackageVersions(parent: Build, packages: List<PackageVersion>) {
-        // TODO Clears previous versions
+        buildPackageVersionService.clearBuildPackages(parent)
         packages.forEach {
             uploadAndResolvePackageVersion(parent, it)
         }

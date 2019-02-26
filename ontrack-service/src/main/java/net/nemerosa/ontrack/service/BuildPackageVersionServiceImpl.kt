@@ -14,6 +14,10 @@ class BuildPackageVersionServiceImpl(
         private val buildPackageRepository: BuildPackageRepository
 ) : BuildPackageVersionService {
 
+    override fun clearBuildPackages(parent: Build) {
+        buildPackageRepository.clearBuildPackages(parent)
+    }
+
     override fun saveBuildPackage(parent: Build, buildPackageVersion: BuildPackageVersion) {
         buildPackageRepository.saveBuildPackage(
                 TBuildPackageVersion(parent, buildPackageVersion)
