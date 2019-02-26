@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.extension.general
 
 import net.nemerosa.ontrack.it.AbstractDSLTestSupport
+import net.nemerosa.ontrack.model.structure.Project
 import net.nemerosa.ontrack.model.structure.ProjectEntity
 import net.nemerosa.ontrack.model.support.NameValue
 
@@ -43,6 +44,14 @@ abstract class AbstractPropertyTypeIT : AbstractDSLTestSupport() {
                 this,
                 MessagePropertyType::class.java,
                 MessageProperty(type, text)
+        )
+    }
+
+    protected fun Project.buildLinkDisplay(useLabel: Boolean) {
+        setProperty(
+                this,
+                BuildLinkDisplayPropertyType::class.java,
+                BuildLinkDisplayProperty(useLabel)
         )
     }
 
