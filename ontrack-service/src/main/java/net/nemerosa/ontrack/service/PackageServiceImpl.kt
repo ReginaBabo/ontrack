@@ -18,6 +18,9 @@ class PackageServiceImpl(
 
     override fun getPackageType(type: String): PackageType? = index[type]
 
+    override fun findByNameOrId(name: String): PackageType? =
+            index[name] ?: index.values.find { it.name.equals(name, true) }
+
     override fun toPackageId(s: String?, errorOnParsingFailure: Boolean): PackageId? {
         if (s == null || s.isBlank()) {
             return null

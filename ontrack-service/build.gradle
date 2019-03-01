@@ -19,6 +19,7 @@ dependencies {
     compile 'org.jgrapht:jgrapht-core'
     compile 'com.github.ben-manes.caffeine:caffeine'
     compile 'org.flywaydb:flyway-core'
+    compile 'com.github.jezza:toml'
 
     compile 'io.micrometer:micrometer-spring-legacy'
 

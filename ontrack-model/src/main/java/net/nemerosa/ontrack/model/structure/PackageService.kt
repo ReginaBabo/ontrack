@@ -7,6 +7,12 @@ interface PackageService {
     fun getPackageType(type: String): PackageType?
 
     /**
+     * Similar to [getPackageType] but looks using either the [PackageType.id] or [PackageType.name] (this one
+     * if a case insensitive way)
+     */
+    fun findByNameOrId(name: String): PackageType?
+
+    /**
      * Converts a string having the format `type:id` into a genuine [PackageId].
      * If [errorOnParsingFailure] is `true` and if the i) the string cannot be parsed or ii) the
      * type is not found, an error is thrown. If `false`, `null` is returned instead.
