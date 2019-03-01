@@ -28,7 +28,7 @@ class BuildPackageVersionUploadParsingServiceImplTest {
     @Before
     fun init() {
         packageService = mock()
-        service = BuildPackageVersionUploadParsingServiceImpl(packageService)
+        service = BuildPackageVersionUploadParsingServiceImpl(listOf(TomlBuildPackageVersionParser(packageService)))
 
         whenever(packageService.findByNameOrId("test")).thenReturn(defaultPackageType)
         whenever(packageService.findByNameOrId("maven")).thenReturn(MockPackageType("Maven"))
@@ -37,9 +37,8 @@ class BuildPackageVersionUploadParsingServiceImplTest {
 
     @Test
     fun `Empty document`() {
-        assertFailsWith<BuildPackageVersionUploadWrongMimeTypeException> {
-            service.parsePackageVersions(defaultPackageType, Document.EMPTY)
-        }
+        val versions = service.parsePackageVersions(defaultPackageType, Document.EMPTY)
+        assertTrue(versions.isEmpty(), "No version")
     }
 
     @Test
@@ -51,7 +50,7 @@ class BuildPackageVersionUploadParsingServiceImplTest {
     @Test
     fun `Wrong MIME type`() {
         assertFailsWith<BuildPackageVersionUploadWrongMimeTypeException> {
-            service.parsePackageVersions(defaultPackageType, Document("application/json", byteArrayOf()))
+            service.parsePackageVersions(defaultPackageType, Document("application/json", "some content".toByteArray()))
         }
     }
 
