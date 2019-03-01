@@ -230,7 +230,7 @@ class Ontrack {
             fileName = u.file
             def connection = u.openConnection()
             document = new Document(
-                    connection.getContentType(),
+                    contentType ?: connection.getContentType(),
                     connection.inputStream.bytes
             )
         } else if (o instanceof File) {

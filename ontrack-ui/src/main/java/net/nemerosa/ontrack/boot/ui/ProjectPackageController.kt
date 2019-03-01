@@ -58,7 +58,7 @@ class ProjectPackageController(
     @PutMapping("{projectId}/edit")
     fun setPackageIdsForProject(@PathVariable projectId: ID, @RequestBody input: PackageIdsForm): Ack {
         val packages = input.packages.mapNotNull { i ->
-            packageService.getPackageType(i.type)
+            packageService.findByNameOrId(i.type)
                     ?.let {
                         PackageId(
                                 type = it,
