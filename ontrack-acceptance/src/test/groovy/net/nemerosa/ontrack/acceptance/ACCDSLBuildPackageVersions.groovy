@@ -4,6 +4,7 @@ import net.nemerosa.ontrack.acceptance.support.AcceptanceTestSuite
 import org.junit.Test
 
 import static net.nemerosa.ontrack.test.TestUtils.uid
+import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertTrue
 
@@ -39,8 +40,23 @@ class ACCDSLBuildPackageVersions extends AbstractACCDSL {
             }
         }
 
-        // TODO Gets the parent build and its versions
-        def versions = ontrack.build(parentName, "master", "1.0.0")
+        // Gets the parent build and its versions
+        def versions = ontrack.build(parentName, "master", "1.0.0").packageVersions
+
+        def ontrackDep = versions.resources.get(0)
+        assert ontrackDep.packageVersion.packageId.type.name == "Maven"
+        assert ontrackDep.packageVersion.packageId.id == "net.nemerosa.ontrack:ontrack-model"
+        assert ontrackDep.packageVersion.version == "3.38.5"
+        assert ontrackDep.target != null: "Ref build has been found"
+        assert ontrackDep.target.id == ref.id
+        assert ontrackDep.target.name == "3.38.5"
+
+        def springDep = versions.get(1)
+        assert springDep.packageVersion.packageId.type.name == "Maven"
+        assert springDep.packageVersion.packageId.id == "org.springframework.boot:spring-boot-gradle-plugin"
+        assert springDep.packageVersion.version == "1.5.14.RELEASE"
+        assert springDep.target == null
+
     }
 
     // TODO Reference project using labels

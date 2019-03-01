@@ -314,4 +314,9 @@ class Build extends AbstractProjectResource {
     void uploadPackageVersions(Object o, String contentType) {
         ontrack.upload(link('packageUpload'), 'file', o, contentType)
     }
+
+    @DSLMethod("Gets the list of package versions for this build.")
+    def getPackageVersions() {
+        return ontrack.get(link("packageVersions"))
+    }
 }
