@@ -53,13 +53,9 @@ class BuildPackageVersionUploadServiceImpl(
                     project.id,
                     searchForm
             )
-        }
-        // OK it only ONE build
-        return if (builds.size == 1) {
-            builds[0]
-        } else {
-            null
-        }
+        }.sortedByDescending { it.signature.time }
+        // First one
+        return builds.firstOrNull()
     }
 
 }

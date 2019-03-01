@@ -51,7 +51,7 @@ class ACCDSLBuildPackageVersions extends AbstractACCDSL {
         assert ontrackDep.target.id == ref.id
         assert ontrackDep.target.name == "3.38.5"
 
-        def springDep = versions.get(1)
+        def springDep = versions.resources.get(1)
         assert springDep.packageVersion.packageId.type.name == "Maven"
         assert springDep.packageVersion.packageId.id == "org.springframework.boot:spring-boot-gradle-plugin"
         assert springDep.packageVersion.version == "1.5.14.RELEASE"
