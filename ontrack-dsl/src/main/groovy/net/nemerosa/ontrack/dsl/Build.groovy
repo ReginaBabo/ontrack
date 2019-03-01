@@ -309,4 +309,9 @@ class Build extends AbstractProjectResource {
                 info
         )
     }
+
+    @DSLMethod("Uploads package versions for the dependencies of this build.")
+    void uploadPackageVersions(Object o, String contentType) {
+        ontrack.upload(link('packageUpload'), 'file', o, contentType)
+    }
 }
