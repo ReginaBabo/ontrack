@@ -11,12 +11,20 @@ class PackageServiceImpl(
         packageTypes: List<PackageType>
 ) : PackageService {
 
+    companion object {
+        private const val DEFAULT_PACKAGE_TYPE_NAME = "generic"
+    }
+
     private val index = packageTypes.associateBy { it.id }
 
     override val packageTypes: List<PackageType>
         get() = index.values.sortedBy { it.name }
 
     override fun getPackageType(type: String): PackageType? = index[type]
+
+    override val defaultPackageType: PackageType
+        get() = findByNameOrId(DEFAULT_PACKAGE_TYPE_NAME)
+                ?: throw IllegalStateException("Cannot find default package type: $DEFAULT_PACKAGE_TYPE_NAME")
 
     override fun findByNameOrId(name: String): PackageType? =
             index[name] ?: index.values.find { it.name.equals(name, true) }

@@ -7,6 +7,11 @@ interface PackageService {
     fun getPackageType(type: String): PackageType?
 
     /**
+     * Gets the default package type to use when not specified.
+     */
+    val defaultPackageType: PackageType
+
+    /**
      * Similar to [getPackageType] but looks using either the [PackageType.id] or [PackageType.name] (this one
      * if a case insensitive way)
      */

@@ -133,8 +133,14 @@ public class BuildResourceDecorator extends AbstractLinkResourceDecorator<Build>
                         ),
                         // Run info
                         link(
-                            "_runInfo",
-                            build -> on(RunInfoController.class).getRunInfo(build.getRunnableEntityType(), build.id())
+                                "_runInfo",
+                                build -> on(RunInfoController.class).getRunInfo(build.getRunnableEntityType(), build.id())
+                        ),
+                        // Upload of package information
+                        link(
+                                "_packageUpload",
+                                build -> on(BuildPackageVersionUploadController.class).uploadPackageVersions(build.getId(), null),
+                                withProjectFn(BuildConfig.class)
                         ),
                         // Page
                         page()
