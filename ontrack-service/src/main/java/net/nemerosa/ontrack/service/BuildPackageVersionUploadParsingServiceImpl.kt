@@ -19,7 +19,7 @@ class BuildPackageVersionUploadParsingServiceImpl(
         } else {
             val mimeType: String = doc.type
             val parser = parsers.find {
-                it.mimeType == mimeType
+                it.mimeTypes.contains(mimeType)
             } ?: throw BuildPackageVersionUploadWrongMimeTypeException(mimeType)
             return parser.parsePackageVersions(defaultType, doc)
         }

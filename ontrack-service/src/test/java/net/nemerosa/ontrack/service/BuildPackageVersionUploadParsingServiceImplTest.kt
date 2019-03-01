@@ -28,7 +28,10 @@ class BuildPackageVersionUploadParsingServiceImplTest {
     @Before
     fun init() {
         packageService = mock()
-        service = BuildPackageVersionUploadParsingServiceImpl(listOf(TomlBuildPackageVersionParser(packageService)))
+        service = BuildPackageVersionUploadParsingServiceImpl(listOf(
+                TomlBuildPackageVersionParser(packageService),
+                PropertiesBuildPackageVersionParser(packageService)
+        ))
 
         whenever(packageService.findByNameOrId("test")).thenReturn(defaultPackageType)
         whenever(packageService.findByNameOrId("maven")).thenReturn(MockPackageType("Maven"))
@@ -43,7 +46,7 @@ class BuildPackageVersionUploadParsingServiceImplTest {
 
     @Test
     fun `Empty text`() {
-        val versions = parse(text = "")
+        val versions = parse(mime = "application/toml", text = "")
         assertTrue(versions.isEmpty(), "No version")
     }
 
@@ -55,8 +58,8 @@ class BuildPackageVersionUploadParsingServiceImplTest {
     }
 
     @Test
-    fun parsing() {
-        val versions = parse(text = """
+    fun `Toml parsing`() {
+        val versions = parse(mime = "application/toml", text = """
             'id.one' = 1.0
             'id.two' = 2.0
 
@@ -83,13 +86,41 @@ class BuildPackageVersionUploadParsingServiceImplTest {
     }
 
     @Test
-    fun `Not existing type`() {
+    fun `Not existing type in Toml`() {
         assertFailsWith<BuildPackageVersionUploadParsingException> {
-            parse(text = """
+            parse(mime = "application/toml", text = """
                 [not-found]
                 some-id = some-version
             """.trimIndent())
         }
+    }
+
+    @Test
+    fun `Properties parsing`() {
+        val versions = parse(mime = "text/plain", text = """
+            id.one = 1.0
+            id.two = 2.0
+
+            # Explicit type
+            test::id.three = 2.1
+
+            # Maven dependencies
+            maven::group1:artifact1 = 3.0
+            maven::group2:artifact2 = 4.0
+
+            # Npm dependencies
+            npm::package-1 = 5.0
+            npm::package-2 = 6.0
+        """)
+        versions.assertVersionsPresent(
+                "test::id.one::1.0",
+                "test::id.two::2.0",
+                "test::id.three::2.1",
+                "maven::group1:artifact1::3.0",
+                "maven::group2:artifact2::4.0",
+                "npm::package-1::5.0",
+                "npm::package-2::6.0"
+        )
     }
 
     private fun List<PackageVersion>.assertVersionsPresent(vararg versions: String) {
@@ -106,11 +137,11 @@ class BuildPackageVersionUploadParsingServiceImplTest {
         )
     }
 
-    private fun parse(defaultType: PackageType = defaultPackageType, text: String) =
-            service.parsePackageVersions(defaultType, document(text))
+    private fun parse(defaultType: PackageType = defaultPackageType, mime: String, text: String) =
+            service.parsePackageVersions(defaultType, document(mime, text))
 
-    private fun document(text: String): Document = Document(
-            "application/toml",
+    private fun document(mime: String, text: String): Document = Document(
+            mime,
             text.toByteArray()
     )
 

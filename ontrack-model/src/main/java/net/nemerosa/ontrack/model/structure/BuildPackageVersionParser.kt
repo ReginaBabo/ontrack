@@ -10,7 +10,7 @@ interface BuildPackageVersionParser {
     /**
      * Supported MIME type
      */
-    val mimeType: String
+    val mimeTypes: Set<String>
 
     /**
      * Parsing of the document.

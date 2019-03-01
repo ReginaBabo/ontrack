@@ -14,8 +14,9 @@ import java.io.StringReader
 @Component
 class TomlBuildPackageVersionParser(
         private val packageService: PackageService
-): BuildPackageVersionParser {
-    override val mimeType: String = "application/toml"
+) : BuildPackageVersionParser {
+
+    override val mimeTypes = setOf("application/toml")
 
     override fun parsePackageVersions(defaultType: PackageType, doc: Document): List<PackageVersion> {
         val table: TomlTable = try {
