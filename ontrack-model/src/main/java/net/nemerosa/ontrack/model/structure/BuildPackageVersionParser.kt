@@ -8,9 +8,29 @@ import net.nemerosa.ontrack.common.Document
 interface BuildPackageVersionParser {
 
     /**
+     * Name of this parser
+     */
+    val name: String
+
+    /**
+     * Description for this parser
+     */
+    val description: String
+
+    /**
+     * Preferred MIME type
+     */
+    val mimeType: String
+
+    /**
      * Supported MIME type
      */
     val mimeTypes: Set<String>
+
+    /**
+     * Example of file content
+     */
+    val example: String
 
     /**
      * Parsing of the document.

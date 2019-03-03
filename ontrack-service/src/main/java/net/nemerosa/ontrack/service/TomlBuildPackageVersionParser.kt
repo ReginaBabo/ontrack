@@ -16,6 +16,19 @@ class TomlBuildPackageVersionParser(
         private val packageService: PackageService
 ) : BuildPackageVersionParser {
 
+    override val name: String = "Toml"
+
+    override val description: String = "Toml format, id = version, grouping per type"
+
+    override val mimeType: String = "application/toml"
+
+    override val example: String = """
+        id = 1.0
+
+        [maven]
+        'net.nemerosa.ontrack:ontrack-model' = "3.38.6"
+    """.trimIndent()
+
     override val mimeTypes = setOf("application/toml")
 
     override fun parsePackageVersions(defaultType: PackageType, doc: Document): List<PackageVersion> {

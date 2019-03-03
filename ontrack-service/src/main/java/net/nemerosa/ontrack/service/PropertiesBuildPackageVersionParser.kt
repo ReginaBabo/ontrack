@@ -17,6 +17,16 @@ class PropertiesBuildPackageVersionParser(
         private const val SEPARATOR = "::"
     }
 
+    override val name: String = "Properties"
+
+    override val description: String = "Properties file, (type::)id = version"
+
+    override val mimeType: String = "application/properties"
+
+    override val example: String = """
+        maven::net.nemerosa.ontrack:ontrack-model = 3.38.6
+    """.trimIndent()
+
     override val mimeTypes = setOf("text/plain", "text/properties", "application/properties", "application/octet-stream")
 
     override fun parsePackageVersions(defaultType: PackageType, doc: Document): List<PackageVersion> {
