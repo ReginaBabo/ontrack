@@ -14,4 +14,43 @@
             </div>
         </div>
     </div>
+    <div class="row" ng-if="build.packageVersions.length > 0">
+        <div class="col-md-12">
+            <table class="table table-condensed table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Identifier</th>
+                    <th>Version</th>
+                    <th>Linked build</th>
+                    <th>Promotions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="dep in build.packageVersions">
+                    <td>
+                        <ot-package-id package-id="dep.packageVersion.packageId"></ot-package-id>
+                    </td>
+                    <td>
+                        {{dep.packageVersion.version}}
+                    </td>
+                    <td ng-if="!dep.target" class="ot-description" colspan="4">
+                        n/a
+                    </td>
+                    <td ng-if="dep.target">
+                        <a href="{{dep.target.branch.project.links._page}}">{{dep.target.branch.project.name}}</a>
+                        /
+                        <a href="{{dep.target.branch.links._page}}">{{dep.target.branch.name}}</a>
+                        /
+                        <a href="{{dep.target.links._page}}">{{dep.target.name}}</a>
+                    </td>
+                    <td ng-if="dep.target" class="ot-build-used-by-promotions">
+                        <span ng-repeat="promotionRun in dep.target.promotionRuns">
+                            <ot-entity-image entity="promotionRun.promotionLevel" title="{{promotionRun.promotionLevel.name}}" link="{{promotionRun.promotionLevel.links._page}}"></ot-entity-image>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </ot-view>

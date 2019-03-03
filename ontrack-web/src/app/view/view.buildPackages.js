@@ -41,6 +41,9 @@ angular.module('ot.view.build-packages', [
                                 id
                                 name
                                 description
+                                feature {
+                                    id
+                                }
                             }
                             id
                         }
@@ -49,6 +52,29 @@ angular.module('ot.view.build-packages', [
                     target {
                         id
                         name
+                        branch {
+                          name
+                          links {
+                            _page
+                          }
+                          project {
+                            name
+                            links {
+                              _page
+                            }
+                          }
+                        }
+                        links {
+                          _page
+                        }
+                        promotionRuns(lastPerLevel: true) {
+                          promotionLevel {
+                            id
+                            name
+                            image
+                            _image
+                          }
+                        }
                     }
                 }
               }
