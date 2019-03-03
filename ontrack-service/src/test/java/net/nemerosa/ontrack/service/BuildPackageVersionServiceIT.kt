@@ -11,9 +11,6 @@ import kotlin.test.assertEquals
 
 class BuildPackageVersionServiceIT : AbstractDSLTestSupport() {
 
-    @Autowired
-    private lateinit var buildPackageVersionService: BuildPackageVersionService
-
     @Test
     fun saveBuildPackage() {
         project {
