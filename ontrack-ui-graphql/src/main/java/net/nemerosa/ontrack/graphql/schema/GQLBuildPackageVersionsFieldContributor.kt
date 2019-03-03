@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.graphql.schema
 import graphql.Scalars.GraphQLBoolean
 import graphql.schema.GraphQLFieldDefinition
 import net.nemerosa.ontrack.graphql.support.GraphqlUtils
+import net.nemerosa.ontrack.graphql.support.GraphqlUtils.stdList
 import net.nemerosa.ontrack.model.structure.Build
 import net.nemerosa.ontrack.model.structure.BuildPackageVersionService
 import net.nemerosa.ontrack.model.structure.ProjectEntity
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class GQLBuildPackageVersionsFieldContributor(
         private val buildPackageVersionService: BuildPackageVersionService,
-        private val packageVersion: GQLTypePackageVersion
+        private val buildPackageVersion: GQLTypeBuildPackageVersion
 ) : GQLProjectEntityFieldContributor {
     override fun getFields(
             projectEntityClass: Class<out ProjectEntity>,
@@ -31,7 +32,7 @@ class GQLBuildPackageVersionsFieldContributor(
                                         .description("Keeps only the versions which are linked to other builds in Ontrack")
                                         .type(GraphQLBoolean)
                             }
-                            .type(packageVersion.typeRef)
+                            .type(stdList(buildPackageVersion.typeRef))
                             .dataFetcher(GraphqlUtils.fetcher(
                                     Build::class.java
                             ) { build -> buildPackageVersionService.getBuildPackages(build) })

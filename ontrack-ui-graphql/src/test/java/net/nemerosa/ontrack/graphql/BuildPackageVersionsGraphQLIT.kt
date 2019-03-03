@@ -5,6 +5,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class BuildPackageVersionsGraphQLIT : AbstractQLKTITSupport() {
 
@@ -32,41 +33,43 @@ class BuildPackageVersionsGraphQLIT : AbstractQLKTITSupport() {
                             // Unmatching dependency
                             testPackageVersion("org.apache.commons:commons-lang", "3.8.1")
                     )
-                }
-                // Gets its versions using GraphQL
-                val data = run("""{
-                    builds(id: $id) {
-                        packageVersions {
-                            packageId {
-                                type {
-                                    name
+                    // Gets its versions using GraphQL
+                    val data = run("""{
+                        builds(id: $id) {
+                            packageVersions {
+                                packageVersion {
+                                    packageId {
+                                        type {
+                                            name
+                                        }
+                                        id
+                                    }
+                                    version
                                 }
-                                id
-                            }
-                            version
-                            target {
-                                id
+                                target {
+                                    id
+                                }
                             }
                         }
+                   }""")
+
+                    val versions = data["builds"][0]["packageVersions"]
+                    assertEquals(2, versions.size())
+
+                    val ontrackVersion = versions[0]
+                    assertEquals("Test", ontrackVersion["packageVersion"]["packageId"]["type"]["name"].asText())
+                    assertEquals("net.nemerosa.ontrack:ontrack-model", ontrackVersion["packageVersion"]["packageId"]["id"].asText())
+                    assertEquals("3.38.5", ontrackVersion["packageVersion"]["version"].asText())
+                    assertNotNull(ontrackVersion["target"]) {
+                        assertEquals(ref.id(), it["id"].asInt())
                     }
-               }""")
 
-                val versions = data["builds"][0]["packageVersions"]
-                assertEquals(2, versions.size())
-
-                val ontrackVersion = versions[0]
-                assertEquals("Test", ontrackVersion["packageId"]["type"]["name"].asText())
-                assertEquals("net.nemerosa.ontrack:ontrack-model", ontrackVersion["packageId"]["id"].asText())
-                assertEquals("3.38.5", ontrackVersion["version"].asText())
-                assertNotNull(ontrackVersion["target"]) {
-                    assertEquals(ref.id(), it["id"].asInt())
+                    val commonsVersion = versions[1]
+                    assertEquals("Test", commonsVersion["packageVersion"]["packageId"]["type"]["name"].asText())
+                    assertEquals("org.apache.commons:commons-lang", commonsVersion["packageVersion"]["packageId"]["id"].asText())
+                    assertEquals("3.8.1", commonsVersion["packageVersion"]["version"].asText())
+                    assertTrue(commonsVersion["target"].isNull)
                 }
-
-                val commonsVersion = versions[1]
-                assertEquals("Test", commonsVersion["packageId"]["type"]["name"].asText())
-                assertEquals("org.apache.commons:commons-lang", commonsVersion["packageId"]["id"].asText())
-                assertEquals("3.8.1", commonsVersion["version"].asText())
-                assertNull(commonsVersion["target"])
             }
         }
     }
@@ -95,34 +98,36 @@ class BuildPackageVersionsGraphQLIT : AbstractQLKTITSupport() {
                             // Unmatching dependency
                             testPackageVersion("org.apache.commons:commons-lang", "3.8.1")
                     )
-                }
-                // Gets its versions using GraphQL
-                val data = run("""{
-                    builds(id: $id) {
-                        packageVersions(linkedOnly: true) {
-                            packageId {
-                                type {
-                                    name
+                    // Gets its versions using GraphQL
+                    val data = run("""{
+                        builds(id: $id) {
+                            packageVersions(linkedOnly: true) {
+                                packageVersion {
+                                    packageId {
+                                        type {
+                                            name
+                                        }
+                                        id
+                                    }
+                                    version
                                 }
-                                id
-                            }
-                            version
-                            target {
-                                id
+                                target {
+                                    id
+                                }
                             }
                         }
+                   }""")
+
+                    val versions = data["builds"][0]["packageVersions"]
+                    assertEquals(1, versions.size())
+
+                    val ontrackVersion = versions[0]
+                    assertEquals("Test", ontrackVersion["packageVersion"]["packageId"]["type"]["name"].asText())
+                    assertEquals("net.nemerosa.ontrack:ontrack-model", ontrackVersion["packageVersion"]["packageId"]["id"].asText())
+                    assertEquals("3.38.5", ontrackVersion["packageVersion"]["version"].asText())
+                    assertNotNull(ontrackVersion["target"]) {
+                        assertEquals(ref.id(), it["id"].asInt())
                     }
-               }""")
-
-                val versions = data["builds"][0]["packageVersions"]
-                assertEquals(1, versions.size())
-
-                val ontrackVersion = versions[0]
-                assertEquals("Test", ontrackVersion["packageId"]["type"]["name"].asText())
-                assertEquals("net.nemerosa.ontrack:ontrack-model", ontrackVersion["packageId"]["id"].asText())
-                assertEquals("3.38.5", ontrackVersion["version"].asText())
-                assertNotNull(ontrackVersion["target"]) {
-                    assertEquals(ref.id(), it["id"].asInt())
                 }
             }
         }
