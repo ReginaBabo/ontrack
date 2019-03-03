@@ -8,5 +8,5 @@ interface BuildPackageVersionUploadService {
     /**
      * Upload
      */
-    fun uploadAndResolvePackageVersions(parent: Build, packages: List<PackageVersion>)
+    fun uploadAndResolvePackageVersions(parent: Build, packages: List<PackageVersion>): List<BuildPackageVersion>
 }

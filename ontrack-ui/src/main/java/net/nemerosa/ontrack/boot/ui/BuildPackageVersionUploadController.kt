@@ -1,13 +1,14 @@
 package net.nemerosa.ontrack.boot.ui
 
 import net.nemerosa.ontrack.common.Document
-import net.nemerosa.ontrack.model.Ack
 import net.nemerosa.ontrack.model.exceptions.PackageTypeNotFoundException
 import net.nemerosa.ontrack.model.structure.*
 import net.nemerosa.ontrack.ui.controller.AbstractResourceController
+import net.nemerosa.ontrack.ui.resource.Resources
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on
 
 @RestController
 @RequestMapping("/rest/builds")
@@ -25,7 +26,7 @@ class BuildPackageVersionUploadController(
             @RequestParam(required = false)
             defaultTypeName: String?,
             @RequestParam file: MultipartFile
-    ): Ack {
+    ): Resources<BuildPackageVersion> {
         val document = Document(
                 file.contentType,
                 file.bytes
@@ -42,8 +43,11 @@ class BuildPackageVersionUploadController(
         // Parsing of the document
         val packageVersions = buildPackageVersionUploadParsingService.parsePackageVersions(defaultType, document)
         // Uploads of versions
-        buildPackageVersionUploadService.uploadAndResolvePackageVersions(build, packageVersions)
+        val versions = buildPackageVersionUploadService.uploadAndResolvePackageVersions(build, packageVersions)
         // OK
-        return Ack.OK
+        return Resources.of(
+                versions,
+                uri(on(BuildPackageVersionController::class.java).getPackageVersions(buildId))
+        )
     }
 }
