@@ -5,6 +5,7 @@ import net.nemerosa.ontrack.model.buildfilter.BuildFilterService
 import net.nemerosa.ontrack.model.buildfilter.StandardFilterProviderDataBuilder
 import net.nemerosa.ontrack.model.exceptions.BuildNotFoundException
 import net.nemerosa.ontrack.model.labels.*
+import net.nemerosa.ontrack.model.security.BuildConfig
 import net.nemerosa.ontrack.model.security.SecurityService
 import net.nemerosa.ontrack.model.security.ValidationRunCreate
 import net.nemerosa.ontrack.model.security.ValidationRunStatusChange
@@ -37,6 +38,12 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
 
     @Autowired
     protected lateinit var packageService: PackageService
+
+    @Autowired
+    protected lateinit var buildPackageVersionService: BuildPackageVersionService
+
+    @Autowired
+    protected lateinit var buildPackageVersionUploadService: BuildPackageVersionUploadService
 
     fun <T> withDisabledConfigurationTest(code: () -> T): T {
         val configurationTest = ontrackConfigProperties.isConfigurationTest
@@ -274,6 +281,27 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
                 id
         )
     }
+
+    protected fun testPackageVersion(id: String, version: String): PackageVersion =
+            testPackageId(id).toVersion(version)
+
+    /**
+     * Uploading some versions for a build
+     */
+    protected fun Build.uploadPackageVersions(vararg packages: PackageVersion) {
+        asUser().with(this, BuildConfig::class.java).execute {
+            buildPackageVersionUploadService.uploadAndResolvePackageVersions(
+                    this,
+                    packages.toList()
+            )
+        }
+    }
+
+    /**
+     * Gets the packages associated with a build
+     */
+    protected val Build.packageVersions: List<BuildPackageVersion>
+        get() = buildPackageVersionService.getBuildPackages(this)
 
     protected inner class PackageIdsSetter(private val project: Project) {
 

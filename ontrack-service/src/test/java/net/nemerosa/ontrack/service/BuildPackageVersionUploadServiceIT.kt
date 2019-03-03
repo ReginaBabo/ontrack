@@ -12,12 +12,6 @@ import kotlin.test.assertNull
 
 class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
 
-    @Autowired
-    private lateinit var buildPackageVersionService: BuildPackageVersionService
-
-    @Autowired
-    private lateinit var buildPackageVersionUploadService: BuildPackageVersionUploadService
-
     @Test
     fun `Upload of packages`() {
         // Project and build acting as a reference
@@ -158,27 +152,6 @@ class BuildPackageVersionUploadServiceIT : AbstractDSLTestSupport() {
             }
         }
     }
-
-    private fun testPackageVersion(id: String, version: String): PackageVersion =
-            testPackageId(id).toVersion(version)
-
-    /**
-     * Uploading some versions for a build
-     */
-    private fun Build.uploadPackageVersions(vararg packages: PackageVersion) {
-        asUser().with(this, BuildConfig::class.java).execute {
-            buildPackageVersionUploadService.uploadAndResolvePackageVersions(
-                    this,
-                    packages.toList()
-            )
-        }
-    }
-
-    /**
-     * Gets the packages associated with a build
-     */
-    private val Build.packageVersions: List<BuildPackageVersion>
-        get() = buildPackageVersionService.getBuildPackages(this)
 
 
 }
