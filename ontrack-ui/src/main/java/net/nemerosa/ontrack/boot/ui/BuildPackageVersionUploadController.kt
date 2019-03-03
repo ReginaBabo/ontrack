@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.boot.ui
 
 import net.nemerosa.ontrack.common.Document
 import net.nemerosa.ontrack.model.Ack
+import net.nemerosa.ontrack.model.exceptions.PackageTypeNotFoundException
 import net.nemerosa.ontrack.model.structure.*
 import net.nemerosa.ontrack.ui.controller.AbstractResourceController
 import org.springframework.http.HttpStatus
@@ -19,7 +20,12 @@ class BuildPackageVersionUploadController(
 
     @PostMapping("{buildId}/packages/upload")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun uploadPackageVersions(@PathVariable buildId: ID, @RequestParam file: MultipartFile): Ack {
+    fun uploadPackageVersions(
+            @PathVariable buildId: ID,
+            @RequestParam(required = false)
+            defaultTypeName: String?,
+            @RequestParam file: MultipartFile
+    ): Ack {
         val document = Document(
                 file.contentType,
                 file.bytes
@@ -27,7 +33,12 @@ class BuildPackageVersionUploadController(
         // Gets the build
         val build = structureService.getBuild(buildId)
         // Gets the default package type
-        val defaultType = packageService.defaultPackageType
+        val defaultType = if (defaultTypeName != null && defaultTypeName.isNotBlank()) {
+            packageService.findByNameOrId(defaultTypeName)
+                    ?: throw PackageTypeNotFoundException(defaultTypeName)
+        } else {
+            packageService.defaultPackageType
+        }
         // Parsing of the document
         val packageVersions = buildPackageVersionUploadParsingService.parsePackageVersions(defaultType, document)
         // Uploads of versions

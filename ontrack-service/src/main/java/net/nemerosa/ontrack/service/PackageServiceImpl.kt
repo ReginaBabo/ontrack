@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.service
 
+import net.nemerosa.ontrack.model.exceptions.PackageTypeNotFoundException
 import net.nemerosa.ontrack.model.structure.PackageId
 import net.nemerosa.ontrack.model.structure.PackageService
 import net.nemerosa.ontrack.model.structure.PackageType
@@ -24,7 +25,7 @@ class PackageServiceImpl(
 
     override val defaultPackageType: PackageType
         get() = findByNameOrId(DEFAULT_PACKAGE_TYPE_NAME)
-                ?: throw IllegalStateException("Cannot find default package type: $DEFAULT_PACKAGE_TYPE_NAME")
+                ?: throw PackageTypeNotFoundException(DEFAULT_PACKAGE_TYPE_NAME)
 
     override fun findByNameOrId(name: String): PackageType? =
             index[name] ?: index.values.find { it.name.equals(name, true) }
