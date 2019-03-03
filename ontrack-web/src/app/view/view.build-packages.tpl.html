@@ -4,6 +4,14 @@
             Build package versions for {{build.name}}
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-if="build.packageVersions.length == 0">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                No package version has been registered for this build.
+                <span ng-if="build.links._packageUpload">
+                    You can <a href="#" ng-click="upload">upload</a> a set of dependencies.
+                </span>
+            </div>
+        </div>
     </div>
 </ot-view>

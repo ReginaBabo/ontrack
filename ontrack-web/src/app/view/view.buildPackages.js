@@ -31,6 +31,9 @@ angular.module('ot.view.build-packages', [
                     name
                   }
                 }
+                links {
+                    _packageUpload
+                }
                 packageVersions {
                     packageVersion {
                         packageId {
