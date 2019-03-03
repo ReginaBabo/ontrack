@@ -279,6 +279,12 @@ angular.module('ot.view.build', [
                                 });
                             }
                         },
+                        {
+                            id: "packageVersionsBuild",
+                            name: "Package versions",
+                            cls: "ot-command-build-package-versions",
+                            link: "/build-packages/" + build.id
+                        },
                         ot.viewApiCommand(build.links._self),
                         ot.viewActionsCommand(build.links._actions),
                         ot.viewCloseCommand('/branch/' + build.branch.id)
