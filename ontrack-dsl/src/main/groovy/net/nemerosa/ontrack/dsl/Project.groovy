@@ -101,7 +101,7 @@ class Project extends AbstractProjectResource {
     }
 
     @DSLMethod("Sets the package identifiers for this project.")
-    void setPackageIds(Map<String, List<String>> packageIds) {
+    void setPackageIds(Map<String, List> packageIds) {
         ontrack.put(link("packageIds"), [
                 packages: packageIds.collect { type, ids ->
                     ids.collect { id ->
