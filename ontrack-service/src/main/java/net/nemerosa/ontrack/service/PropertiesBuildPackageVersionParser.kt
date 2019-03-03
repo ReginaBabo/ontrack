@@ -17,7 +17,7 @@ class PropertiesBuildPackageVersionParser(
         private const val SEPARATOR = "::"
     }
 
-    override val mimeTypes = setOf("text/plain", "text/properties", "application/properties")
+    override val mimeTypes = setOf("text/plain", "text/properties", "application/properties", "application/octet-stream")
 
     override fun parsePackageVersions(defaultType: PackageType, doc: Document): List<PackageVersion> {
         val text = doc.content.toString(Charsets.UTF_8)
