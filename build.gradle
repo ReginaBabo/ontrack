@@ -339,6 +339,29 @@ task testReport(type: TestReport) {
 }
 
 /**
+ * List of all dependencies
+ */
+
+task flatDependencies {
+    doLast {
+        def deps = [] as Set
+        subprojects {
+            configurations.each { conf ->
+                if (conf.name in ["runtime", "api", "implementation", "compile"]) {
+                    conf.dependencies.each { dep ->
+                        if (dep.version) {
+                            deps += "maven::${dep.group}:${dep.name} = ${dep.version}"
+                        }
+                    }
+                }
+            }
+        }
+        file("build/reports").mkdirs()
+        file("build/reports/dependencies.properties").text = deps.sort().join("\n")
+    }
+}
+
+/**
  * Wrapper definition
  */
 
