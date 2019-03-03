@@ -139,13 +139,13 @@ public class BuildResourceDecorator extends AbstractLinkResourceDecorator<Build>
                         // Upload of package information
                         link(
                                 "_packageUpload",
-                                build -> on(BuildPackageVersionUploadController.class).uploadPackageVersions(build.getId(), null),
+                                build -> on(BuildPackageVersionUploadController.class).uploadPackageVersions(build.getId(), null, null),
                                 withProjectFn(BuildConfig.class)
                         ),
                         // List of package versions
                         link(
                                 "_packageVersions",
-                                build ->on (BuildPackageVersionController.class).getPackageVersions(build.getId())
+                                build -> on(BuildPackageVersionController.class).getPackageVersions(build.getId())
                         ),
                         // Page
                         page()
