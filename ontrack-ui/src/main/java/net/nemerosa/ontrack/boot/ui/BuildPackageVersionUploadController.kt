@@ -31,6 +31,28 @@ class BuildPackageVersionUploadController(
                 file.contentType,
                 file.bytes
         )
+        return uploadDocument(buildId, defaultTypeName, document)
+    }
+
+    @PostMapping("{buildId}/packages/uploadText")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun uploadPackageVersionsAsText(
+            @PathVariable buildId: ID,
+            @RequestParam(required = false)
+            defaultTypeName: String?,
+            @RequestParam(required = false)
+            mimeType: String?,
+            @RequestBody
+            text: String
+    ): Resources<BuildPackageVersion> {
+        val document = Document(
+                mimeType ?: "application/properties",
+                text.toByteArray(/* UTF-8 */)
+        )
+        return uploadDocument(buildId, defaultTypeName, document)
+    }
+
+    private fun uploadDocument(buildId: ID, defaultTypeName: String?, document: Document): Resources<BuildPackageVersion> {
         // Gets the build
         val build = structureService.getBuild(buildId)
         // Gets the default package type
