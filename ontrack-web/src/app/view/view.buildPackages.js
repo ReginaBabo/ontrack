@@ -32,7 +32,7 @@ angular.module('ot.view.build-packages', [
                   }
                 }
                 links {
-                    _packageUpload
+                    _packageUploadAsText
                 }
                 packageVersions {
                     packageVersion {
@@ -91,5 +91,19 @@ angular.module('ot.view.build-packages', [
         }
         // Initial call
         loadPackageVersions();
+
+        /**
+         * Uploading package versions for this build
+         */
+        $scope.uploadAsText = () => {
+            if ($scope.build.links._packageUploadAsText) {
+                // TODO Gets the list of MIME types
+                // TODO Modal dialog with two fields
+                // TODO i) MIME type
+                // TODO ii) Text (limited to 10000 characters)
+                // TODO On OK, POST the text, waiting time
+                // TODO On upload OK, refresh the list of items (callback to loadPackageVersions)
+            }
+        };
     })
 ;
