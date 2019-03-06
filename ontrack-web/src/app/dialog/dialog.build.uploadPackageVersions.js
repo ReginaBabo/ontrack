@@ -8,6 +8,8 @@ angular.module('ot.dialog.build.uploadPackageVersions', [
         $scope.parsers = config.parsers;
         $scope.packageTypes = config.packageTypes;
         $scope.build = config.build;
+        // Dialog data
+        $scope.data = {};
         // Cancelling the dialog
         $scope.cancel = () => {
             $modalInstance.dismiss('cancel');
@@ -17,7 +19,7 @@ angular.module('ot.dialog.build.uploadPackageVersions', [
             if (isValid) {
                 otFormService.submitDialog(
                     config.submit,
-                    $scope.xxxx,
+                    $scope.data,
                     $modalInstance,
                     $scope
                 );

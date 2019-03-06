@@ -81,6 +81,7 @@ angular.module('ot.view.build-packages', [
               }
             }
         `;
+
         // Loading function
         function loadPackageVersions() {
             otGraphqlService.pageGraphQLCall(query, queryParams).then(data => {
@@ -90,6 +91,7 @@ angular.module('ot.view.build-packages', [
                 view.breadcrumbs = ot.buildBreadcrumbs(build);
             });
         }
+
         // Initial call
         loadPackageVersions();
 
@@ -118,15 +120,27 @@ angular.module('ot.view.build-packages', [
                         templateUrl: 'app/dialog/dialog.build.uploadPackageVersions.tpl.html',
                         controller: 'otDialogBuildUploadPackageVersions',
                         resolve: {
-                            config: function () {
-                                return {
-                                    parsers: data.buildPackageVersionParsers,
-                                    packageTypes: data.packageTypes,
-                                    build: $scope.build,
-                                    submit: function (xxx) {
+                            config: () => ({
+                                parsers: data.buildPackageVersionParsers,
+                                packageTypes: data.packageTypes,
+                                build: $scope.build,
+                                submit: function (dialogData) {
+                                    const queryParams = {};
+                                    if (dialogData.packageType) {
+                                        queryParams.defaultTypeName = dialogData.packageType.id;
                                     }
-                                };
-                            }
+                                    return ot.pageCall($http.post(
+                                        $scope.build.links._packageUploadAsText,
+                                        dialogData.content,
+                                        {
+                                            params: queryParams,
+                                            headers: {
+                                                "Content-Type": dialogData.parser.mimeType
+                                            }
+                                        }
+                                    ));
+                                }
+                            })
                         }
                     }).result;
                 }).then(loadPackageVersions);
