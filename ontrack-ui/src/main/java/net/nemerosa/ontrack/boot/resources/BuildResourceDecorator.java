@@ -144,7 +144,7 @@ public class BuildResourceDecorator extends AbstractLinkResourceDecorator<Build>
                         ),
                         // Upload of package information as text
                         link(
-                                "_packageUploadText",
+                                "_packageUploadAsText",
                                 build -> on(BuildPackageVersionUploadController.class).uploadPackageVersionsAsText(build.getId(), null, null, ""),
                                 withProjectFn(BuildConfig.class)
                         ),
