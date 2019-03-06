@@ -107,10 +107,13 @@ angular.module('ot.view.build-packages', [
                         description
                         example
                       }
+                      packageTypes {
+                        id
+                        name
+                      }
                     }
                 `;
                 otGraphqlService.pageGraphQLCall(parserQuery).then(data => {
-                    $scope.parsers = data.buildPackageVersionParsers;
                     return $modal.open({
                         templateUrl: 'app/dialog/dialog.build.uploadPackageVersions.tpl.html',
                         controller: 'otDialogBuildUploadPackageVersions',
@@ -118,6 +121,7 @@ angular.module('ot.view.build-packages', [
                             config: function () {
                                 return {
                                     parsers: data.buildPackageVersionParsers,
+                                    packageTypes: data.packageTypes,
                                     build: $scope.build,
                                     submit: function (xxx) {
                                     }

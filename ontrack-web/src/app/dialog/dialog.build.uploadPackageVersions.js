@@ -6,6 +6,7 @@ angular.module('ot.dialog.build.uploadPackageVersions', [
         // Inject the configuration into the scope
         $scope.config = config;
         $scope.parsers = config.parsers;
+        $scope.packageTypes = config.packageTypes;
         $scope.build = config.build;
         // Cancelling the dialog
         $scope.cancel = () => {

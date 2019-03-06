@@ -4,12 +4,25 @@
     </h3>
 </div>
 <div class="modal-body">
-    ...
+    <form name="thisForm" class="form-horizontal">
+        <div class="form-group">
+            <label for="parser" class="col-md-2 control-label">Parser</label>
+            <div class="col-md-10">
+                <select class="form-control" required="true" ng-model="parser" ng-options="parser.name for parser in parsers"></select>
+            </div>
+        </div>
+        <div class="form-group" ng-if="parser">
+            <div class="col-md-10 col-md-offset-2">
+                <p class="form-control-static">{{parser.description}}</p>
+                <pre>{{parser.example}}</pre>
+            </div>
+        </div>
+    </form>
 </div>
 <div class="modal-footer">
     <div class="ot-alert-{{message.type}} alert-dismissable" ng-show="message">
         <span>{{message.content}}</span>
     </div>
-    <button class="btn btn-primary" type="submit" ng-click="submit(true)">OK</button>
+    <button class="btn btn-primary" type="submit" ng-click="submit(thisForm.$valid)" ng-disabled="thisForm.$invalid">OK</button>
     <button class="btn btn-link" type="button" ng-click="cancel()">Cancel</button>
 </div>
