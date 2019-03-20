@@ -19,3 +19,14 @@ dependencies {
     testCompile(project(":ontrack-test-utils"))
 
 }
+
+val tests by configurations.creating
+
+val testJar by tasks.registering(Jar::class) {
+    baseName = "${project.name}-test"
+    from(sourceSets["test"].output)
+}
+
+artifacts {
+    add("tests", testJar)
+}
