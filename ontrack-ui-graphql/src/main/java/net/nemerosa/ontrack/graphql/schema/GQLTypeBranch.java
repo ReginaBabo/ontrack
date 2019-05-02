@@ -6,6 +6,7 @@ import graphql.schema.GraphQLTypeReference;
 import net.nemerosa.ontrack.graphql.support.GraphqlUtils;
 import net.nemerosa.ontrack.model.buildfilter.BuildFilterProviderData;
 import net.nemerosa.ontrack.model.buildfilter.BuildFilterService;
+import net.nemerosa.ontrack.model.chart.ChartService;
 import net.nemerosa.ontrack.model.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,8 @@ public class GQLTypeBranch extends AbstractGQLProjectEntity<Branch> {
     private final GQLInputBuildStandardFilter inputBuildStandardFilter;
     private final GQLInputBuildGenericFilter inputBuildGenericFilter;
     private final GQLProjectEntityInterface projectEntityInterface;
+    private final GQLTypeChart chart;
+    private final ChartService chartService;
 
     @Autowired
     public GQLTypeBranch(StructureService structureService,
@@ -44,7 +47,9 @@ public class GQLTypeBranch extends AbstractGQLProjectEntity<Branch> {
                          GQLInputBuildStandardFilter inputBuildStandardFilter,
                          List<GQLProjectEntityFieldContributor> projectEntityFieldContributors,
                          GQLInputBuildGenericFilter inputBuildGenericFilter,
-                         GQLProjectEntityInterface projectEntityInterface
+                         GQLProjectEntityInterface projectEntityInterface,
+                         GQLTypeChart chart,
+                         ChartService chartService
     ) {
         super(Branch.class, ProjectEntityType.BRANCH, projectEntityFieldContributors, creation);
         this.structureService = structureService;
@@ -55,6 +60,8 @@ public class GQLTypeBranch extends AbstractGQLProjectEntity<Branch> {
         this.inputBuildStandardFilter = inputBuildStandardFilter;
         this.inputBuildGenericFilter = inputBuildGenericFilter;
         this.projectEntityInterface = projectEntityInterface;
+        this.chart = chart;
+        this.chartService = chartService;
     }
 
     @Override
@@ -144,9 +151,26 @@ public class GQLTypeBranch extends AbstractGQLProjectEntity<Branch> {
                                 .dataFetcher(branchBuildsFetcher())
                                 .build()
                 )
+                // Build chart for the branch
+                .field((it) -> it.name("buildChart")
+                        .type(chart.getTypeRef())
+                        .dataFetcher(branchBuildChartFetcher())
+                )
                 // OK
                 .build();
 
+    }
+
+    private DataFetcher branchBuildChartFetcher() {
+        return environment -> {
+            Object source = environment.getSource();
+            if (source instanceof Branch) {
+                Branch branch = (Branch) source;
+                return chartService.getBuildChart(branch);
+            } else {
+                return null;
+            }
+        };
     }
 
     private DataFetcher branchBuildsFetcher() {
@@ -203,15 +227,12 @@ public class GQLTypeBranch extends AbstractGQLProjectEntity<Branch> {
             Optional<String> name = GraphqlUtils.getStringArgument(environment, "name");
             if (source instanceof Branch) {
                 Branch branch = (Branch) source;
-                if (name.isPresent()) {
-                    return structureService.findValidationStampByName(
-                            branch.getProject().getName(), branch.getName(), name.get()
-                    )
-                            .map(Collections::singletonList)
-                            .orElse(Collections.emptyList());
-                } else {
-                    return structureService.getValidationStampListForBranch(branch.getId());
-                }
+                return name.map(s ->
+                        structureService.findValidationStampByName(
+                                branch.getProject().getName(), branch.getName(), s
+                        )
+                                .map(Collections::singletonList)
+                                .orElse(Collections.emptyList())).orElseGet(() -> structureService.getValidationStampListForBranch(branch.getId()));
             } else {
                 return Collections.emptyList();
             }

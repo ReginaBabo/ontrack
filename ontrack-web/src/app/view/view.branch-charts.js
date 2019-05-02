@@ -35,23 +35,18 @@ angular.module('ot.view.branch.charts', [
                   id
                   name
                 }
-                builds(filter: {afterDate: "2018-07-01"}) {
-                  id
-                  name
-                  creation {
-                    time
-                  }
-                  validationRuns(count: 1, validationStamp: "build") {
-                    creation {
-                      time
-                    }
-                    validationRunStatuses {
-                      statusID {
-                        id
+                buildChart {
+                  series {
+                    type
+                    name
+                    points {
+                      ref {
+                        name
+                        timestamp
                       }
-                    }
-                    runInfo {
-                      runTime
+                      status
+                      duration
+                      data
                     }
                   }
                 }
