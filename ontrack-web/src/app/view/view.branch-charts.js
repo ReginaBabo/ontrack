@@ -22,7 +22,7 @@ angular.module('ot.view.branch.charts', [
 
         // Branch query variables
         const queryVariables = {
-              branchId: branchId
+            branchId: branchId
         };
 
         // Branch query
@@ -37,6 +37,7 @@ angular.module('ot.view.branch.charts', [
                 }
                 builds(filter: {afterDate: "2018-07-01"}) {
                   id
+                  name
                   validationRuns(count: 1, validationStamp: "build") {
                     creation {
                       time
@@ -55,6 +56,39 @@ angular.module('ot.view.branch.charts', [
             }
         `;
 
+        // Loads the branch charts data
+        function loadBranchCharts() {
+            // based on prepared DOM, initialize echarts instance
+            let myChart = echarts.init(document.getElementById('charts'));
+            // Extracts the xAxis labels
+            let xAxisData = $scope.branch.builds.map(build => build.name);
+            // "build" VS data
+            let vsBuildData = $scope.branch.builds.map(build => build.validationRuns[0].runInfo.runTime);
+            // Specify chart configuration item and data
+            let chartOptions = {
+                title: {
+                    text: 'Build times'
+                },
+                tooltip: {},
+                legend: {},
+                xAxis: {
+                    data: xAxisData
+                },
+                yAxis: {
+                    name: "Time (ms)",
+                    nameLocation: "center",
+                    nameGap: 30
+                },
+                series: [{
+                    name: 'build',
+                    type: 'line',
+                    data: vsBuildData
+                }]
+            };
+            // use configuration item and data specified to show chart
+            myChart.setOption(chartOptions);
+        }
+
         // Loads the branch
         function loadBranchData() {
             otGraphqlService.pageGraphQLCall(query, queryVariables).then(function (data) {
@@ -70,6 +104,8 @@ angular.module('ot.view.branch.charts', [
                     // View OK now
                     viewInitialized = true;
                 }
+                // Loads the charts
+                loadBranchCharts();
             });
         }
 
