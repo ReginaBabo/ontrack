@@ -38,6 +38,9 @@ angular.module('ot.view.branch.charts', [
                 builds(filter: {afterDate: "2018-07-01"}) {
                   id
                   name
+                  creation {
+                    time
+                  }
                   validationRuns(count: 1, validationStamp: "build") {
                     creation {
                       time
@@ -60,10 +63,11 @@ angular.module('ot.view.branch.charts', [
         function loadBranchCharts() {
             // based on prepared DOM, initialize echarts instance
             let myChart = echarts.init(document.getElementById('charts'));
-            // Extracts the xAxis labels
-            let xAxisData = $scope.branch.builds.map(build => build.name);
             // "build" VS data
-            let vsBuildData = $scope.branch.builds.map(build => build.validationRuns[0].runInfo.runTime);
+            let vsBuildData = $scope.branch.builds.map(build => [
+                new Date(build.creation.time), // time
+                build.validationRuns[0].runInfo.runTime // value
+            ]);
             // Specify chart configuration item and data
             let chartOptions = {
                 title: {
@@ -72,10 +76,10 @@ angular.module('ot.view.branch.charts', [
                 tooltip: {},
                 legend: {},
                 xAxis: {
-                    data: xAxisData
+                    type: "time"
                 },
                 yAxis: {
-                    name: "Time (ms)",
+                    name: "Time (seconds)",
                     nameLocation: "center",
                     nameGap: 30
                 },
