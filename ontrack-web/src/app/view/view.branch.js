@@ -356,6 +356,12 @@ angular.module('ot.view.branch', [
                 // Branch commands
                 view.commands = [
                     {
+                        id: "branchCharts",
+                        name: "Charts",
+                        cls: "ot-command-charts",
+                        link: `/branch-charts/${$scope.branch.id}`
+                    },
+                    {
                         condition: function () {
                             return branchResource._createBuild;
                         },
