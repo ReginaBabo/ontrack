@@ -46,7 +46,6 @@ angular.module('ot.view.branch.charts', [
                       }
                       status
                       duration
-                      data
                     }
                   }
                 }
@@ -58,11 +57,6 @@ angular.module('ot.view.branch.charts', [
         function loadBranchCharts() {
             // based on prepared DOM, initialize echarts instance
             let myChart = echarts.init(document.getElementById('charts'));
-            // "build" VS data
-            let vsBuildData = $scope.branch.builds.map(build => [
-                new Date(build.creation.time), // time
-                build.validationRuns[0].runInfo.runTime // value
-            ]);
             // Specify chart configuration item and data
             let chartOptions = {
                 title: {
@@ -78,11 +72,18 @@ angular.module('ot.view.branch.charts', [
                     nameLocation: "center",
                     nameGap: 30
                 },
-                series: [{
-                    name: 'build',
-                    type: 'line',
-                    data: vsBuildData
-                }]
+                series: $scope.branch.buildChart.series.map(series => {
+                    return {
+                        name: series.name ? series.name : series.type,
+                        type: "line",
+                        data: series.points.filter(point =>
+                            !point.status || point.status === "PASSED"
+                        ).map(point => [
+                            new Date(point.ref.timestamp),
+                            point.duration
+                        ])
+                    };
+                })
             };
             // use configuration item and data specified to show chart
             myChart.setOption(chartOptions);
