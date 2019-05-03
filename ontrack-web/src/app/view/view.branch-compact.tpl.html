@@ -14,4 +14,21 @@
         The branch is disabled.
     </ot-entity-disabled>
 
+    <table class="ot-branch-compact-view">
+        <tbody>
+        <tr ng-repeat="build in branch.builds">
+            <!-- TODO Row selection -->
+            <!-- Build name section -->
+            <td class="ot-branch-compact-view-build-name">
+                <a href="{{build.links._page}}">
+                    {{build.name}}
+                </a>
+                <!-- TODO Signature -->
+                <!-- Build decorations -->
+                <ot-entity-embedded-decorations decorations="build.decorations"></ot-entity-embedded-decorations>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
 </ot-view>

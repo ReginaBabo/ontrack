@@ -138,6 +138,7 @@ angular.module('ot.view.branch-compact', [
                     }
                   }
                   links {
+                    _page
                     _validate
                   }
                 }
