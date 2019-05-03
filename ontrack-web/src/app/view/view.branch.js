@@ -356,6 +356,12 @@ angular.module('ot.view.branch', [
                 // Branch commands
                 view.commands = [
                     {
+                        id: 'compactView',
+                        name: "Compact view",
+                        cls: 'fa fa-eye',
+                        link: '/branch-compact/' + branchResource.id
+                    },
+                    {
                         condition: function () {
                             return branchResource._createBuild;
                         },
