@@ -12,33 +12,26 @@
 import net.nemerosa.ontrack.gradle.*
 
 /**
- * CI environment
+ * Running local acceptance tests end to end
  */
 
-task ciStart(type: ComposeUp) {
-    machine = project.properties.ciMachine
-    host = project.properties.ciHost
-    dir = file("${rootDir}/gradle/compose")
-    projectFiles = ['docker-compose.yml', 'docker-compose-ci.yml']
-    projectName = 'ci'
-    forceRecreate = true
-}
-
-task ciStop(type: ComposeStop) {
-    machine = project.properties.ciMachine
-    dir = file("${rootDir}/gradle/compose")
-    projectFiles = ['docker-compose.yml', 'docker-compose-ci.yml']
-    projectName = 'ci'
-    remove = true
-    logs = file("${project.buildDir}/ci-logs")
-    logService = 'ontrack'
+dockerCompose {
+    ci {
+        useComposeFiles = ["compose/docker-compose-ci.yml"]
+        projectName = "ci"
+        captureContainersOutputToFiles = "${project.buildDir}/ci-logs"
+        waitForTcpPorts = false
+    }
 }
 
 task ciAcceptanceTest(type: RemoteAcceptanceTest) {
-    acceptanceUrl = { "https://${ciStart.host}:${ciStart.getPublishedPort('ontrack', 443)}" }
+    dependsOn "ciComposeUp"
+    doFirst {
+        def ontrackPort = dockerCompose.ci.servicesInfos.ontrack.'ontrack_1'.ports.get(8080) as int
+        acceptanceUrl = { "http://localhost:${ontrackPort}" }
+    }
     disableSsl = true
     acceptanceTimeout = 300
     acceptanceImplicitWait = 30
-    dependsOn ciStart
-    finalizedBy ciStop
+    finalizedBy ciComposeDown
 }
