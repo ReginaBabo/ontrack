@@ -1,3 +1,6 @@
 dependencies {
-    compile project(':ontrack-model')
+    implementation(project(':ontrack-common'))
+    implementation(project(':ontrack-model'))
+    implementation("org.springframework:spring-context")
+    implementation("com.google.guava:guava") // TODO: remove (Nullable dependency)
 }
