@@ -22,6 +22,7 @@ plugins {
     id 'net.nemerosa.versioning' version '2.7.1'
     id 'nebula.os-package' version '2.2.6'
     id 'org.sonarqube' version '2.5'
+    id "com.avast.gradle.docker-compose" version "0.9.4"
 }
 
 /**
@@ -318,7 +319,19 @@ apply from: 'gradle/acceptance.gradle'
  * Development tasks
  */
 
-apply from: 'gradle/development.gradle'
+dockerCompose {
+    devInit {
+        useComposeFiles = ["compose/docker-compose-dev.yml"]
+    }
+}
+
+task devStart {
+    dependsOn devInitComposeUp
+}
+
+task devStop {
+    dependsOn devInitComposeDown
+}
 
 /**
  * Publication tasks
