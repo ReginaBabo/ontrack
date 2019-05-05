@@ -310,7 +310,26 @@ apply from: 'gradle/docker.gradle'
  * Acceptance tasks
  */
 
-apply from: 'gradle/acceptance.gradle'
+dockerCompose {
+    ci {
+        useComposeFiles = ["compose/docker-compose-ci.yml"]
+        projectName = "ci"
+        captureContainersOutputToFiles = "${project.buildDir}/ci-logs"
+        waitForTcpPorts = false
+    }
+}
+
+task ciAcceptanceTest(type: RemoteAcceptanceTest) {
+    dependsOn "ciComposeUp"
+    doFirst {
+        def ontrackPort = dockerCompose.ci.servicesInfos.ontrack.'ontrack_1'.ports.get(8080) as int
+        acceptanceUrl = { "http://localhost:${ontrackPort}" }
+    }
+    disableSsl = true
+    acceptanceTimeout = 300
+    acceptanceImplicitWait = 30
+    finalizedBy ciComposeDown
+}
 
 /**
  * Development tasks
