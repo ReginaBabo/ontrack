@@ -6,4 +6,6 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient'
     compile 'org.apache.httpcomponents:httpmime'
     compile 'org.slf4j:slf4j-api'
+    implementation("org.apache.commons:commons-lang3")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
 }

@@ -5,6 +5,7 @@ dependencies {
     compile 'org.springframework:spring-context'
     compile 'org.slf4j:slf4j-api'
     compile 'io.micrometer:micrometer-core'
+    implementation("org.apache.commons:commons-lang3")
 
     testCompile project(':ontrack-test-utils')
     testCompile 'org.apache.commons:commons-math3'

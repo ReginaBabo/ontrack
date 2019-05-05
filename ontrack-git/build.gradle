@@ -10,4 +10,5 @@ dependencies {
     compile project(':ontrack-common')
     compile 'org.codehaus.groovy:groovy-all'
     compile 'org.slf4j:slf4j-api'
+    implementation("org.apache.commons:commons-lang3")
 }

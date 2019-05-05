@@ -25,6 +25,7 @@ dependencies {
     compile project(':ontrack-dsl')
     compile project(':ontrack-json')
     compile 'commons-io:commons-io'
+    implementation("org.apache.commons:commons-lang3")
 }
 
 if (documentationProfile) {
