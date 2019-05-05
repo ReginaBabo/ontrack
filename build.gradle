@@ -65,18 +65,22 @@ ext {
     itJdbcWait = project.properties.itJdbcWait
 }
 
+// Integration test Compose setup
+
+dockerCompose {
+    integrationTest {
+        useComposeFiles = ["compose/docker-compose-it.yml"]
+        projectName = project.properties.itProject
+    }
+}
+
 // Pre-integration tests: starting Postgresql
 
-task preIntegrationTest(type: ComposeUp) {
-    machine = project.properties.itMachine
-    dir = file("${rootDir}/gradle/it")
-    projectFiles = ['docker-compose.yml']
-    projectName = project.properties.itProject
-    forceRecreate = false
-    host = project.properties.itJdbcHost
-    // When done
+task preIntegrationTest {
+    dependsOn integrationTestComposeUp
     doLast {
-        def jdbcUrl = "jdbc:postgresql://${host}:${getPublishedPort('db', 5432)}/ontrack"
+        def postgresPort = integrationTestComposeUp.servicesInfos.db.'db_1'.ports.get(5432) as int
+        def jdbcUrl = "jdbc:postgresql://localhost:${postgresPort}/ontrack"
         project.ext.itJdbcUrl = jdbcUrl
         logger.info("JDBC URL = ${project.ext.itJdbcUrl}")
         logger.info("JDBC. Wait ${itJdbcWait} seconds for DB container to be ready...")
@@ -86,12 +90,8 @@ task preIntegrationTest(type: ComposeUp) {
 
 // Post-integration tests: stopping Postgresql
 
-task postIntegrationTest(type: ComposeStop) {
-    machine = project.properties.itMachine
-    dir = file("${rootDir}/gradle/it")
-    projectFiles = ['docker-compose.yml']
-    projectName = project.properties.itProject
-    remove = true
+task postIntegrationTest {
+    dependsOn integrationTestComposeDown
 }
 
 /**
