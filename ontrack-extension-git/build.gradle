@@ -11,6 +11,7 @@ dependencies {
     compile project(':ontrack-json')
     compile project(':ontrack-repository-support')
     compile 'org.springframework:spring-tx'
+    implementation("org.apache.commons:commons-lang3")
     compile 'commons-io:commons-io'
 
     testCompile project(':ontrack-it-utils')

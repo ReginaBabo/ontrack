@@ -6,8 +6,8 @@ plugins {
 dependencies {
     api(project(":ontrack-json"))
     api(project(":ontrack-common"))
-
-    implementation(project(":ontrack-job"))
+    api(project(":ontrack-job"))
+    
     implementation("com.google.guava:guava")
     implementation("org.apache.commons:commons-text")
     implementation("org.springframework:spring-context")

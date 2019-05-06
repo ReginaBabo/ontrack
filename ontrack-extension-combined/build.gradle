@@ -5,6 +5,7 @@ apply plugin: OntrackExtensionPlugin
 
 dependencies {
     compile project(':ontrack-extension-issues')
+    implementation("org.apache.commons:commons-lang3")
 
     testCompile project(':ontrack-extension-issues').sourceSets.test.output
     testCompile 'org.codehaus.groovy:groovy-all'
