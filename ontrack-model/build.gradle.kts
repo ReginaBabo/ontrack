@@ -5,8 +5,8 @@ plugins {
 
 dependencies {
     api(project(":ontrack-json"))
+    api(project(":ontrack-common"))
 
-    implementation(project(":ontrack-common"))
     implementation(project(":ontrack-job"))
     implementation("com.google.guava:guava")
     implementation("org.apache.commons:commons-text")

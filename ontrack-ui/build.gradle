@@ -6,6 +6,8 @@ dependencies {
     compile project(':ontrack-ui-graphql')
     compile project(':ontrack-extension-api')
     compile project(':ontrack-extension-support')
+    implementation project(':ontrack-job')
+    implementation("org.apache.commons:commons-lang3")
     implementation("commons-io:commons-io")
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'

@@ -5,6 +5,9 @@ dependencies {
     compile project(':ontrack-ui-support')
     compile 'com.graphql-java:graphql-java'
     compile 'org.springframework:spring-tx'
+    implementation("org.apache.commons:commons-lang3")
+    implementation 'org.springframework.security:spring-security-core'
+    implementation("com.google.guava:guava") // TODO: remove, used only for Nullable
 
     testCompile project(':ontrack-test-utils')
     testCompile project(':ontrack-it-utils')

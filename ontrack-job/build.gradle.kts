@@ -1,5 +1,9 @@
 description = "Abstract management of identified jobs."
 
+plugins {
+    `java-library`
+}
+
 dependencies {
     implementation(project(":ontrack-common"))
     implementation("org.springframework:spring-context")

@@ -1,6 +1,8 @@
 dependencies {
     compile project(':ontrack-model')
     compile 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation("org.apache.commons:commons-lang3")
+    implementation("com.google.guava:guava")
 }
 
 configurations {

@@ -4,7 +4,9 @@ dependencies {
     compile project(':ontrack-model')
     compile project(':ontrack-repository')
     compile project(':ontrack-extension-api')
-    compile project(':ontrack-job')
+    implementation(project(':ontrack-job'))
+    implementation("com.google.guava:guava")
+    implementation("org.apache.commons:commons-lang3")
     compile 'org.springframework:spring-context'
     compile 'org.springframework:spring-tx'
     compile 'org.springframework.security:spring-security-core'
