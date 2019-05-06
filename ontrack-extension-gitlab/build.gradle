@@ -6,6 +6,7 @@ dependencies {
     compile project(':ontrack-extension-git')
     implementation("org.apache.commons:commons-lang3")
     compile 'org.gitlab:java-gitlab-api:1.2.7'
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     testCompile project(':ontrack-test-utils')
     testCompile project(':ontrack-it-utils')

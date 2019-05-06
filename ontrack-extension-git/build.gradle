@@ -10,6 +10,7 @@ dependencies {
     compile project(':ontrack-tx')
     compile project(':ontrack-json')
     compile project(':ontrack-repository-support')
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     compile 'org.springframework:spring-tx'
     implementation("org.apache.commons:commons-lang3")
     compile 'commons-io:commons-io'
