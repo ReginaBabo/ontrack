@@ -6,6 +6,8 @@ apply plugin: 'groovy'
 dependencies {
     compile project(':ontrack-extension-support')
     implementation(project(":ontrack-job"))
+    implementation("org.slf4j:slf4j-api")
+    implementation("org.springframework:spring-context")
 
     testCompile project(':ontrack-it-utils')
     testCompile 'org.codehaus.groovy:groovy-all'

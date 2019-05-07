@@ -20,3 +20,16 @@ dependencies {
     testImplementation(project(":ontrack-test-utils"))
 
 }
+
+val testJar by tasks.registering(Jar::class) {
+    classifier = "tests"
+    from(sourceSets["test"].allJava)
+}
+
+tasks["assemble"].dependsOn("testJar")
+
+val tests by configurations.creating
+
+artifacts {
+    add("tests", testJar)
+}

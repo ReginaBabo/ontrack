@@ -7,6 +7,8 @@ dependencies {
     compile project(':ontrack-extension-support')
     implementation("org.apache.commons:commons-lang3")
     compile 'org.springframework.security:spring-security-ldap'
+    implementation(project(":ontrack-ui-support"))
+    implementation("javax.validation:validation-api")
 
     testCompile project(':ontrack-it-utils')
     testCompile 'org.codehaus.groovy:groovy-all'

@@ -6,6 +6,7 @@ dependencies {
     compile 'com.graphql-java:graphql-java'
     compile 'org.springframework:spring-tx'
     implementation("org.apache.commons:commons-lang3")
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation 'org.springframework.security:spring-security-core'
     implementation("com.google.guava:guava") // TODO: remove, used only for Nullable
 

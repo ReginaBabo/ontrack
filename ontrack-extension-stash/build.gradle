@@ -4,6 +4,7 @@ apply plugin: OntrackExtensionPlugin
 
 dependencies {
     compile project(':ontrack-extension-git')
+    implementation(project(":ontrack-client"))
     implementation("org.apache.commons:commons-lang3")
 
     testCompile project(':ontrack-test-utils')

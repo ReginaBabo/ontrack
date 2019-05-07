@@ -4,6 +4,7 @@ dependencies {
     compile project(':ontrack-extension-support')
     implementation("org.apache.commons:commons-lang3")
     implementation("com.google.guava:guava")
+    implementation("org.springframework:spring-context")
     compile 'org.codehaus.groovy:groovy-all'
 }
 
