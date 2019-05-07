@@ -6,6 +6,7 @@ apply plugin: 'groovy'
 dependencies {
     compile project(':ontrack-extension-scm')
     compile project(':ontrack-ui-graphql')
+    compile project(':ontrack-ui-support')
     compile project(':ontrack-git')
     compile project(':ontrack-tx')
     compile project(':ontrack-json')

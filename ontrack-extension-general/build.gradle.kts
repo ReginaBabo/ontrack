@@ -1,6 +1,7 @@
 import net.nemerosa.ontrack.gradle.extension.OntrackExtensionPlugin
 
 plugins {
+    `java-library`
     groovy
 }
 
