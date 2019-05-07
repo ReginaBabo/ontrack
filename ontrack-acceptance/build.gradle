@@ -19,6 +19,7 @@ dependencies {
     testCompile project(':ontrack-dsl')
     testCompile project(':ontrack-dsl-shell')
     testCompile project(':ontrack-test-utils')
+    testCompile("org.apache.commons:commons-lang3")
     testCompile 'org.codehaus.groovy:groovy-all'
     testCompile 'org.springframework.boot:spring-boot-starter'
 
