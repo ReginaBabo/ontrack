@@ -6,9 +6,15 @@ dependencies {
     implementation("com.google.guava:guava")
 }
 
-tasks.register<Jar>("testJar") {
+val testJar by tasks.registering(Jar::class) {
     classifier = "tests"
     from(sourceSets["test"].allJava)
 }
 
 tasks["assemble"].dependsOn("testJar")
+
+val tests by configurations.creating
+
+artifacts {
+    add("tests", testJar)
+}
