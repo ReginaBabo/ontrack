@@ -9,6 +9,7 @@ dependencies {
     implementation project(':ontrack-job')
     implementation("org.apache.commons:commons-lang3")
     implementation("commons-io:commons-io")
+    implementation("com.google.guava:guava")
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-actuator'

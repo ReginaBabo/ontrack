@@ -3,6 +3,7 @@ apply plugin: 'groovy'
 dependencies {
     compile project(':ontrack-extension-support')
     implementation("org.apache.commons:commons-lang3")
+    implementation("com.google.guava:guava")
     compile 'org.codehaus.groovy:groovy-all'
 }
 

@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":ontrack-test-utils"))
     implementation(project(":ontrack-extension-support"))
     implementation(project(":ontrack-ui-support"))
+    implementation("com.google.guava:guava")
     implementation("org.springframework:spring-context")
     implementation("org.springframework:spring-jdbc")
     implementation("org.springframework:spring-test")
