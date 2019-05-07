@@ -1,3 +1,7 @@
+plugins {
+    `java-library`
+}
+
 dependencies {
     api(project(":ontrack-model"))
     api("org.springframework:spring-jdbc")
