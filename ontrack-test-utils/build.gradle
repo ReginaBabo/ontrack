@@ -1,9 +1,0 @@
-dependencies {
-    compile 'junit:junit'
-    compile 'commons-io:commons-io'
-    compile "org.jetbrains.kotlin:kotlin-test"
-    implementation project(':ontrack-json')
-    implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("org.apache.commons:commons-lang3")
-    compile "org.jetbrains.kotlin:kotlin-test:${kotlinVersion}"
-}
