@@ -1,7 +1,11 @@
+import net.nemerosa.ontrack.gradle.extension.OntrackExtensionPlugin
+
 plugins {
     `java-library`
     groovy
 }
+
+apply<OntrackExtensionPlugin>()
 
 dependencies {
     api(project(":ontrack-extension-support"))

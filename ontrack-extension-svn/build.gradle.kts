@@ -5,6 +5,8 @@ plugins {
     groovy
 }
 
+apply<OntrackExtensionPlugin>()
+
 dependencies {
     implementation(project(":ontrack-extension-scm"))
     implementation(project(":ontrack-repository-support"))
@@ -25,7 +27,7 @@ dependencies {
     testImplementation(project(path = ":ontrack-extension-api", configuration = "tests"))
     testImplementation(project(path = ":ontrack-ui-graphql", configuration = "tests"))
     testImplementation("org.codehaus.groovy:groovy-all")
-    
+
     testRuntimeOnly(project(":ontrack-service"))
     testRuntimeOnly(project(":ontrack-repository-impl"))
 }

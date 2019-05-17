@@ -8,15 +8,15 @@ plugins {
 apply<OntrackExtensionPlugin>()
 
 dependencies {
-    api(project(":ontrack-extension-support"))
-    api(project(":ontrack-extension-issues"))
-    api(project(":ontrack-ui-support"))
-
+    implementation(project(":ontrack-extension-git"))
+    implementation(project(":ontrack-client"))
     implementation("org.apache.commons:commons-lang3")
-    implementation("com.google.guava:guava") // TODO Remove, used only for Nullable
 
-    testImplementation("org.codehaus.groovy:groovy-all")
+    testImplementation(project(":ontrack-test-utils"))
     testImplementation(project(":ontrack-it-utils"))
+    testImplementation("org.springframework.boot:spring-boot-starter-actuator")
+    testImplementation(project(path = ":ontrack-extension-issues", configuration = "tests"))
+
     testRuntimeOnly(project(":ontrack-service"))
     testRuntimeOnly(project(":ontrack-repository-impl"))
 }
