@@ -29,7 +29,7 @@ dependencies {
 
 val testJar by tasks.registering(Jar::class) {
     classifier = "tests"
-    from(sourceSets["test"].allJava)
+    from(sourceSets["test"].output)
 }
 
 tasks["assemble"].dependsOn("testJar")

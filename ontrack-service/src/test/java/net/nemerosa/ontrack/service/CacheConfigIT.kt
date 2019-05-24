@@ -6,7 +6,7 @@ import net.nemerosa.ontrack.it.AbstractServiceTestSupport
 import net.nemerosa.ontrack.repository.PropertyRepository
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import kotlin.test.assertTrue
+import kotlin.test.assertSame
 
 class CacheConfigIT : AbstractServiceTestSupport() {
 
@@ -34,7 +34,7 @@ class CacheConfigIT : AbstractServiceTestSupport() {
                 project.id
         )
         // Checks this is the same instance
-        assertTrue(p === p2, "Cache enabled")
+        assertSame(p, p2, "Cache enabled")
     }
 
 }
