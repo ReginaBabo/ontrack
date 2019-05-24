@@ -14,5 +14,4 @@ dependencies {
     testImplementation(project(":ontrack-test-utils"))
     testImplementation("org.apache.commons:commons-math3")
     testImplementation("com.google.guava:guava")
-    testRuntimeOnly("org.slf4j:slf4j-log4j12")
 }
