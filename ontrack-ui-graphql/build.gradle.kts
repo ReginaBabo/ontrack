@@ -18,6 +18,7 @@ dependencies {
     testImplementation(project(path = ":ontrack-extension-api", configuration = "tests"))
     testImplementation(project(path = ":ontrack-model", configuration = "tests"))
     testImplementation("org.codehaus.groovy:groovy-all")
+    testImplementation("org.apache.tomcat:tomcat-jdbc")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testImplementation(project(":ontrack-repository-impl"))
