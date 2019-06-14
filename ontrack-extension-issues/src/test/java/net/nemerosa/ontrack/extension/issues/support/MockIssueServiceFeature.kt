@@ -4,9 +4,5 @@ import net.nemerosa.ontrack.extension.support.AbstractExtensionFeature
 import org.springframework.stereotype.Component
 
 @Component
-class MockIssueServiceFeature extends AbstractExtensionFeature {
+class MockIssueServiceFeature : AbstractExtensionFeature("mock-issue", "Mock issue", "Mock issue service")
 
-    MockIssueServiceFeature() {
-        super('mock-issue', 'Mock issue', 'Mock issue service')
-    }
-}
