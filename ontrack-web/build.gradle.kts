@@ -65,7 +65,6 @@ val prod by tasks.registering(ExecuteNodeScriptTask::class) {
     inputs.dir("src")
     inputs.file("bower.json")
     inputs.file("package.json")
-    extensions.add("outputDir", file("build/web/prod"))
     outputs.dir("build/web/prod")
 }
 
