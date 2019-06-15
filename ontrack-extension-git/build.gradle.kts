@@ -23,7 +23,7 @@ dependencies {
     implementation("commons-io:commons-io")
 
     testImplementation(project(":ontrack-it-utils"))
-    testImplementation(project(path = ":ontrack-extension-api", configuration = "test"))
+    testImplementation(project(path = ":ontrack-extension-api", configuration = "tests"))
     testImplementation(project(path = ":ontrack-extension-issues", configuration = "tests"))
     testImplementation(project(path = ":ontrack-ui-graphql", configuration = "tests"))
     testImplementation("org.codehaus.groovy:groovy-all")
