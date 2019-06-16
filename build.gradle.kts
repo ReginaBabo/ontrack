@@ -8,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath("com.netflix.nebula:gradle-aggregate-javadocs-plugin:3.0.1")
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE")
     }
 }
 
@@ -28,7 +29,6 @@ plugins {
     id("org.sonarqube") version "2.5"
     id("com.avast.gradle.docker-compose") version "0.9.4"
     // FIXME Spring Boot
-    // FIXME Kotling
 }
 
 /**
@@ -171,7 +171,8 @@ configure(javaProjects) p@{
 }
 
 
-//configure(coreProjects) {
+configure(coreProjects) {
+
 //
 //    /**
 //     * For all Java projects
@@ -270,7 +271,7 @@ configure(javaProjects) p@{
 //        }
 //    }
 //
-//}
+}
 
 /**
  * Packaging for delivery
