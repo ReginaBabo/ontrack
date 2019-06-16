@@ -62,8 +62,6 @@ if (project.hasProperty("documentation")) {
         sources(delegateClosureOf<PatternSet> {
             include("index.adoc")
         })
-        // FIXME requires("asciidoctor-diagram")
-        sources("**/*.adoc")
     }
 
     // PDF specific settings
@@ -82,24 +80,22 @@ if (project.hasProperty("documentation")) {
         sources(delegateClosureOf<PatternSet> {
             include("index.adoc")
         })
-        // FIXME requires("asciidoctor-diagram")
-        sources("**/*.adoc")
     }
 
-//    tasks.named("build") {
-//        dependsOn("generateHtml")
-//        dependsOn("generatePdf")
-//    }
+    tasks.named<Task>("build") {
+        dependsOn("asciidoctor")
+        dependsOn("asciidoctorPdf")
+    }
 
     rootProject.tasks.named<Zip>("publicationPackage") {
-        //        dependsOn(generateHtml)
-//        dependsOn(generatePdf)
-//        from("${generateHtml.outputDir}/html5") {
-//            into "html5"
-//        }
-//        from("${generatePdf.outputDir}/pdf") {
-//            include "*.pdf"
-//            into "pdf"
-//        }
+        dependsOn(":ontrack-docs:asciidoctor")
+        dependsOn(":ontrack-docs:asciidoctorPdf")
+        from(project(":ontrack-docs").file("build/docs/asciidoc")) {
+            into("html5")
+        }
+        from(project(":ontrack-docs").file("build/docs/asciidocPdf")) {
+            include("*.pdf")
+            into("pdf")
+        }
     }
 }
