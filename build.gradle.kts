@@ -119,14 +119,14 @@ configure(javaProjects) p@{
     if (hasProperty("documentation")) {
 
         tasks.register<Jar>("javadocJar") {
-            classifier = "javadoc"
+            archiveClassifier.set("javadoc")
             from("javadoc")
         }
 
         // Sources
 
         tasks.register<Jar>("sourcesJar") {
-            classifier = "sources"
+            archiveClassifier.set("sources")
             // FIXME from sourceSets.main.allSource
         }
     }
