@@ -15,7 +15,6 @@ buildscript {
  * Build properties
  */
 
-val kotlinVersion: String by project
 val micrometerVersion: String by project
 val springBootVersion: String by project
 
@@ -38,7 +37,7 @@ plugins {
 
 allprojects {
     group = "net.nemerosa.ontrack"
-    // version = versioning.info.display
+    version = versioning.info.display
 }
 
 /**
