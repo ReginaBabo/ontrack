@@ -69,7 +69,7 @@ if (project.hasProperty("documentation")) {
                 "ontrack-version" to version,
                 "spring-boot-version" to springBootVersion,
                 "icons" to "font",
-                "imagesdir" to file("build/asciidoc/html5")
+                "imagesdir" to file("build/docs/asciidoc")
         )
         logDocuments = true
         baseDirFollowsSourceDir()
