@@ -1,3 +1,4 @@
+import org.asciidoctor.gradle.jvm.AsciidoctorPdfTask
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
@@ -57,25 +58,27 @@ if (project.hasProperty("documentation")) {
         })
         // FIXME requires("asciidoctor-diagram")
         sources("**/*.adoc")
-//        sources(delegateClosureOf<PatternSet> {
-//            include("index.adoc")
-//        })
     }
 
-//    // PDF specific settings
-//
-//    val generatePdf by tasks.registering(AsciidoctorTask::class) {
-//        description = "Generates PDF documentation."
-//        group =  "Documentation"
-//        mustRunAfter(generateHtml)
-//        backends("pdf")
-//        attributes = mapOf(
-//                "ontrack-version"    to version,
-//                "spring-boot-version" to springBootVersion,
-//                "icons"              to "font",
-//                "imagesdir"          to file("build/asciidoc/html5")
-//        )
-//    }
+    // PDF specific settings
+
+    tasks.named<AsciidoctorPdfTask>("asciidoctorPdf") {
+        dependsOn("asciidoctor")
+        description = "Generates PDF documentation."
+        attributes = mapOf(
+                "ontrack-version" to version,
+                "spring-boot-version" to springBootVersion,
+                "icons" to "font",
+                "imagesdir" to file("build/asciidoc/html5")
+        )
+        logDocuments = true
+        baseDirFollowsSourceDir()
+        sources(delegateClosureOf<PatternSet> {
+            include("index.adoc")
+        })
+        // FIXME requires("asciidoctor-diagram")
+        sources("**/*.adoc")
+    }
 
 //    tasks.named("build") {
 //        dependsOn("generateHtml")
