@@ -21,6 +21,12 @@ if (project.hasProperty("documentation")) {
 
     val springBootVersion: String by project
 
+    asciidoctorj {
+        modules {
+            diagram.setVersion("1.5.4.1")
+        }
+    }
+
     val generateDoc by tasks.registering(JavaExec::class) {
         dependsOn("classes")
         dependsOn(":ontrack-dsl:classes")
