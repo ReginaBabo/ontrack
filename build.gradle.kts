@@ -96,97 +96,81 @@ val postIntegrationTest by tasks.registering {
  * Java projects
  */
 
-//ext {
-//    sourceCompatibility = 1.8
-//    targetCompatibility = 1.8
-//}
+val javaProjects = subprojects.filter {
+    it.path != ":ontrack-web"
+}
 
-//def javaProjects = subprojects.findAll {
-//    it.path != ":ontrack-web"
-//}
-//
-//def coreProjects = javaProjects.findAll {
-//    it.path != ":ontrack-dsl"
-//}
+val coreProjects = subprojects.filter {
+    it.path != ":ontrack-dsl"
+}
 
-//configure(javaProjects) {
-//
-//    /**
-//     * For all Java projects
-//     */
-//
-//    apply plugin: "java"
-//    apply plugin: "maven-publish"
-//
-//    // Javadoc
-//
-//    if (documentationProfile) {
-//        task javadocJar(type: Jar) {
-//            classifier = "javadoc"
-//            from javadoc
-//        }
-//
-//        // Sources
-//
-//        task sourceJar(type: Jar) {
-//            classifier = "sources"
-//            from sourceSets.main.allSource
-//        }
-//    }
-//
-//    // POM file
-//
-//    publishing {
-//        publications {
-//            mavenCustom(MavenPublication) {
-//                from components.java
-//                pom.withXml {
-//                    def root = asNode()
-//                    root.appendNode("name", project.name)
-//                    root.appendNode("description", project.description ?: project.name)
-//                    root.appendNode("url", "http://nemerosa.github.io/ontrack")
-//
-//                    def licenses = root.appendNode("licenses")
-//                    def license = licenses.appendNode("license")
-//                    license.appendNode("name", "The MIT License (MIT)")
-//                    license.appendNode("url", "http://opensource.org/licenses/MIT")
-//                    license.appendNode("distribution", "repo")
-//
-//                    def scm = root.appendNode("scm")
-//                    scm.appendNode("url", "https://github.com/nemerosa/ontrack")
-//                    scm.appendNode("connection", "scm:git://github.com/nemerosa/ontrack")
-//                    scm.appendNode("developerConnection", "scm:git://github.com/nemerosa/ontrack")
-//
-//                    def developers = root.appendNode("developers")
-//                    def developer = developers.appendNode("developer")
-//                    developer.appendNode("id", "dcoraboeuf")
-//                    developer.appendNode("name", "Damien Coraboeuf")
-//                    developer.appendNode("email", "damien.coraboeuf@gmail.com")
-//                }
-//            }
-//        }
-//    }
-//
-//    model {
-//        tasks.generatePomFileForMavenCustomPublication {
-//            destination = file("${buildDir}/poms/${project.name}-${version}.pom")
-//        }
-//    }
-//
-//    afterEvaluate {
-//        tasks.assemble.dependsOn "generatePomFileForMavenCustomPublication"
-//    }
-//
-//    // Archives for Javadoc and Sources
-//
-//    artifacts {
-//        if (documentationProfile) {
-//            archives javadocJar
-//            archives sourceJar
-//        }
-//    }
-//
-//}
+configure(javaProjects) p@{
+
+    /**
+     * For all Java projects
+     */
+
+    plugins {
+        java
+        `maven-publish`
+    }
+
+    // Javadoc
+
+    if (hasProperty("documentation")) {
+
+        tasks.register<Jar>("javadocJar") {
+            classifier = "javadoc"
+            from("javadoc")
+        }
+
+        // Sources
+
+        tasks.register<Jar>("sourcesJar") {
+            classifier = "sources"
+            // FIXME from sourceSets.main.allSource
+        }
+    }
+
+    // POM file
+
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("mavenCustom") {
+                from(components["java"])
+                if (hasProperty("documentation")) {
+                    artifact(tasks["sourcesJar"])
+                    artifact(tasks["javadocJar"])
+                }
+                pom {
+                    name.set(this@p.name)
+                    description.set(this@p.description)
+                    url.set("http://nemerosa.github.io/ontrack")
+                    licenses {
+                        license {
+                            name.set("The MIT License (MIT)")
+                            url.set("http://opensource.org/licenses/MIT")
+                            distribution.set("repo")
+                        }
+                    }
+                    scm {
+                        connection.set("scm:git://github.com/nemerosa/ontrack")
+                        developerConnection.set("scm:git://github.com/nemerosa/ontrack")
+                        url.set("https://github.com/nemerosa/ontrack/")
+                    }
+                    developers {
+                        developer {
+                            id.set("dcoraboeuf")
+                            name.set("Damien Coraboeuf")
+                            email.set("damien.coraboeuf@gmail.com")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 //configure(coreProjects) {
 //
