@@ -3,13 +3,13 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     groovy
-    id("org.asciidoctor.convert") version "2.2.0"
+    id("org.asciidoctor.jvm.convert") version "2.2.0"
+    id("org.asciidoctor.jvm.pdf") version "2.2.0"
 }
 
 apply<SpringBootPlugin>()
 
 dependencies {
-    asciidoctor("org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.14")
     implementation(project(":ontrack-dsl"))
     implementation(project(":ontrack-json"))
     implementation("commons-io:commons-io")
@@ -17,10 +17,6 @@ dependencies {
 }
 
 if (project.hasProperty("documentation")) {
-
-    asciidoctorj {
-        version = "1.5.6"
-    }
 
     val springBootVersion: String by project
 
@@ -46,17 +42,26 @@ if (project.hasProperty("documentation")) {
 
     // HTML specific settings
 
-//    val generateHtml by tasks.registering(AsciidoctorTask::class) {
-//        description = "Generates HTML documentation."
-//        group =  "Documentation"
-//        backends("html5")
-//        attributes = mapOf(
-//                "ontrack-version"    to version,
-//        "spring-boot-version" to springBootVersion,
-//        "icons"              to "font"
-//        )
-//    }
-//
+    tasks.named<AsciidoctorTask>("asciidoctor") {
+        dependsOn(prepareGeneratedDoc)
+        description = "Generates HTML documentation."
+        attributes = mapOf(
+                "ontrack-version" to version,
+                "spring-boot-version" to springBootVersion,
+                "icons" to "font"
+        )
+        logDocuments = true
+        baseDirFollowsSourceDir()
+        sources(delegateClosureOf<PatternSet> {
+            include("index.adoc")
+        })
+        // FIXME requires("asciidoctor-diagram")
+        sources("**/*.adoc")
+//        sources(delegateClosureOf<PatternSet> {
+//            include("index.adoc")
+//        })
+    }
+
 //    // PDF specific settings
 //
 //    val generatePdf by tasks.registering(AsciidoctorTask::class) {
@@ -71,17 +76,6 @@ if (project.hasProperty("documentation")) {
 //                "imagesdir"          to file("build/asciidoc/html5")
 //        )
 //    }
-
-    // common Asciidoctor settings
-
-    tasks.withType(AsciidoctorTask::class) {
-        dependsOn(prepareGeneratedDoc)
-        // FIXME requires("asciidoctor-diagram")
-        sources(delegateClosureOf<PatternSet> {
-            include("index.adoc")
-        })
-        logDocuments = true
-    }
 
 //    tasks.named("build") {
 //        dependsOn("generateHtml")
