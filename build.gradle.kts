@@ -8,6 +8,9 @@ buildscript {
     }
     dependencies {
         classpath("com.netflix.nebula:gradle-aggregate-javadocs-plugin:3.0.1")
+        // FIXME Reuse kotlinVersion from gradle.properties
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.3.11")
     }
 }
 
@@ -108,9 +111,9 @@ configure(javaProjects) p@{
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "net.nemerosa.versioning")
-    // FIXME Maven Publish
-    // FIXME Kotlin
-    // FIXME Kotlin Spring
+
+    apply(plugin = "kotlin-platform-jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
 
     /**
      * Dependency management
@@ -118,7 +121,7 @@ configure(javaProjects) p@{
 
     dependencies {
         // Spring Boot managed dependencies
-        "implementation"(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
+        "implementation"(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
     }
 
     // Javadoc
