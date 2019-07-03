@@ -1,14 +1,11 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorPdfTask
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     groovy
     id("org.asciidoctor.jvm.convert") version "2.2.0"
     id("org.asciidoctor.jvm.pdf") version "2.2.0"
 }
-
-apply<SpringBootPlugin>()
 
 dependencies {
     implementation(project(":ontrack-dsl"))

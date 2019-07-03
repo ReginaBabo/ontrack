@@ -18,7 +18,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}"
 }
 
-if (documentationProfile) {
+if (project.hasProperty("documentation")) {
     javadocJar {
         from javadoc
         from groovydoc

@@ -17,7 +17,7 @@ ext {
 dependencies {
     testImplementation(project(':ontrack-client'))
     testImplementation(project(':ontrack-dsl'))
-    testImplementation(project(':ontrack-dsl-shell'))
+    // FIXME testImplementation(project(':ontrack-dsl-shell'))
     testImplementation(project(':ontrack-test-utils'))
     testImplementation("org.apache.commons:commons-lang3")
     testImplementation("commons-io:commons-io")
@@ -51,12 +51,12 @@ artifacts {
     archives testJar
 }
 
-bootRepackage {
-    mainClass = 'net.nemerosa.ontrack.acceptance.boot.Start'
-    withJarTask = 'testJar'
-    customConfiguration = 'testRuntime'
-    classifier = 'app'
-}
+//bootRepackage {
+//    mainClass = 'net.nemerosa.ontrack.acceptance.boot.Start'
+//    withJarTask = 'testJar'
+//    customConfiguration = 'testRuntime'
+//    classifier = 'app'
+//}
 
 task normaliseJar {
     dependsOn bootRepackage
@@ -94,9 +94,9 @@ task dockerLatest(type: Exec, dependsOn: dockerBuild) {
     ]
 }
 
-rootProject.tasks.publicationPackage {
-    from bootRepackage
-}
+// FIXME rootProject.tasks.publicationPackage {
+//    from bootRepackage
+//}
 
 /**
  * Local test definitions
@@ -107,11 +107,11 @@ ext {
     ontrackJvmOptions = project.hasProperty('ontrackJvmOptions') ? project.ontrackJvmOptions : '-Xmx256m'
 }
 
-acceptanceTest {
-    outputs.upToDateWhen { false }  // Always run tests
-    systemProperty 'ontrack.url', ontrackUrl
-    systemProperty 'ontrack.implicitWait', project.hasProperty('ontrackImplicitWait') ? ontrackImplicitWait : 5
-}
+// FIXME acceptanceTest {
+//    outputs.upToDateWhen { false }  // Always run tests
+//    systemProperty 'ontrack.url', ontrackUrl
+//    systemProperty 'ontrack.implicitWait', project.hasProperty('ontrackImplicitWait') ? ontrackImplicitWait : 5
+//}
 
 // Disable unit tests (none in this project)
 test {

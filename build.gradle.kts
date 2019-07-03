@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
         classpath("com.netflix.nebula:gradle-aggregate-javadocs-plugin:3.0.1")
-        classpath("io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE")
     }
 }
 
@@ -28,16 +27,17 @@ plugins {
     id("nebula.os-package") version "2.2.6"
     id("org.sonarqube") version "2.5"
     id("com.avast.gradle.docker-compose") version "0.9.4"
-    // FIXME Spring Boot
+    // FIXME Reuse springBootVersion
+    id("org.springframework.boot") version "1.5.18.RELEASE" apply false
 }
 
 /**
  * Meta information
  */
 
-allprojects {
+allprojects p@{
     group = "net.nemerosa.ontrack"
-    version = versioning.info.display
+    // FIXME version = this@p.versioning.info.display
 }
 
 /**
@@ -99,19 +99,26 @@ val javaProjects = subprojects.filter {
     it.path != ":ontrack-web"
 }
 
-val coreProjects = subprojects.filter {
-    it.path != ":ontrack-dsl"
-}
-
 configure(javaProjects) p@{
 
     /**
      * For all Java projects
      */
 
-    plugins {
-        java
-        `maven-publish`
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
+    apply(plugin = "net.nemerosa.versioning")
+    // FIXME Maven Publish
+    // FIXME Kotlin
+    // FIXME Kotlin Spring
+
+    /**
+     * Dependency management
+     */
+
+    dependencies {
+        // Spring Boot managed dependencies
+        "implementation"(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
     }
 
     // Javadoc
@@ -171,16 +178,10 @@ configure(javaProjects) p@{
 }
 
 
-configure(coreProjects) {
+//configure(coreProjects) {
 
-//
-//    /**
-//     * For all Java projects
-//     */
-//
-//    apply plugin: "kotlin"
-//    apply plugin: "kotlin-spring"
-//    apply plugin: "io.spring.dependency-management"
+
+
 //
 //    dependencyManagement {
 //        imports {
@@ -271,7 +272,7 @@ configure(coreProjects) {
 //        }
 //    }
 //
-}
+//}
 
 /**
  * Packaging for delivery
