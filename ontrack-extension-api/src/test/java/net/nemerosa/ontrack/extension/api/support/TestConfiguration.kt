@@ -4,7 +4,7 @@ import net.nemerosa.ontrack.model.support.ConfigurationDescriptor
 import net.nemerosa.ontrack.model.support.UserPasswordConfiguration
 import java.util.function.Function
 
-class TestConfiguration(
+data class TestConfiguration(
         private val name: String,
         private val user: String? = null,
         private val password: String? = null
