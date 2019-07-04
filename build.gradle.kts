@@ -140,6 +140,9 @@ configure(javaProjects) p@{
             // Misc.
             "implementation"("args4j:args4j:2.33")
             "implementation"("com.google.guava:guava:27.0.1-jre")
+            "implementation"("org.kohsuke:groovy-sandbox:1.19")
+            "implementation"("com.graphql-java:graphql-java:11.0")
+            "implementation"("org.jgrapht:jgrapht-core:1.3.0")
             // Overrides from Spring Boot
 //            dependency "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
 //            dependency "org.postgresql:postgresql:9.4.1208"
@@ -236,9 +239,6 @@ configure(javaProjects) p@{
 //            dependency "commons-logging:commons-logging:1.2"
 //            dependency "org.apache.commons:commons-math3:3.6.1"
 //            dependency "net.sf.dbinit:dbinit:1.4.0"
-//            dependency "org.jgrapht:jgrapht-core:1.3.0"
-//            dependency "org.kohsuke:groovy-sandbox:1.19"
-//            dependency "com.graphql-java:graphql-java:11.0"
 //            dependency "org.jetbrains.kotlin:kotlin-test:${kotlinVersion}"
 //        }
 //    }
