@@ -58,6 +58,7 @@ public class BranchTest {
                         .with("description", "Branch")
                         .with("disabled", false)
                         .with("type", "CLASSIC")
+                        .with("signature", SIGNATURE_OBJECT)
                         .with("project", object()
                                 .with("id", 0)
                                 .with("name", "PRJ")
@@ -65,7 +66,6 @@ public class BranchTest {
                                 .with("disabled", false)
                                 .with("signature", SIGNATURE_OBJECT)
                                 .end())
-                        .with("signature", SIGNATURE_OBJECT)
                         .end(),
                 branch,
                 Branch.class
