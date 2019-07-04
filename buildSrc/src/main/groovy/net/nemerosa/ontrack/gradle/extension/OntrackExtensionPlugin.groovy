@@ -73,6 +73,8 @@ class OntrackExtensionPlugin implements Plugin<Project> {
             dependsOn 'npmInstall'
             dependsOn 'copyGulpFile'
 
+            enabled = project.file('src/main/resources/static').exists()
+
             inputs.dir project.file('src/main/resources/static')
             outputs.file project.file('build/web/dist/module.js')
 
