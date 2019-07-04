@@ -129,6 +129,7 @@ configure(javaProjects) p@{
             // Commons
             "implementation"("commons-io:commons-io:2.6")
             "implementation"("org.apache.commons:commons-lang3:3.8.1")
+            "implementation"("org.apache.commons:commons-text:1.6")
             // InfluxDB
             "implementation"("org.influxdb:influxdb-java:2.14")
             // Metrics
@@ -138,6 +139,11 @@ configure(javaProjects) p@{
             "implementation"("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
             // Misc.
             "implementation"("args4j:args4j:2.33")
+            "implementation"("com.google.guava:guava:27.0.1-jre")
+            // Overrides from Spring Boot
+//            dependency "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
+//            dependency "org.postgresql:postgresql:9.4.1208"
+            "implementation"("org.flywaydb:flyway-core:4.2.0")
         }
         // Kotlin
         "implementation"(kotlin("stdlib-jdk8", version = kotlinVersion))
@@ -226,20 +232,14 @@ configure(javaProjects) p@{
 //            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
 //        }
 //        dependencies {
-//            dependency "org.apache.commons:commons-text:1.6"
 //            dependency "net.jodah:failsafe:1.1.1"
 //            dependency "commons-logging:commons-logging:1.2"
 //            dependency "org.apache.commons:commons-math3:3.6.1"
-//            dependency "com.google.guava:guava:27.0.1-jre"
 //            dependency "net.sf.dbinit:dbinit:1.4.0"
 //            dependency "org.jgrapht:jgrapht-core:1.3.0"
 //            dependency "org.kohsuke:groovy-sandbox:1.19"
 //            dependency "com.graphql-java:graphql-java:11.0"
 //            dependency "org.jetbrains.kotlin:kotlin-test:${kotlinVersion}"
-//            // Overrides from Spring Boot
-//            dependency "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
-//            dependency "org.postgresql:postgresql:9.4.1208"
-//            dependency "org.flywaydb:flyway-core:4.2.0"
 //        }
 //    }
 //
