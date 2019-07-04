@@ -1,5 +1,6 @@
 import com.avast.gradle.dockercompose.ComposeExtension
 import com.avast.gradle.dockercompose.tasks.ComposeUp
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.lang.Thread.sleep
 
 buildscript {
@@ -150,6 +151,12 @@ configure(javaProjects) p@{
         "testCompileOnly"("org.projectlombok:lombok:1.18.8")
         "annotationProcessor"("org.projectlombok:lombok:1.18.8")
         "testAnnotationProcessor"("org.projectlombok:lombok:1.18.8")
+    }
+
+    // Kotlin options
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
     }
 
     // Javadoc
