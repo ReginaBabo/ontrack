@@ -20,6 +20,7 @@ buildscript {
 
 val micrometerVersion: String by project
 val springBootVersion: String by project
+val kotlinVersion: String by project
 
 /**
  * Plugins
@@ -122,6 +123,18 @@ configure(javaProjects) p@{
     dependencies {
         // Spring Boot managed dependencies
         "implementation"(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
+        // Constraints
+        constraints {
+            "implementation"("commons-io:commons-io:2.6")
+            "implementation"("org.apache.commons:commons-lang3:3.8.1")
+        }
+        // Kotlin
+        "implementation"(kotlin("stdlib-jdk8"))
+        "implementation"(kotlin("reflect"))
+        // Lombok (TODO Replace with Kotlin)
+        "compileOnly"("org.projectlombok:lombok:1.18.8")
+        "testCompileOnly"("org.projectlombok:lombok:1.18.8")
+        "annotationProcessor"("org.projectlombok:lombok:1.18.8")
     }
 
     // Javadoc
@@ -191,10 +204,7 @@ configure(javaProjects) p@{
 //            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
 //        }
 //        dependencies {
-//            dependency "commons-io:commons-io:2.6"
-//            dependency "org.apache.commons:commons-lang3:3.8.1"
 //            dependency "org.apache.commons:commons-text:1.6"
-//            dependency "org.projectlombok:lombok:1.16.18"
 //            dependency "net.jodah:failsafe:1.1.1"
 //            dependency "commons-logging:commons-logging:1.2"
 //            dependency "org.apache.commons:commons-math3:3.6.1"
@@ -222,8 +232,6 @@ configure(javaProjects) p@{
 //    dependencies {
 //        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
 //        compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
-//        compileOnly "org.projectlombok:lombok"
-//        testCompile "org.projectlombok:lombok"
 //        // Testing
 //        testCompile "junit:junit"
 //        testCompile "org.mockito:mockito-core"
