@@ -132,8 +132,8 @@ configure(javaProjects) p@{
             "implementation"("org.influxdb:influxdb-java:2.14")
         }
         // Kotlin
-        "implementation"(kotlin("stdlib-jdk8"))
-        "implementation"(kotlin("reflect"))
+        "implementation"(kotlin("stdlib-jdk8", version = kotlinVersion))
+        "implementation"(kotlin("reflect", version = kotlinVersion))
         // Lombok (TODO Replace with Kotlin)
         "compileOnly"("org.projectlombok:lombok:1.18.8")
         "testCompileOnly"("org.projectlombok:lombok:1.18.8")
