@@ -2,7 +2,6 @@ package net.nemerosa.ontrack.boot.support
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import net.nemerosa.ontrack.model.structure.NameDescription
-import java.util.*
 
 class APIInfo(
         @JsonIgnore
@@ -12,7 +11,7 @@ class APIInfo(
     val name: String = nd.name
     val description: String = nd.description
 
-    val methods = ArrayList<APIMethodInfo>()
+    val methods = mutableListOf<APIMethodInfo>()
 
 
     fun add(methodInfo: APIMethodInfo): APIInfo {
