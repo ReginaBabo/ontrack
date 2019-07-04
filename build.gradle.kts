@@ -332,24 +332,24 @@ configure(javaProjects) p@{
 //    acceptanceImplicitWait = 30
 //    finalizedBy ciComposeDown
 //}
-//
-///**
-// * Development tasks
-// */
-//
-//dockerCompose {
-//    devInit {
-//        useComposeFiles = ["compose/docker-compose-dev.yml"]
-//    }
-//}
-//
-//task devStart {
-//    dependsOn devInitComposeUp
-//}
-//
-//task devStop {
-//    dependsOn devInitComposeDown
-//}
+
+/**
+ * Development tasks
+ */
+
+dockerCompose {
+    createNested("devInit").apply {
+        useComposeFiles = listOf("compose/docker-compose-dev.yml")
+    }
+}
+
+val devStart by tasks.registering {
+    dependsOn("devInitComposeUp")
+}
+
+val devStop by tasks.registering {
+    dependsOn("devInitComposeDown")
+}
 
 /**
  * Publication tasks
