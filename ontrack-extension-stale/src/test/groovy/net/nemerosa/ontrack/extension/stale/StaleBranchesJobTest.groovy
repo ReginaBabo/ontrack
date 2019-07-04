@@ -266,7 +266,7 @@ class StaleBranchesJobTest {
     @Test
     void 'Scan for project with disabling duration'() {
         // Configuration
-        configureProject(StaleProperty.create().withDisablingDuration(1))
+        configureProject(new StaleProperty(1))
         // Call
         staleJobService.detectAndManageStaleBranches(JobRunListener.out(), project)
         // Check
@@ -276,7 +276,7 @@ class StaleBranchesJobTest {
     @Test
     void 'Configured projects do schedule jobs at startup'() {
         // Configuration
-        configureProject(StaleProperty.create().withDisablingDuration(1))
+        configureProject(new StaleProperty(1))
         // Gets the list of jobs
         List<JobRegistration> jobs = staleJobService.collectJobRegistrations().collect(Collectors.toList())
         // Verifies the job has not been scheduled
@@ -300,7 +300,7 @@ class StaleBranchesJobTest {
     @Test
     void 'Configuring a project does schedule a job'() {
         // Configuration
-        def property = StaleProperty.create().withDisablingDuration(1)
+        def property = new StaleProperty(1)
         configureProject(property)
         // Gets the list of jobs
         List<JobRegistration> jobs = staleJobService.collectJobRegistrations().collect(Collectors.toList())
@@ -313,7 +313,7 @@ class StaleBranchesJobTest {
     @Test
     void 'Unconfiguring a project does unschedule a job'() {
         // Configuration
-        def property = StaleProperty.create().withDisablingDuration(1)
+        def property = new StaleProperty(1)
         configureProject(property)
         // Gets the list of jobs
         List<JobRegistration> jobs = staleJobService.collectJobRegistrations().collect(Collectors.toList())

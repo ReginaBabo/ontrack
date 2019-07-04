@@ -1,9 +1,11 @@
 package net.nemerosa.ontrack.extension.stale
 
-class StaleProperty(
-        val disablingDuration: Int,
-        val deletingDuration: Int,
-        promotionsToKeep: List<String>?
+class StaleProperty
+@JvmOverloads
+constructor(
+        val disablingDuration: Int = 0,
+        val deletingDuration: Int = 0,
+        promotionsToKeep: List<String>? = emptyList()
 ) {
 
     /**
