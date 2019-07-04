@@ -6,6 +6,8 @@ import net.nemerosa.ontrack.json.JsonUtils;
 import net.nemerosa.ontrack.test.TestUtils;
 import org.junit.Test;
 
+import java.util.Collections;
+
 public class StalePropertyTest {
 
     @Test
@@ -15,7 +17,7 @@ public class StalePropertyTest {
                 .with("deletingDuration", 0)
                 .end();
         TestUtils.assertJsonRead(
-                new StaleProperty(30, 0, null),
+                new StaleProperty(30, 0, Collections.emptyList()),
                 json,
                 StaleProperty.class
         );
