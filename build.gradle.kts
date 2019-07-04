@@ -136,6 +136,10 @@ configure(javaProjects) p@{
         // Kotlin
         "implementation"(kotlin("stdlib-jdk8", version = kotlinVersion))
         "implementation"(kotlin("reflect", version = kotlinVersion))
+        // Testing
+        "testImplementation"("junit:junit")
+        "testImplementation"("org.mockito:mockito-core")
+        "testImplementation"("org.jetbrains.kotlin:kotlin-test")
         // Lombok (TODO Replace with Kotlin)
         "compileOnly"("org.projectlombok:lombok:1.18.8")
         "testCompileOnly"("org.projectlombok:lombok:1.18.8")
@@ -230,15 +234,6 @@ configure(javaProjects) p@{
 //            dependency "org.postgresql:postgresql:9.4.1208"
 //            dependency "org.flywaydb:flyway-core:4.2.0"
 //        }
-//    }
-//
-//    dependencies {
-//        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
-//        compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
-//        // Testing
-//        testCompile "junit:junit"
-//        testCompile "org.mockito:mockito-core"
-//        testCompile "org.jetbrains.kotlin:kotlin-test"
 //    }
 //
 //    compileKotlin {
