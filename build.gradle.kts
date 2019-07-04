@@ -125,8 +125,11 @@ configure(javaProjects) p@{
         "implementation"(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
         // Constraints
         constraints {
+            // Commons
             "implementation"("commons-io:commons-io:2.6")
             "implementation"("org.apache.commons:commons-lang3:3.8.1")
+            // InfluxDB
+            "implementation"("org.influxdb:influxdb-java:2.14")
         }
         // Kotlin
         "implementation"(kotlin("stdlib-jdk8"))
@@ -220,8 +223,6 @@ configure(javaProjects) p@{
 //            dependency "io.micrometer:micrometer-spring-legacy:${micrometerVersion}"
 //            dependency "io.micrometer:micrometer-registry-influx:${micrometerVersion}"
 //            dependency "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
-//            // InfluxDB
-//            dependency "org.influxdb:influxdb-java:2.14"
 //            // Overrides from Spring Boot
 //            dependency "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
 //            dependency "org.postgresql:postgresql:9.4.1208"
