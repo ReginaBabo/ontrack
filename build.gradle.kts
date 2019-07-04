@@ -138,6 +138,7 @@ configure(javaProjects) p@{
         "compileOnly"("org.projectlombok:lombok:1.18.8")
         "testCompileOnly"("org.projectlombok:lombok:1.18.8")
         "annotationProcessor"("org.projectlombok:lombok:1.18.8")
+        "testAnnotationProcessor"("org.projectlombok:lombok:1.18.8")
     }
 
     // Javadoc
