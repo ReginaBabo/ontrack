@@ -17,7 +17,7 @@ ext {
 dependencies {
     testImplementation(project(':ontrack-client'))
     testImplementation(project(':ontrack-dsl'))
-    // FIXME testImplementation(project(':ontrack-dsl-shell'))
+    testImplementation(project(':ontrack-dsl-shell'))
     testImplementation(project(':ontrack-test-utils'))
     testImplementation("org.apache.commons:commons-lang3")
     testImplementation("commons-io:commons-io")
@@ -63,7 +63,7 @@ task normaliseJar {
     doFirst {
         project.mkdir "${buildDir}/libs"
         // Used for local testing only
-        ant.copy file: bootRepackage.outputs.files.singleFile, tofile: "${buildDir}/libs/ontrack-acceptance.jar"
+        // FIXME ant.copy file: bootRepackage.outputs.files.singleFile, tofile: "${buildDir}/libs/ontrack-acceptance.jar"
     }
 }
 

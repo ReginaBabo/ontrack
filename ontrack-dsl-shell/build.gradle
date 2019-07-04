@@ -21,14 +21,14 @@ dependencies {
     compile project(':ontrack-dsl')
 }
 
-bootRepackage {
-    executable = true
-    classifier = 'executable'
-}
+// FIXME bootRepackage {
+//    executable = true
+//    classifier = 'executable'
+//}
 
-rootProject.tasks.publicationPackage {
-    from bootRepackage
-}
+// FIXME rootProject.tasks.publicationPackage {
+//    from bootRepackage
+//}
 
 springBoot {
     mainClass = 'net.nemerosa.ontrack.shell.ShellApplication'

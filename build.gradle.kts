@@ -130,6 +130,8 @@ configure(javaProjects) p@{
             "implementation"("org.apache.commons:commons-lang3:3.8.1")
             // InfluxDB
             "implementation"("org.influxdb:influxdb-java:2.14")
+            // Misc.
+            "implementation"("args4j:args4j:2.33")
         }
         // Kotlin
         "implementation"(kotlin("stdlib-jdk8", version = kotlinVersion))
@@ -214,7 +216,6 @@ configure(javaProjects) p@{
 //            dependency "org.apache.commons:commons-math3:3.6.1"
 //            dependency "com.google.guava:guava:27.0.1-jre"
 //            dependency "net.sf.dbinit:dbinit:1.4.0"
-//            dependency "args4j:args4j:2.33"
 //            dependency "org.jgrapht:jgrapht-core:1.3.0"
 //            dependency "org.kohsuke:groovy-sandbox:1.19"
 //            dependency "com.graphql-java:graphql-java:11.0"
