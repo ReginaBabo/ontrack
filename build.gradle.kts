@@ -143,6 +143,7 @@ configure(javaProjects) p@{
             "implementation"("org.kohsuke:groovy-sandbox:1.19")
             "implementation"("com.graphql-java:graphql-java:11.0")
             "implementation"("org.jgrapht:jgrapht-core:1.3.0")
+            "implementation"("org.apache.commons:commons-math3:3.6.1")
             // Overrides from Spring Boot
 //            dependency "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
 //            dependency "org.postgresql:postgresql:9.4.1208"
@@ -237,7 +238,6 @@ configure(javaProjects) p@{
 //        dependencies {
 //            dependency "net.jodah:failsafe:1.1.1"
 //            dependency "commons-logging:commons-logging:1.2"
-//            dependency "org.apache.commons:commons-math3:3.6.1"
 //            dependency "net.sf.dbinit:dbinit:1.4.0"
 //            dependency "org.jetbrains.kotlin:kotlin-test:${kotlinVersion}"
 //        }
