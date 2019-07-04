@@ -11,7 +11,7 @@ dependencies {
     api(project(":ontrack-extension-support"))
 
     implementation("org.slf4j:slf4j-api")
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     testImplementation(project(":ontrack-it-utils"))
     testImplementation("org.codehaus.groovy:groovy-all")
