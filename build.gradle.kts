@@ -130,6 +130,11 @@ configure(javaProjects) p@{
             "implementation"("org.apache.commons:commons-lang3:3.8.1")
             // InfluxDB
             "implementation"("org.influxdb:influxdb-java:2.14")
+            // Metrics
+            "implementation"("io.micrometer:micrometer-core:$micrometerVersion")
+            "implementation"("io.micrometer:micrometer-spring-legacy:$micrometerVersion")
+            "implementation"("io.micrometer:micrometer-registry-influx:$micrometerVersion")
+            "implementation"("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
             // Misc.
             "implementation"("args4j:args4j:2.33")
         }
@@ -224,11 +229,6 @@ configure(javaProjects) p@{
 //            dependency "org.kohsuke:groovy-sandbox:1.19"
 //            dependency "com.graphql-java:graphql-java:11.0"
 //            dependency "org.jetbrains.kotlin:kotlin-test:${kotlinVersion}"
-//            // Metrics
-//            dependency "io.micrometer:micrometer-core:${micrometerVersion}"
-//            dependency "io.micrometer:micrometer-spring-legacy:${micrometerVersion}"
-//            dependency "io.micrometer:micrometer-registry-influx:${micrometerVersion}"
-//            dependency "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
 //            // Overrides from Spring Boot
 //            dependency "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
 //            dependency "org.postgresql:postgresql:9.4.1208"
