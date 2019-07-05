@@ -1,5 +1,7 @@
 import com.avast.gradle.dockercompose.ComposeExtension
 import com.avast.gradle.dockercompose.tasks.ComposeUp
+import net.nemerosa.versioning.VersioningExtension
+import net.nemerosa.versioning.VersioningPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.lang.Thread.sleep
 
@@ -28,7 +30,7 @@ val kotlinVersion: String by project
  */
 
 plugins {
-    id("net.nemerosa.versioning") version "2.8.2"
+    id("net.nemerosa.versioning") version "2.8.2" apply false
     id("nebula.os-package") version "2.2.6"
     id("org.sonarqube") version "2.5"
     id("com.avast.gradle.docker-compose") version "0.9.4"
@@ -40,9 +42,15 @@ plugins {
  * Meta information
  */
 
-allprojects p@{
+apply<VersioningPlugin>()
+version = extensions.getByType<VersioningExtension>().info.display
+
+allprojects {
     group = "net.nemerosa.ontrack"
-    // FIXME version = this@p.versioning.info.display
+}
+
+subprojects {
+    version = rootProject.version
 }
 
 /**
