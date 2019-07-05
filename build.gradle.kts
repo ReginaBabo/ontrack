@@ -11,9 +11,11 @@ buildscript {
     }
     dependencies {
         val kotlinVersion: String by project
+        val springBootVersion: String by project
         classpath("com.netflix.nebula:gradle-aggregate-javadocs-plugin:3.0.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
     }
 }
 
@@ -26,8 +28,6 @@ plugins {
     id("nebula.os-package") version "2.2.6"
     id("org.sonarqube") version "2.5"
     id("com.avast.gradle.docker-compose") version "0.9.4"
-    // FIXME Reuse springBootVersion
-    id("org.springframework.boot") version "1.5.18.RELEASE" apply false
 }
 
 /**
