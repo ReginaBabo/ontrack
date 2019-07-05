@@ -33,34 +33,50 @@ if (hasProperty("documentation")) {
     }
 }
 
-//// ZIP package which contains all artifacts to be published
-//
-//task publicationPackage(type: Zip) {
-//    classifier = 'publication'
-//    archiveName = 'ontrack-publication.zip'
-//    subprojects {
-//        afterEvaluate {
-//            if (tasks.findByName('jar')) {
-//                dependsOn assemble
-//                if (jar.isEnabled()) {
-//                    from jar
-//                }
-//                if (documentationProfile) {
-//                    if (tasks.findByName('javadocJar')) from javadocJar
-//                    if (tasks.findByName('sourceJar')) from sourceJar
-//                }
-//                if (tasks.findByName('testJar')) from testJar
-//                // POM file
-//                from "${project.buildDir}/poms/${project.name}-${project.version}.pom"
-//            }
-//        }
-//    }
-//    // Extension test
-//    from("${rootProject.file('ontrack-extension-test')}") {
-//        into 'ontrack-extension-test'
-//    }
-//}
-//
+// ZIP package which contains all artifacts to be published
+
+val publicationPackage by tasks.registering(Zip::class) {
+    archiveClassifier.set("publication")
+    archiveFileName.set("ontrack-publication.zip")
+    // Extension test module
+    from(rootProject.file("ontrack-extension-test")) {
+        into("ontrack-extension-test")
+    }
+}
+
+subprojects {
+    afterEvaluate {
+        val jar = tasks.findByName("jar") as? Jar?
+        if (jar != null && jar.isEnabled) {
+            publicationPackage {
+                from(jar)
+            }
+            if (rootProject.hasProperty("documentation")) {
+                val javadoc = tasks.findByName("javadocJar")
+                if (javadoc != null) {
+                    publicationPackage {
+                        from(javadoc)
+                    }
+                }
+                val sources = tasks.findByName("sourcesJar")
+                if (sources != null) {
+                    publicationPackage {
+                        from(sources)
+                    }
+                }
+            }
+            val testJar = tasks.findByName("testJar")
+            if (testJar != null) {
+                publicationPackage {
+                    from(testJar)
+                }
+            }
+//                // FIXME POM file
+//                // from "${project.buildDir}/poms/${project.name}-${project.version}.pom"
+        }
+    }
+}
+
 //if (documentationProfile) {
 //    gradle.projectsEvaluated {
 //        publicationPackage {
