@@ -145,8 +145,6 @@ configure(javaProjects) p@{
             "implementation"("org.jgrapht:jgrapht-core:1.3.0")
             "implementation"("org.apache.commons:commons-math3:3.6.1")
             // Overrides from Spring Boot
-//            dependency "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
-//            dependency "org.postgresql:postgresql:9.4.1208"
             "implementation"("org.flywaydb:flyway-core:4.2.0")
         }
         // Kotlin
@@ -167,6 +165,11 @@ configure(javaProjects) p@{
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
+    }
+
+    // Unit testing
+    tasks.named<Test>("test") {
+        include("**/*Test.class")
     }
 
     // Javadoc
@@ -227,36 +230,6 @@ configure(javaProjects) p@{
 
 
 //configure(coreProjects) {
-
-
-
-//
-//    dependencyManagement {
-//        imports {
-//            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-//        }
-//        dependencies {
-//            dependency "net.jodah:failsafe:1.1.1"
-//            dependency "commons-logging:commons-logging:1.2"
-//            dependency "net.sf.dbinit:dbinit:1.4.0"
-//            dependency "org.jetbrains.kotlin:kotlin-test:${kotlinVersion}"
-//        }
-//    }
-//
-//    compileKotlin {
-//        kotlinOptions.jvmTarget = "1.8"
-//    }
-//    compileTestKotlin {
-//        kotlinOptions.jvmTarget = "1.8"
-//    }
-//
-//    // Unit tests run with the `test` task
-//    test {
-//        include "**/*Test.class"
-//        reports {
-//            html.enabled = false
-//        }
-//    }
 //
 //    // Integration tests
 //    task integrationTest(type: Test, dependsOn: "test") {
