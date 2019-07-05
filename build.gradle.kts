@@ -274,7 +274,7 @@ configure(javaProjects) p@{
  * Packaging for delivery
  */
 
-// FIXME apply from: "gradle/packaging.gradle"
+apply(from = "gradle/packaging.gradle.kts")
 
 /**
  * Packaging for OS
