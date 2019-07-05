@@ -18,13 +18,6 @@ buildscript {
 }
 
 /**
- * Build properties
- */
-
-val micrometerVersion: String by project
-val springBootVersion: String by project
-
-/**
  * Plugins
  */
 
@@ -36,6 +29,13 @@ plugins {
     // FIXME Reuse springBootVersion
     id("org.springframework.boot") version "1.5.18.RELEASE" apply false
 }
+
+/**
+ * Build properties
+ */
+
+val micrometerVersion: String by project
+val springBootVersion: String by project
 
 /**
  * Meta information
