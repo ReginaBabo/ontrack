@@ -210,9 +210,11 @@ configure(javaProjects) p@{
         // Sources
 
         tasks.register<Jar>("sourcesJar") {
+            dependsOn(JavaPlugin.CLASSES_TASK_NAME)
             archiveClassifier.set("sources")
-            // FIXME from sourceSets.main.allSource
+            from(project.the<SourceSetContainer>()["main"].allSource)
         }
+
     }
 
     // POM file
