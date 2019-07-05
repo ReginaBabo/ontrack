@@ -19,6 +19,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3")
     implementation("commons-io:commons-io")
     implementation("com.google.guava:guava")
+    implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
