@@ -77,13 +77,14 @@ subprojects {
     }
 }
 
-//if (documentationProfile) {
-//    gradle.projectsEvaluated {
-//        publicationPackage {
-//            from javadocPackage
-//        }
-//    }
-//}
+if (hasProperty("documentation")) {
+    gradle.projectsEvaluated {
+        val javadocPackage = tasks.named("javadocPackage")
+        publicationPackage {
+            from(javadocPackage)
+        }
+    }
+}
 //
 //// Ontrack descriptor
 //
