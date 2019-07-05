@@ -10,10 +10,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        val kotlinVersion: String by project
         classpath("com.netflix.nebula:gradle-aggregate-javadocs-plugin:3.0.1")
-        // FIXME Reuse kotlinVersion from gradle.properties
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.3.11")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
     }
 }
 
@@ -156,8 +156,8 @@ configure(javaProjects) p@{
             "implementation"("org.flywaydb:flyway-core:4.2.0")
         }
         // Kotlin
-        "implementation"(kotlin("stdlib-jdk8", version = kotlinVersion))
-        "implementation"(kotlin("reflect", version = kotlinVersion))
+        "implementation"(kotlin("stdlib-jdk8"))
+        "implementation"(kotlin("reflect"))
         // Testing
         "testImplementation"("junit:junit")
         "testImplementation"("org.mockito:mockito-core")
