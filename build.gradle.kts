@@ -172,6 +172,25 @@ configure(javaProjects) p@{
         include("**/*Test.class")
     }
 
+    // Integration tests
+    tasks.register<Test>("integrationTest") {
+        include("**/*IT.class")
+        minHeapSize = "512m"
+        maxHeapSize = "1024m"
+        dependsOn(preIntegrationTest)
+        finalizedBy(postIntegrationTest)
+        /**
+         * Sets the JDBC URL
+         */
+        doFirst {
+            val jdbcUrl = rootProject.extra["itJdbcUrl"] as String
+            println("Setting JDBC URL for IT: $jdbcUrl")
+            systemProperty("it.jdbc.url", jdbcUrl)
+            systemProperty("it.jdbc.user", itJdbcUsername)
+            systemProperty("it.jdbc.password", itJdbcPassword)
+        }
+    }
+
     // Javadoc
 
     if (hasProperty("documentation")) {
@@ -231,29 +250,8 @@ configure(javaProjects) p@{
 
 //configure(coreProjects) {
 //
-//    // Integration tests
-//    task integrationTest(type: Test, dependsOn: "test") {
-//        include "**/*IT.class"
-//        minHeapSize = "512m"
-//        maxHeapSize = "1024m"
-//        reports {
-//            html.enabled = false
-//        }
-//        dependsOn preIntegrationTest
-//        finalizedBy postIntegrationTest
-//        /**
-//         * Sets the JDBC URL
-//         */
-//        doFirst {
-//            println "Setting JDBC URL for IT: ${rootProject.ext.itJdbcUrl}"
-//            systemProperty "it.jdbc.url", rootProject.ext.itJdbcUrl
-//            systemProperty "it.jdbc.user", rootProject.ext.itJdbcUsername
-//            systemProperty "it.jdbc.password", rootProject.ext.itJdbcPassword
-//        }
-//    }
-//
 //    // Acceptance tests
-//    task acceptanceTest(type: Test, dependsOn: "integrationTest") {
+//    FIXME task acceptanceTest(type: Test, dependsOn: "integrationTest") {
 //        include "**/ACC*.class"
 //        ignoreFailures true
 //        reports {
@@ -282,7 +280,7 @@ configure(javaProjects) p@{
 // FIXME apply from: "gradle/docker.gradle"
 
 /**
- * Acceptance tasks
+ * FIXME Acceptance tasks
  */
 
 //dockerCompose {
@@ -323,20 +321,3 @@ val devStart by tasks.registering {
 val devStop by tasks.registering {
     dependsOn("devInitComposeDown")
 }
-
-/**
- * Publication tasks
- *
- * Standalone Gradle tasks in `gradle/publication.gradle` and in
- * `gradle/production.gradle`
- */
-
-/**
- * General test report
- */
-
-//task testReport(type: TestReport) {
-//    destinationDir = file("$buildDir/reports/allTests")
-//    // Include the results from the `test` tasks in all core subprojects
-//    reportOn coreProjects*.test, coreProjects*.integrationTest, coreProjects*.acceptanceTest
-//}
