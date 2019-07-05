@@ -23,7 +23,6 @@ buildscript {
 
 val micrometerVersion: String by project
 val springBootVersion: String by project
-val kotlinVersion: String by project
 
 /**
  * Plugins
