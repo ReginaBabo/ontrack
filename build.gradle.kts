@@ -276,6 +276,33 @@ configure(javaProjects) p@{
 
 apply(from = "gradle/packaging.gradle.kts")
 
+// Ontrack descriptor
+
+val deliveryDescriptor by tasks.registering {
+    doLast {
+        val output = project.file("build/ontrack.properties")
+        extra["output"] = output
+        // Directories
+        output.parentFile.mkdirs()
+        output.writeText("# Ontrack properties\n")
+        // Version information
+        val version = rootProject.extensions.getByType<VersioningExtension>().info
+        output.appendText("# Version information\n")
+        output.appendText("VERSION_BUILD = ${version.build}\n")
+        output.appendText("VERSION_BRANCH = ${version.branch}\n")
+        output.appendText("VERSION_BASE = ${version.base}\n")
+        output.appendText("VERSION_BRANCHID = ${version.branchId}\n")
+        output.appendText("VERSION_BRANCHTYPE = ${version.branchType}\n")
+        output.appendText("VERSION_COMMIT = ${version.commit}\n")
+        output.appendText("VERSION_DISPLAY = ${version.display}\n")
+        output.appendText("VERSION_FULL = ${version.full}\n")
+        output.appendText("VERSION_SCM = ${version.scm}\n")
+        // Modules
+        output.appendText("# Comma-separated list of modules\n")
+        output.appendText("MODULES = ${rootProject.subprojects.filter { it.tasks.findByName("jar") != null }.joinToString(",") { it.name }}\n")
+    }
+}
+
 /**
  * Packaging for OS
  */

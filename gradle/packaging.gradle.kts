@@ -85,31 +85,7 @@ if (hasProperty("documentation")) {
         }
     }
 }
-//
-//// Ontrack descriptor
-//
-//task deliveryDescriptor {
-//    ext.output = project.file('build/ontrack.properties')
-//    doLast {
-//        (output as File).parentFile.mkdirs()
-//        output.text = "# Ontrack properties\n"
-//        // Version
-//        output << "# Version information"
-//        output << "VERSION_BUILD = ${project.versioning.info.build}\n"
-//        output << "VERSION_BRANCH = ${project.versioning.info.branch}\n"
-//        output << "VERSION_BASE = ${project.versioning.info.base}\n"
-//        output << "VERSION_BRANCHID = ${project.versioning.info.branchId}\n"
-//        output << "VERSION_BRANCHTYPE = ${project.versioning.info.branchType}\n"
-//        output << "VERSION_COMMIT = ${project.versioning.info.commit}\n"
-//        output << "VERSION_DISPLAY = ${project.versioning.info.display}\n"
-//        output << "VERSION_FULL = ${project.versioning.info.full}\n"
-//        output << "VERSION_SCM = ${project.versioning.info.scm}\n"
-//        // Modules
-//        output << "# Comma-separated list of modules\n"
-//        output << "MODULES = ${project.subprojects.findAll { it.tasks.findByName('jar') }.collect { it.name }.join(',')}\n"
-//    }
-//}
-//
+
 //// Delivery package
 //
 //task deliveryPackage(type: Zip) {
