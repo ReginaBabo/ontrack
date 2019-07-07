@@ -7,3 +7,12 @@ db:
     POSTGRES_PASSWORD: ontrack
   ports:
     - "5432"
+
+# InfluxDB container
+influxdb:
+  image: influxdb:1.1-alpine
+  environment:
+    PRE_CREATE_DB: "ontrack"
+  # Makes all ports accessible on the host for testing
+  ports:
+    - "8086:8086"
