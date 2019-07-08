@@ -2,6 +2,7 @@ import com.avast.gradle.dockercompose.ComposeExtension
 import com.avast.gradle.dockercompose.tasks.ComposeUp
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.netflix.gradle.plugins.deb.Deb
+import com.netflix.gradle.plugins.packaging.SystemPackagingTask
 import com.netflix.gradle.plugins.rpm.Rpm
 import net.nemerosa.versioning.VersioningExtension
 import net.nemerosa.versioning.VersioningPlugin
@@ -29,6 +30,7 @@ buildscript {
 
 plugins {
     id("net.nemerosa.versioning") version "2.8.2" apply false
+    id("nebula.deb") version "6.2.1"
     id("nebula.rpm") version "6.2.1"
     id("org.sonarqube") version "2.5"
     id("com.avast.gradle.docker-compose") version "0.9.4"
@@ -321,17 +323,26 @@ val packageVersion = if (version.toString().matches("\\d+\\.\\d+\\.\\d+".toRegex
     "0.0.0"
 }
 
-//val debPackage by tasks.registering(Deb::class) {
-//    dependsOn(":ontrack-ui:bootRepackage")
-//    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
-//}
+println("Package version = $packageVersion")
+
+val debPackage by tasks.registering(Deb::class) {
+    dependsOn(":ontrack-ui:bootRepackage")
+
+    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
+}
 
 val rpmPackage by tasks.registering(Rpm::class) {
     dependsOn(":ontrack-ui:bootRepackage")
 
+    user = "ontrack"
+    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
+}
+
+tasks.withType(SystemPackagingTask::class) {
+
     packageName = "ontrack"
-    archiveVersion.set(packageVersion)
     release = "1"
+    version = packageVersion
     os = Os.LINUX // only applied to RPM
 
     preInstall("gradle/os-package/preInstall.sh")
@@ -348,14 +359,11 @@ val rpmPackage by tasks.registering(Rpm::class) {
         into("/opt/ontrack/bin")
         fileMode = 0x168 // 0550
     })
-
-    user = "ontrack"
-    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
 }
 
 val osPackages by tasks.registering {
     dependsOn(rpmPackage)
-//    dependsOn(debPackage)
+    dependsOn(debPackage)
 }
 
 /**
