@@ -1,9 +1,12 @@
 import com.avast.gradle.dockercompose.ComposeExtension
 import com.avast.gradle.dockercompose.tasks.ComposeUp
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.netflix.gradle.plugins.deb.Deb
+import com.netflix.gradle.plugins.rpm.Rpm
 import net.nemerosa.versioning.VersioningExtension
 import net.nemerosa.versioning.VersioningPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.redline_rpm.header.Os
 import java.lang.Thread.sleep
 
 buildscript {
@@ -309,7 +312,52 @@ apply(from = "gradle/packaging.gradle.kts")
  * Packaging for OS
  */
 
-// FIXME apply from: "gradle/os-packaging.gradle"
+// The package version does not accept versions like the ones generated
+// from the Versioning plugin for the feature branches for example.
+
+extra["packageVersion"] = if (version.toString().matches("\\d+\\.\\d+\\.\\d+".toRegex())) {
+    version.toString().replace("[^0-9\\.-_]".toRegex(), "")
+} else {
+    "0.0.0"
+}
+
+ospackage {
+    packageName = "ontrack"
+    version = extra["packageVersion"] as String
+    release = "1"
+    os = Os.LINUX // only applied to RPM
+
+    preInstall("gradle/os-package/preInstall.sh")
+    postInstall("gradle/os-package/postInstall.sh")
+
+    from(project(":ontrack-ui").file("build/libs"), closureOf<CopySpec> {
+        include("ontrack-ui-$version.jar")
+        into("/opt/ontrack/lib")
+        rename(".*", "ontrack.jar")
+    })
+
+    from("gradle/os-package", closureOf<CopySpec> {
+        include("ontrack.sh")
+        into("/opt/ontrack/bin")
+        fileMode = 0x168 // 0550
+    })
+}
+
+val debPackage by tasks.registering(Deb::class) {
+    dependsOn(":ontrack-ui:bootRepackage")
+    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
+}
+
+val rpmPackage by tasks.registering(Rpm::class) {
+    dependsOn(":ontrack-ui:bootRepackage")
+    user = "ontrack"
+    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
+}
+
+val osPackages by tasks.registering {
+    dependsOn(rpmPackage)
+    dependsOn(debPackage)
+}
 
 /**
  * Docker tasks
