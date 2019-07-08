@@ -274,14 +274,12 @@ configure(javaProjects) p@{
  * Packaging for delivery
  */
 
-apply(from = "gradle/packaging.gradle.kts")
-
 // Ontrack descriptor
 
 val deliveryDescriptor by tasks.registering {
+    val output = project.file("build/ontrack.properties")
+    extra["output"] = output
     doLast {
-        val output = project.file("build/ontrack.properties")
-        extra["output"] = output
         // Directories
         output.parentFile.mkdirs()
         output.writeText("# Ontrack properties\n")
@@ -302,6 +300,8 @@ val deliveryDescriptor by tasks.registering {
         output.appendText("MODULES = ${rootProject.subprojects.filter { it.tasks.findByName("jar") != null }.joinToString(",") { it.name }}\n")
     }
 }
+
+apply(from = "gradle/packaging.gradle.kts")
 
 /**
  * Packaging for OS

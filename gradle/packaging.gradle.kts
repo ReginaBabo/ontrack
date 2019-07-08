@@ -86,31 +86,33 @@ if (hasProperty("documentation")) {
     }
 }
 
-//// Delivery package
-//
-//task deliveryPackage(type: Zip) {
-//    classifier = 'delivery'
-//    // Gradle files
-//    from(projectDir) {
-//        include 'buildSrc/**'
-//        include '*.gradle'
-//        include 'gradlew*'
-//        include 'gradle/**'
-//        include 'gradle.properties'
-//        exclude '**/.gradle/**'
-//        exclude '**/build/**'
-//    }
-//    // Acceptance
-//    dependsOn ':ontrack-acceptance:normaliseJar'
-//    from(project(':ontrack-acceptance').file('src/main/compose')) {
-//      into 'ontrack-acceptance'
-//    }
-//    // All artifacts
-//    dependsOn publicationPackage
-//    from publicationPackage
-//    // Descriptor
-//    dependsOn deliveryDescriptor
-//    from deliveryDescriptor.output
-//}
-//
-//build.dependsOn deliveryPackage
+// Delivery package
+
+val deliveryPackage by tasks.registering(Zip::class) {
+    archiveClassifier.set("delivery")
+    // Gradle files
+    from(projectDir) {
+        include("buildSrc/**")
+        include("*.gradle")
+        include("gradlew*")
+        include("gradle/**")
+        include("gradle.properties")
+        exclude("**/.gradle/**")
+        exclude("**/build/**")
+    }
+    // Acceptance
+    dependsOn(":ontrack-acceptance:normaliseJar")
+    from(project(":ontrack-acceptance").file("src/main/compose")) {
+        into("ontrack-acceptance")
+    }
+    // All artifacts
+    dependsOn(publicationPackage)
+    from(publicationPackage)
+    // Descriptor (defined in main build.gradle)
+    dependsOn("deliveryDescriptor")
+    from(tasks.getByName("deliveryDescriptor").extra["output"])
+}
+
+tasks.named("build") {
+    dependsOn(deliveryPackage)
+}
