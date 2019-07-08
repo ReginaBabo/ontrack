@@ -18,7 +18,9 @@ dependencies {
     implementation("org.slf4j:slf4j-api")
     implementation("commons-io:commons-io")
     implementation("org.codehaus.groovy:groovy-all")
-    implementation("org.kohsuke:groovy-sandbox")
+    implementation("org.kohsuke:groovy-sandbox") {
+        exclude(group = "org.codehaus.groovy")
+    }
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.jgrapht:jgrapht-core")
