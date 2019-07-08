@@ -3,6 +3,7 @@ import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
 plugins {
     groovy
+    `java-library`
     id("org.asciidoctor.jvm.convert") version "2.2.0"
     id("org.asciidoctor.jvm.pdf") version "2.2.0"
 }
