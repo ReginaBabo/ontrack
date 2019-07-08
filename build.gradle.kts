@@ -29,7 +29,7 @@ buildscript {
 
 plugins {
     id("net.nemerosa.versioning") version "2.8.2" apply false
-    id("nebula.os-package") version "2.2.6"
+    id("nebula.rpm") version "6.2.1"
     id("org.sonarqube") version "2.5"
     id("com.avast.gradle.docker-compose") version "0.9.4"
     id("com.bmuschko.docker-remote-api") version "4.10.0"
@@ -315,15 +315,22 @@ apply(from = "gradle/packaging.gradle.kts")
 // The package version does not accept versions like the ones generated
 // from the Versioning plugin for the feature branches for example.
 
-extra["packageVersion"] = if (version.toString().matches("\\d+\\.\\d+\\.\\d+".toRegex())) {
+val packageVersion = if (version.toString().matches("\\d+\\.\\d+\\.\\d+".toRegex())) {
     version.toString().replace("[^0-9\\.-_]".toRegex(), "")
 } else {
     "0.0.0"
 }
 
-ospackage {
+//val debPackage by tasks.registering(Deb::class) {
+//    dependsOn(":ontrack-ui:bootRepackage")
+//    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
+//}
+
+val rpmPackage by tasks.registering(Rpm::class) {
+    dependsOn(":ontrack-ui:bootRepackage")
+
     packageName = "ontrack"
-    version = extra["packageVersion"] as String
+    archiveVersion.set(packageVersion)
     release = "1"
     os = Os.LINUX // only applied to RPM
 
@@ -331,7 +338,7 @@ ospackage {
     postInstall("gradle/os-package/postInstall.sh")
 
     from(project(":ontrack-ui").file("build/libs"), closureOf<CopySpec> {
-        include("ontrack-ui-$version.jar")
+        include("ontrack-ui-${project.version}.jar")
         into("/opt/ontrack/lib")
         rename(".*", "ontrack.jar")
     })
@@ -341,22 +348,14 @@ ospackage {
         into("/opt/ontrack/bin")
         fileMode = 0x168 // 0550
     })
-}
 
-val debPackage by tasks.registering(Deb::class) {
-    dependsOn(":ontrack-ui:bootRepackage")
-    link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
-}
-
-val rpmPackage by tasks.registering(Rpm::class) {
-    dependsOn(":ontrack-ui:bootRepackage")
     user = "ontrack"
     link("/etc/init.d/ontrack", "/opt/ontrack/bin/ontrack.sh")
 }
 
 val osPackages by tasks.registering {
     dependsOn(rpmPackage)
-    dependsOn(debPackage)
+//    dependsOn(debPackage)
 }
 
 /**
