@@ -1,5 +1,6 @@
 import net.nemerosa.versioning.VersioningExtension
 import org.apache.commons.lang3.time.DateFormatUtils
+import org.springframework.boot.gradle.repackage.RepackageTask
 import org.springframework.boot.gradle.SpringBootPluginExtension
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 import org.springframework.boot.gradle.run.BootRunTask
@@ -139,6 +140,10 @@ tasks.named<BootRunTask>("bootRun") {
 /**
  * Spring boot packaging
  */
+
+tasks.named<RepackageTask>("bootRepackage") {
+    setCustomConfiguration("runtimeClasspath")
+}
 
 configure<SpringBootPluginExtension> {
     // Allowing the declaration of external extensions, packaged using the Spring Boot Module format

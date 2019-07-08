@@ -124,7 +124,7 @@ configure(javaProjects) p@{
      * For all Java projects
      */
 
-    apply(plugin = "java-library")
+    apply(plugin = "java")
     apply(plugin = "maven-publish")
     apply(plugin = "net.nemerosa.versioning")
 
