@@ -138,29 +138,26 @@ configure(javaProjects) p@{
     dependencies {
         // Spring Boot managed dependencies
         "implementation"(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
-        // Constraints
-        constraints {
-            // Commons
-            "implementation"("commons-io:commons-io:2.6")
-            "implementation"("org.apache.commons:commons-lang3:3.8.1")
-            "implementation"("org.apache.commons:commons-text:1.6")
-            // InfluxDB
-            "implementation"("org.influxdb:influxdb-java:2.14")
-            // Metrics
-            "implementation"("io.micrometer:micrometer-core:$micrometerVersion")
-            "implementation"("io.micrometer:micrometer-spring-legacy:$micrometerVersion")
-            "implementation"("io.micrometer:micrometer-registry-influx:$micrometerVersion")
-            "implementation"("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
-            // Misc.
-            "implementation"("args4j:args4j:2.33")
-            "implementation"("com.google.guava:guava:27.0.1-jre")
-            "implementation"("org.kohsuke:groovy-sandbox:1.19")
-            "implementation"("com.graphql-java:graphql-java:11.0")
-            "implementation"("org.jgrapht:jgrapht-core:1.3.0")
-            "implementation"("org.apache.commons:commons-math3:3.6.1")
-            // Overrides from Spring Boot
-            "implementation"("org.flywaydb:flyway-core:4.2.0")
-        }
+        // Commons
+        "implementation"(platform("commons-io:commons-io:2.6"))
+        "implementation"(platform("org.apache.commons:commons-lang3:3.8.1"))
+        "implementation"(platform("org.apache.commons:commons-text:1.6"))
+        // InfluxDB
+        "implementation"(platform("org.influxdb:influxdb-java:2.14"))
+        // Metrics
+        "implementation"(platform("io.micrometer:micrometer-core:$micrometerVersion"))
+        "implementation"(platform("io.micrometer:micrometer-spring-legacy:$micrometerVersion"))
+        "implementation"(platform("io.micrometer:micrometer-registry-influx:$micrometerVersion"))
+        "implementation"(platform("io.micrometer:micrometer-registry-prometheus:$micrometerVersion"))
+        // Misc.
+        "implementation"(platform("args4j:args4j:2.33"))
+        "implementation"(platform("com.google.guava:guava:27.0.1-jre")) // TODO Guava - to be replaced
+        "implementation"(platform("org.kohsuke:groovy-sandbox:1.19"))
+        "implementation"(platform("com.graphql-java:graphql-java:11.0"))
+        "implementation"(platform("org.jgrapht:jgrapht-core:1.3.0"))
+        "implementation"(platform("org.apache.commons:commons-math3:3.6.1"))
+        // Overrides from Spring Boot
+        "implementation"(platform("org.flywaydb:flyway-core:4.2.0"))
         // Kotlin
         "implementation"(kotlin("stdlib-jdk8"))
         "implementation"(kotlin("reflect"))
