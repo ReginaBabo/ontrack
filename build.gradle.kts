@@ -1,5 +1,6 @@
 import com.avast.gradle.dockercompose.ComposeExtension
 import com.avast.gradle.dockercompose.tasks.ComposeUp
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import net.nemerosa.versioning.VersioningExtension
 import net.nemerosa.versioning.VersioningPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -28,6 +29,7 @@ plugins {
     id("nebula.os-package") version "2.2.6"
     id("org.sonarqube") version "2.5"
     id("com.avast.gradle.docker-compose") version "0.9.4"
+    id("com.bmuschko.docker-remote-api") version "4.10.0"
 }
 
 /**
@@ -313,7 +315,20 @@ apply(from = "gradle/packaging.gradle.kts")
  * Docker tasks
  */
 
-// FIXME apply from: "gradle/docker.gradle"
+val dockerPrepareEnv by tasks.registering(Copy::class) {
+    from("ontrack-ui/build/libs")
+    include("*.jar")
+    exclude("*-javadoc.jar")
+    exclude("*-sources.jar")
+    into(project.file("docker"))
+    rename(".*", "ontrack.jar")
+}
+
+val dockerBuild by tasks.registering(DockerBuildImage::class) {
+    inputDir.set(file("docker"))
+    tags.add("nemerosa/ontrack:$version")
+    tags.add("nemerosa/ontrack:latest")
+}
 
 /**
  * FIXME Acceptance tasks
