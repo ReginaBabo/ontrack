@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":ontrack-json"))
     implementation("commons-io:commons-io")
     implementation("org.apache.commons:commons-lang3")
+
+    runtimeOnly("org.fusesource.jansi:jansi:1.18")
 }
 
 if (project.hasProperty("documentation")) {
