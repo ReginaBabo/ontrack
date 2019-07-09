@@ -1,9 +1,5 @@
-import net.nemerosa.versioning.VersioningExtension
-import org.apache.commons.lang3.time.DateFormatUtils
-import org.springframework.boot.gradle.repackage.RepackageTask
-import org.springframework.boot.gradle.SpringBootPluginExtension
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
-import org.springframework.boot.gradle.run.BootRunTask
+import org.springframework.boot.gradle.repackage.RepackageTask
 
 plugins {
     groovy
@@ -39,20 +35,19 @@ tasks.named<Jar>("jar") {
  * Spring boot packaging
  */
 
-tasks.named<RepackageTask>("bootRepackage") {
+val bootRepackage by tasks.named<RepackageTask>("bootRepackage") {
     setCustomConfiguration("testRuntimeClasspath")
     mainClass = "net.nemerosa.ontrack.acceptance.boot.Start"
 }
 
-// FIXME task normaliseJar {
-//    dependsOn bootRepackage
-//    doFirst {
-//        project.mkdir "${buildDir}/libs"
-//        // Used for local testing only
-//        // FIXME ant.copy file: bootRepackage.outputs.files.singleFile, tofile: "${buildDir}/libs/ontrack-acceptance.jar"
-//    }
-//}
-//
+val normaliseJar by tasks.registering(Copy::class) {
+    dependsOn("bootRepackage")
+    from("$buildDir/libs/")
+    include("ontrack-acceptance-$version.jar")
+    into("$buildDir/libs/")
+    rename("ontrack-acceptance-$version.jar", "ontrack-acceptance.jar")
+}
+
 // FIXME task acceptanceDockerPrepareEnv(type: Copy) {
 //    dependsOn normaliseJar
 //    from "${buildDir}/libs/ontrack-acceptance.jar"
