@@ -161,6 +161,7 @@ configure(javaProjects) p@{
         "implementation"(platform("org.apache.commons:commons-math3:3.6.1"))
         // Overrides from Spring Boot
         "implementation"(platform("org.flywaydb:flyway-core:4.2.0"))
+        "implementation"(platform("org.postgresql:postgresql:9.4.1208"))
         "implementation"(platform("com.fasterxml.jackson.core:jackson-core:2.9.9"))
         "implementation"(platform("com.fasterxml.jackson.core:jackson-annotations:2.9.9"))
         "implementation"(platform("com.fasterxml.jackson.core:jackson-databind:2.9.9.1"))
