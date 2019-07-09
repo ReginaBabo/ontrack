@@ -90,16 +90,11 @@ rootProject.tasks.named<Zip>("publicationPackage") {
 //    systemProperty 'ontrack.implicitWait', project.hasProperty('ontrackImplicitWait') ? ontrackImplicitWait : 5
 //}
 
-// FIXME Disable unit tests (none in this project)
-//test {
-//    enabled = false
-//}
+// Disable unit tests (none in this project)
 
-// FIXME Disable normal JAR creation
-
-//jar {
-//    enabled = false
-//}
+tasks.named<Test>("test") {
+    enabled = false
+}
 
 // FIXME publishing {
 //    publications {
