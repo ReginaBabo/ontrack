@@ -99,7 +99,7 @@ val generateVersionInfo by tasks.registering {
         file.writeText("""
             # This file is generated at build time to contain version information
             # Do not edit it, do not commit it
-            ontrack.version.date = $timestamp
+            ontrack.ersion.date = $timestamp
             ontrack.version.display = ${info.display}
             ontrack.version.full = ${info.full}
             ontrack.version.branch = ${info.branchId}
@@ -132,7 +132,8 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 tasks.named<BootRunTask>("bootRun") {
-    dependsOn("jar")
+    dependsOn("bootRepackage")
+    dependsOn(":ontrack-web:dev")
     // Running with `dev` profile by default with `bootRun`
     args("--spring.profiles.active=dev")
 }
