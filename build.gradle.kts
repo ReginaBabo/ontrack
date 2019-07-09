@@ -44,6 +44,8 @@ plugins {
 val micrometerVersion: String by project
 val springBootVersion: String by project
 
+extra["selenium.version"] = "3.11.0"
+
 /**
  * Meta information
  */
@@ -138,6 +140,7 @@ configure(javaProjects) p@{
     dependencies {
         // Spring Boot managed dependencies
         "implementation"(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
+        "testImplementation"(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
         // Commons
         "implementation"(platform("commons-io:commons-io:2.6"))
         "implementation"(platform("org.apache.commons:commons-lang3:3.8.1"))
