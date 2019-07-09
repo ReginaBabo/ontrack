@@ -1,3 +1,4 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 import org.springframework.boot.gradle.repackage.RepackageTask
 
@@ -6,6 +7,7 @@ plugins {
 }
 
 apply<SpringBootPlugin>()
+apply(plugin = "com.bmuschko.docker-remote-api")
 
 dependencies {
     testImplementation(project(":ontrack-client"))
@@ -48,33 +50,26 @@ val normaliseJar by tasks.registering(Copy::class) {
     rename("ontrack-acceptance-$version.jar", "ontrack-acceptance.jar")
 }
 
-// FIXME task acceptanceDockerPrepareEnv(type: Copy) {
-//    dependsOn normaliseJar
-//    from "${buildDir}/libs/ontrack-acceptance.jar"
-//    into "${projectDir}/src/main/docker"
-//}
-//
-// FIXME assemble.dependsOn normaliseJar
+tasks.named("assemble") {
+    dependsOn(normaliseJar)
+}
 
-// FIXME Acceptance Docker image
-//task dockerBuild(type: Exec, dependsOn: acceptanceDockerPrepareEnv) {
-//    executable 'docker'
-//    args = [
-//            'build',
-//            '--tag',
-//            "nemerosa/ontrack-acceptance:${versioning.info.display}",
-//            project.file('src/main/docker')
-//    ]
-//}
-//
-//task dockerLatest(type: Exec, dependsOn: dockerBuild) {
-//    executable 'docker'
-//    args = [
-//            'tag',
-//            "nemerosa/ontrack-acceptance:${versioning.info.display}",
-//            "nemerosa/ontrack-acceptance:latest",
-//    ]
-//}
+/**
+ * Acceptance Docker image
+ */
+
+val acceptanceDockerPrepareEnv by tasks.registering(Copy::class) {
+    dependsOn(normaliseJar)
+    from("$buildDir/libs/ontrack-acceptance.jar")
+    into("$projectDir/src/main/docker")
+}
+
+val dockerBuild by tasks.registering(DockerBuildImage::class) {
+    dependsOn(acceptanceDockerPrepareEnv)
+    inputDir.set(file("src/main/docker"))
+    tags.add("nemerosa/ontrack-acceptance:$version")
+    tags.add("nemerosa/ontrack-acceptance:latest")
+}
 
 // FIXME rootProject.tasks.publicationPackage {
 //    from bootRepackage
