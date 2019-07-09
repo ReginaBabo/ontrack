@@ -141,11 +141,15 @@ tasks.named<BootRunTask>("bootRun") {
  * Spring boot packaging
  */
 
-tasks.named<RepackageTask>("bootRepackage") {
+val bootRepackage by tasks.named<RepackageTask>("bootRepackage") {
     setCustomConfiguration("runtimeClasspath")
 }
 
 configure<SpringBootPluginExtension> {
     // Allowing the declaration of external extensions, packaged using the Spring Boot Module format
     layout = SpringBootPluginExtension.LayoutType.ZIP
+}
+
+rootProject.tasks.named<Zip>("publicationPackage") {
+    from(bootRepackage)
 }
