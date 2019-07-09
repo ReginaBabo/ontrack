@@ -4,6 +4,7 @@ description = "DSL Shell for Ontrack."
 
 plugins {
     groovy
+    `java-library`
 }
 
 apply<SpringBootPlugin>()
