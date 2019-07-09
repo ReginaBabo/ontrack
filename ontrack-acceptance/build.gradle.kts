@@ -71,9 +71,9 @@ val dockerBuild by tasks.registering(DockerBuildImage::class) {
     tags.add("nemerosa/ontrack-acceptance:latest")
 }
 
-// FIXME rootProject.tasks.publicationPackage {
-//    from bootRepackage
-//}
+rootProject.tasks.named<Zip>("publicationPackage") {
+    from(bootRepackage)
+}
 
 /**
  * FIXME Local test definitions
