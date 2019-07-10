@@ -272,20 +272,6 @@ configure(javaProjects) p@{
     }
 }
 
-
-//configure(coreProjects) {
-//
-//    // Acceptance tests
-//    FIXME task acceptanceTest(type: Test, dependsOn: "integrationTest") {
-//        include "**/ACC*.class"
-//        ignoreFailures true
-//        reports {
-//            html.enabled = false
-//        }
-//    }
-//
-//}
-
 /**
  * Packaging for delivery
  */
