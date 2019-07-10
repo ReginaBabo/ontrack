@@ -83,31 +83,27 @@ rootProject.tasks.named<Zip>("publicationPackage") {
 }
 
 /**
- * FIXME Local test definitions
+ * Local test definitions
  */
 
-//ext {
-//    ontrackUrl = 'http://localhost:8080'
-//    ontrackJvmOptions = project.hasProperty('ontrackJvmOptions') ? project.ontrackJvmOptions : '-Xmx256m'
-//}
+val ontrackUrl: String by project
+val ontrackJvmOptions: String by project
+val ontrackImplicitWait: String by project
 
-// FIXME acceptanceTest {
-//    outputs.upToDateWhen { false }  // Always run tests
-//    systemProperty 'ontrack.url', ontrackUrl
-//    systemProperty 'ontrack.implicitWait', project.hasProperty('ontrackImplicitWait') ? ontrackImplicitWait : 5
-//}
+val acceptanceTest by tasks.registering(Test::class) {
+    include("**/ACC*.class")
+    ignoreFailures = true
+    systemProperties(
+            mapOf(
+                    "ontrack.url" to ontrackUrl,
+                    "ontrack.implicitWait" to ontrackImplicitWait
+            )
+    )
+    outputs.upToDateWhen { false }  // Always run tests
+}
 
 // Disable unit tests (none in this project)
 
 tasks.named<Test>("test") {
     enabled = false
 }
-
-// FIXME publishing {
-//    publications {
-//        mavenCustom(MavenPublication) {
-//            // Clears all previous artifacts defined in root `build.gradle`
-//            artifacts = [testJar]
-//        }
-//    }
-//}
