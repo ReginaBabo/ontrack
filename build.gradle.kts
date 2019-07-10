@@ -390,6 +390,7 @@ val dockerPrepareEnv by tasks.registering(Copy::class) {
 }
 
 val dockerBuild by tasks.registering(DockerBuildImage::class) {
+    dependsOn(dockerPrepareEnv)
     inputDir.set(file("docker"))
     tags.add("nemerosa/ontrack:$version")
     tags.add("nemerosa/ontrack:latest")
