@@ -11,12 +11,13 @@ plugins {
 apply<SpringBootPlugin>()
 
 dependencies {
+    api(project(":ontrack-dsl"))
+
     implementation("args4j:args4j")
     implementation("org.slf4j:slf4j-api")
     implementation("org.apache.httpcomponents:httpclient")
     implementation("org.apache.httpcomponents:httpmime")
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation(project(":ontrack-dsl"))
 }
 
 /**
