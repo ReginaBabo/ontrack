@@ -1,3 +1,4 @@
+import net.nemerosa.ontrack.gradle.OntrackBoot15Plugin
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
@@ -18,3 +19,9 @@ dependencies {
     runtimeOnly("org.hibernate:hibernate-validator")
 
 }
+
+/**
+ * BOOT2 Workaround waiting for Spring Boot 2
+ */
+
+apply<OntrackBoot15Plugin>()

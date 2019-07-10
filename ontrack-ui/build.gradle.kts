@@ -1,8 +1,9 @@
+import net.nemerosa.ontrack.gradle.OntrackBoot15Plugin
 import net.nemerosa.versioning.VersioningExtension
 import org.apache.commons.lang3.time.DateFormatUtils
-import org.springframework.boot.gradle.repackage.RepackageTask
 import org.springframework.boot.gradle.SpringBootPluginExtension
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
+import org.springframework.boot.gradle.repackage.RepackageTask
 import org.springframework.boot.gradle.run.BootRunTask
 
 plugins {
@@ -60,6 +61,12 @@ dependencies {
     runtimeOnly(project(":ontrack-extension-vault"))
     runtimeOnly(project(":ontrack-extension-influxdb"))
 }
+
+/**
+ * BOOT2 Workaround waiting for Spring Boot 2
+ */
+
+apply<OntrackBoot15Plugin>()
 
 /**
  * Cleaning the Web resources

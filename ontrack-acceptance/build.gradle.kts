@@ -1,4 +1,5 @@
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import net.nemerosa.ontrack.gradle.OntrackBoot15Plugin
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 import org.springframework.boot.gradle.repackage.RepackageTask
 
@@ -24,6 +25,12 @@ dependencies {
     testImplementation("org.seleniumhq.selenium:selenium-java")
     testImplementation("org.seleniumhq.selenium:selenium-support")
 }
+
+/**
+ * BOOT2 Workaround waiting for Spring Boot 2
+ */
+
+apply<OntrackBoot15Plugin>()
 
 /**
  * Packaging

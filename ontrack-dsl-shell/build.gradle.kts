@@ -1,3 +1,4 @@
+import net.nemerosa.ontrack.gradle.OntrackBoot15Plugin
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 description = "DSL Shell for Ontrack."
@@ -17,6 +18,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation(project(":ontrack-dsl"))
 }
+
+/**
+ * BOOT2 Workaround waiting for Spring Boot 2
+ */
+
+apply<OntrackBoot15Plugin>()
 
 // FIXME bootRepackage {
 //    executable = true

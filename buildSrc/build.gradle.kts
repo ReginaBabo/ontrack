@@ -1,8 +1,10 @@
 plugins {
     groovy
+    kotlin("jvm") version "1.3.41"
 }
 
 repositories {
+    mavenCentral()
     maven {
         url = uri("https://plugins.gradle.org/m2/")
     }
