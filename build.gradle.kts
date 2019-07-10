@@ -380,6 +380,7 @@ val osPackages by tasks.registering {
  */
 
 val dockerPrepareEnv by tasks.registering(Copy::class) {
+    dependsOn(":ontrack-ui:bootRepackage")
     from("ontrack-ui/build/libs")
     include("*.jar")
     exclude("*-javadoc.jar")
