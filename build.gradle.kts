@@ -192,7 +192,7 @@ configure(javaProjects) p@{
     }
 
     // Integration tests
-    tasks.register<Test>("integrationTest") {
+    val integrationTest = tasks.register<Test>("integrationTest") {
         include("**/*IT.class")
         minHeapSize = "512m"
         maxHeapSize = "1024m"
@@ -208,6 +208,10 @@ configure(javaProjects) p@{
             systemProperty("it.jdbc.user", itJdbcUsername)
             systemProperty("it.jdbc.password", itJdbcPassword)
         }
+    }
+
+    rootProject.tasks.named("integrationTestComposeDown") {
+        mustRunAfter(integrationTest)
     }
 
     // Javadoc
