@@ -1,0 +1,151 @@
+[
+  {
+    "build": {
+      "name": "3"
+    },
+    "promotions": [
+      {
+        "promotion": null,
+        "creation": null,
+        "validations": [
+          {
+            "validationRunStatusId": {
+              "name": "PASSED"
+            },
+            "count": 1
+          },
+          {
+            "validationRunStatusId": {
+              "name": "FAILED"
+            },
+            "count": 1
+          }
+        ]
+      },
+      {
+        "promotion": {
+          "name": "IRON"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "SILVER"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "GOLD"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "PLATINUM"
+        },
+        "creation": null,
+        "validations": []
+      }
+    ]
+  },
+  {
+    "build": {
+      "name": "2"
+    },
+    "promotions": [
+      {
+        "promotion": null,
+        "creation": null,
+        "validations": [
+          {
+            "validationRunStatusId": {
+              "name": "FAILED"
+            },
+            "count": 1
+          }
+        ]
+      },
+      {
+        "promotion": {
+          "name": "IRON"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "SILVER"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "GOLD"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "PLATINUM"
+        },
+        "creation": null,
+        "validations": []
+      }
+    ]
+  },
+  {
+    "build": {
+      "name": "1"
+    },
+    "promotions": [
+      {
+        "promotion": null,
+        "creation": null,
+        "validations": [
+          {
+            "validationRunStatusId": {
+              "name": "PASSED"
+            },
+            "count": 2
+          }
+        ]
+      },
+      {
+        "promotion": {
+          "name": "IRON"
+        },
+        "creation": {
+          "user": "test"
+        },
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "SILVER"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "GOLD"
+        },
+        "creation": null,
+        "validations": []
+      },
+      {
+        "promotion": {
+          "name": "PLATINUM"
+        },
+        "creation": null,
+        "validations": []
+      }
+    ]
+  }
+]
