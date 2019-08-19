@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue
  * Ontrack DSL tests.
  */
 @AcceptanceTestSuite
-@AcceptanceTest(AcceptanceTestContext.SMOKE)
+@AcceptanceTest([AcceptanceTestContext.SMOKE, AcceptanceTestContext.VAULT])
 class ACCDSL extends AbstractACCDSL {
 
     @Test
@@ -1559,6 +1559,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @AcceptanceTest(AcceptanceTestContext.SMOKE)
     void 'Configuration - Git'() {
         def name = uid('G')
         ontrack.configure {
