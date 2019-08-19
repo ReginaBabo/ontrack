@@ -52,8 +52,18 @@ This renders keys like:
 
     Initial Root Token: xxx
 
-Then, run `vault operator unseal` three (3) times, and
-provide each time a different unseal key.
+Then, for _each pod_ of Vault, run:
+
+    kubectl port-forward pod/<pod> 8200
+
+and in a different terminal:
+
+    export VAULT_ADDR=http://127.0.0.1:8200
+    # Run this command 3 (three) times
+    # and provide every time a different unseal key
+    vault operator unseal
+
+Vault is now operational.
 
 ## Remaining actions
 
