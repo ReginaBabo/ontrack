@@ -29,11 +29,17 @@ spec:
           image: {{ .Values.container.image }}:{{ .Values.container.tag }}
           env:
             - name: SPRING_DATASOURCE_URL
-              value: {{ .Values.container.env.spring.datasource.url | quote }}
+              value: {{ .Values.container.env.spring.datasource.url  }}
             - name: SPRING_DATASOURCE_USERNAME
-              value: doadmin
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "ontrack.fullname" . }}
+                  key: ontrack-spring-datasource-username
             - name: SPRING_DATASOURCE_PASSWORD
-              value: mslp7sgti494j9zz
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "ontrack.fullname" . }}
+                  key: ontrack-spring-datasource-password
           volumeMounts:
             - mountPath: /var/ontrack/data
               name: {{ .Values.app.name }}-{{ .Values.environment }}-tmp-storage

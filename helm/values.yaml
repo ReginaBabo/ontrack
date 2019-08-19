@@ -13,3 +13,5 @@ container:
     spring:
       datasource:
         url: "jdbc:postgresql://postgres:5432/ontrack"
+        username: ontrack
+        password: ontrack
