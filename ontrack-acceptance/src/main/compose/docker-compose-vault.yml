@@ -16,7 +16,7 @@ services:
             condition: service_started
          influxdb:
            condition: service_started
-        vault:
+         vault:
            condition: service_started
       environment:
          PROFILE: acceptance
