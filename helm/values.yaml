@@ -1,0 +1,15 @@
+app:
+  name: ontrack
+  service:
+    type: LoadBalancer
+    port: 80
+environment: development
+replicas: 1
+container:
+  image: nemerosa/ontrack
+  tag: 3.38.2
+  port: 8080
+  env:
+    spring:
+      datasource:
+        url: "jdbc:postgresql://postgres:5432/ontrack"

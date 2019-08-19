@@ -1,0 +1,4 @@
+name: ontrack
+sources:
+  - https://github.com/nemerosa/ontrack
+version: 0.1
