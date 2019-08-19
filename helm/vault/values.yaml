@@ -1,0 +1,9 @@
+vault:
+  dev: False
+  config:
+    storage:
+      s3:
+        access_key: "AWS-ACCESS-KEY"
+        secret_key: "AWS-SECRET-KEY"
+        bucket: "bucket"
+        region: "eu-central-1"
