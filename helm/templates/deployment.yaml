@@ -50,3 +50,19 @@ spec:
             - containerPort: {{ .Values.container.port }}
               name: {{ .Values.app.name }}-port
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.container.healthProbesPath }}
+              port: {{ .Values.container.port }}
+            initialDelaySeconds: {{ .Values.container.healthProbeLivenessInitialDelay }}
+            periodSeconds: {{ .Values.container.healthProbeLivenessPeriodSeconds }}
+            timeoutSeconds: {{ .Values.container.healthProbesLivenessTimeout }}
+            failureThreshold: {{ .Values.container.healthProbeLivenessFailureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.container.healthProbesPath }}
+              port: {{ .Values.container.port }}
+            initialDelaySeconds: {{ .Values.container.healthProbeReadinessInitialDelay }}
+            periodSeconds: {{ .Values.container.healthProbeReadinessPeriodSeconds }}
+            timeoutSeconds: {{ .Values.container.healthProbesReadinessTimeout }}
+            failureThreshold: {{ .Values.container.healthProbeReadinessFailureThreshold }}

@@ -9,6 +9,19 @@ container:
   image: nemerosa/ontrack
   tag: 3.38.2
   port: 8080
+
+  healthProbesPath: /manage/health
+
+  healthProbesLivenessTimeout: 5
+  healthProbeLivenessPeriodSeconds: 10
+  healthProbeLivenessFailureThreshold: 5
+  healthProbeLivenessInitialDelay: 300
+
+  healthProbesReadinessTimeout: 5
+  healthProbeReadinessPeriodSeconds: 10
+  healthProbeReadinessFailureThreshold: 3
+  healthProbeReadinessInitialDelay: 60
+
   env:
     spring:
       datasource:
