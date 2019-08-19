@@ -1,3 +1,13 @@
+# ID for the resources
+# Defaults to the Chart Name
+# See templates/_helpers.tpl
+# nameOverride:
+
+# Namespace used for the deployment of resources
+# Defaults to the Release Namespace
+# See templates/_helpers.tpl
+# namespaceOverride: 
+
 app:
   name: ontrack
   component: web

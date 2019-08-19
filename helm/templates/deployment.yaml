@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "ontrack.fullname" . }}
+  namespace: {{ template "ontrack.namespace" . }}
   labels:
     "app.kubernetes.io/name": '{{ template "ontrack.name" .}}'
     "helm.sh/chart": "{{ .Chart.Name }}-{{ .Chart.Version }}"
