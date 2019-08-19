@@ -1,9 +1,9 @@
 app:
   name: ontrack
+  component: web
   service:
     type: LoadBalancer
     port: 80
-environment: development
 replicas: 1
 container:
   image: nemerosa/ontrack

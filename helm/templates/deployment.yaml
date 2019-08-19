@@ -2,24 +2,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.app.name }}-{{ .Values.environment }}
+  name: {{ template "ontrack.fullname" . }}
   labels:
-    app: {{ .Values.app.name }}
-    environment: {{ .Values.environment }}
-    component: "web"
+    "app.kubernetes.io/name": '{{ template "ontrack.name" .}}'
+    "helm.sh/chart": "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    "app.kubernetes.io/managed-by": "{{ .Release.Service }}"
+    "app.kubernetes.io/instance": "{{ .Release.Name }}"
+    "app.kubernetes.io/component": "{{ .Values.app.component }}"
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.app.name }}
-      environment: {{ .Values.environment }}
-      component: "web"
+      "app.kubernetes.io/instance": "{{ .Release.Name }}"
+      "app.kubernetes.io/component": "{{ .Values.app.component }}"
   template:
     metadata:
       labels:
-        app: {{ .Values.app.name }}
-        environment: {{ .Values.environment }}
-        component: "web"
+        "app.kubernetes.io/name": '{{ template "ontrack.name" .}}'
+        "helm.sh/chart": "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        "app.kubernetes.io/managed-by": "{{ .Release.Service }}"
+        "app.kubernetes.io/instance": "{{ .Release.Name }}"
+        "app.kubernetes.io/component": "{{ .Values.app.component }}"
     spec:
       volumes:
         - name: {{ .Values.app.name }}-{{ .Values.environment }}-tmp-storage
