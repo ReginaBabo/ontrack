@@ -33,3 +33,14 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+  Creates the prefix to use in Vault secrets.
+*/}}
+{{- define "ontrack.vault.prefix" -}}
+{{- if .Values.container.env.vault.prefix -}}
+{{- .Values.container.env.vault.prefix -}}
+{{- else -}}
+{{- printf "secret/%s/key" .Release.Name -}}
+{{- end -}}
+{{- end -}}

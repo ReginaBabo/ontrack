@@ -44,6 +44,16 @@ spec:
                 secretKeyRef:
                   name: {{ template "ontrack.fullname" . }}
                   key: ontrack-spring-datasource-password
+            {{- if .Values.container.env.vault.uri }}
+            - name: ONTRACK_CONFIG_KEY_STORE
+              value: vault
+            - name: ONTRACK_CONFIG_VAULT_URI
+              value: {{ .Values.container.env.vault.uri | quote }}
+            - name: ONTRACK_CONFIG_VAULT_TOKEN
+              value: {{ .Values.container.env.vault.token | quote }}
+            - name: ONTRACK_CONFIG_VAULT_PREFIX
+              value: {{ template "ontrack.vault.prefix" }}
+            {{- end }}
           volumeMounts:
             - mountPath: /var/ontrack/data
               name: {{ .Values.app.name }}-{{ .Values.environment }}-tmp-storage
