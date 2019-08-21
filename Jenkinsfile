@@ -319,13 +319,13 @@ docker-compose --project-name vault --file docker-compose-vault.yml up --exit-co
                     sh """\
 echo "Cleanup..."
 mkdir -p build
-rm -rf build/extension
-cp -r ontrack-acceptance/src/main/compose/build build/extension
+rm -rf build/vault
+cp -r ontrack-acceptance/src/main/compose/build build/vault
 cd ontrack-acceptance/src/main/compose
 docker-compose --project-name vault --file docker-compose-vault.yml down --volumes
 """
                     script {
-                        def results = junit 'build/extension/*.xml'
+                        def results = junit 'build/vault/*.xml'
                         ontrackValidate(
                                 project: projectName,
                                 branch: branchName,
