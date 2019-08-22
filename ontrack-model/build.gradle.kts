@@ -25,6 +25,7 @@ val testJar by tasks.registering(Jar::class) {
     archiveClassifier.set("tests")
     from(sourceSets["test"].output)
 }
+
 configure<PublishingExtension> {
     publications {
         maybeCreate<MavenPublication>("mavenCustom").artifact(tasks["testJar"])
