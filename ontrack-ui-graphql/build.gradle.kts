@@ -29,7 +29,7 @@ dependencies {
 }
 
 val testJar by tasks.registering(Jar::class) {
-    classifier = "tests"
+    archiveClassifier.set("tests")
     from(sourceSets["test"].output)
 }
 
