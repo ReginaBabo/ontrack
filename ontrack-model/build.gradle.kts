@@ -22,8 +22,13 @@ dependencies {
 }
 
 val testJar by tasks.registering(Jar::class) {
-    classifier = "tests"
+    archiveClassifier.set("tests")
     from(sourceSets["test"].output)
+}
+configure<PublishingExtension> {
+    publications {
+        maybeCreate<MavenPublication>("mavenCustom").artifact(tasks["testJar"])
+    }
 }
 
 tasks["assemble"].dependsOn("testJar")
