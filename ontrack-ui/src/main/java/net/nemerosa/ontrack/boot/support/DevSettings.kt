@@ -14,15 +14,17 @@ class DevSettings {
     var src = "src"
     var vendor = "vendor"
 
-    private val defaultWeb: File
+    val rootDir: File
         get() {
             val currentDir = File(System.getProperty("user.dir"))
-            val rootDir: File = if (currentDir.name == "ontrack-ui") {
+            return if (currentDir.name == "ontrack-ui") {
                 currentDir.parentFile
             } else {
                 currentDir
             }
-            return File(rootDir, "ontrack-web")
         }
+
+    private val defaultWeb: File
+        get() = File(rootDir, "ontrack-web")
 
 }
