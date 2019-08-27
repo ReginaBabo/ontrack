@@ -383,17 +383,18 @@ val dockerBuild by tasks.registering(DockerBuildImage::class) {
 }
 
 /**
- * FIXME Acceptance tasks
+ * Acceptance tasks
  */
 
-//dockerCompose {
-//    ci {
-//        useComposeFiles = ["compose/docker-compose-ci.yml"]
-//        projectName = "ci"
-//        captureContainersOutputToFiles = "${project.buildDir}/ci-logs"
-//        waitForTcpPorts = false
-//    }
-//}
+dockerCompose {
+    createNested("ci").apply {
+        useComposeFiles = listOf("compose/docker-compose-ci.yml")
+        projectName = "ci"
+        captureContainersOutputToFiles = project.file("${project.buildDir}/ci-logs")
+        waitForTcpPorts = false
+    }
+}
+
 //
 //task ciAcceptanceTest(type: RemoteAcceptanceTest) {
 //    dependsOn "ciComposeUp"
