@@ -28,14 +28,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
 
-    runtimeOnly(project(":ontrack-service"))
-    runtimeOnly(project(":ontrack-repository-impl"))
-    runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("org.flywaydb:flyway-core")
+    runtime(project(":ontrack-service"))
+    runtime(project(":ontrack-repository-impl"))
+    runtime("org.postgresql:postgresql")
+    runtime("org.flywaydb:flyway-core")
 
     // Metric runtimes
-    runtimeOnly("io.micrometer:micrometer-registry-influx")
-    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+    runtime("io.micrometer:micrometer-registry-influx")
+    runtime("io.micrometer:micrometer-registry-prometheus")
 
     testImplementation(project(":ontrack-test-utils"))
     testImplementation(project(":ontrack-it-utils"))
@@ -46,20 +46,20 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     // List of extensions to include in core
-    runtimeOnly(project(":ontrack-extension-general"))
-    runtimeOnly(project(":ontrack-extension-jenkins"))
-    runtimeOnly(project(":ontrack-extension-jira"))
-    runtimeOnly(project(":ontrack-extension-svn"))
-    runtimeOnly(project(":ontrack-extension-artifactory"))
-    runtimeOnly(project(":ontrack-extension-git"))
-    runtimeOnly(project(":ontrack-extension-github"))
-    runtimeOnly(project(":ontrack-extension-gitlab"))
-    runtimeOnly(project(":ontrack-extension-stash"))
-    runtimeOnly(project(":ontrack-extension-combined"))
-    runtimeOnly(project(":ontrack-extension-ldap"))
-    runtimeOnly(project(":ontrack-extension-stale"))
-    runtimeOnly(project(":ontrack-extension-vault"))
-    runtimeOnly(project(":ontrack-extension-influxdb"))
+    runtime(project(":ontrack-extension-general"))
+    runtime(project(":ontrack-extension-jenkins"))
+    runtime(project(":ontrack-extension-jira"))
+    runtime(project(":ontrack-extension-svn"))
+    runtime(project(":ontrack-extension-artifactory"))
+    runtime(project(":ontrack-extension-git"))
+    runtime(project(":ontrack-extension-github"))
+    runtime(project(":ontrack-extension-gitlab"))
+    runtime(project(":ontrack-extension-stash"))
+    runtime(project(":ontrack-extension-combined"))
+    runtime(project(":ontrack-extension-ldap"))
+    runtime(project(":ontrack-extension-stale"))
+    runtime(project(":ontrack-extension-vault"))
+    runtime(project(":ontrack-extension-influxdb"))
 }
 
 /**
@@ -150,7 +150,7 @@ tasks.named<BootRunTask>("bootRun") {
  */
 
 val bootRepackage by tasks.named<RepackageTask>("bootRepackage") {
-    setCustomConfiguration("runtimeClasspath")
+    // setCustomConfiguration("runtime")
 }
 
 configure<SpringBootPluginExtension> {

@@ -395,6 +395,10 @@ dockerCompose {
     }
 }
 
+tasks.named("ciComposeUp") {
+    dependsOn(dockerBuild)
+}
+
 //
 //task ciAcceptanceTest(type: RemoteAcceptanceTest) {
 //    dependsOn "ciComposeUp"
