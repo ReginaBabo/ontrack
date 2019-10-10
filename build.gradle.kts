@@ -587,7 +587,7 @@ val sitePagesDocJs by tasks.registering {
     outputs.file(project.file("build/site/page/doc.js"))
     doLast {
         val allReleases = siteOntrackLast3Releases.get().releases + siteOntrackLast2Releases.get().releases
-        val allVersions = allReleases.joinToString(",") { "'${it.name}'" }
+        val allVersions = allReleases.joinToString(",") { ""${it.name}"" }
         project.file("build/site/page").mkdirs()
         project.file("build/site/page/doc.js").writeText(
                 """var releases = [$allVersions];"""
@@ -614,4 +614,29 @@ tasks.named("gitPublishCopy") {
 
 val site by tasks.registering {
     dependsOn("gitPublishPush")
+}
+
+/**
+ * Release and publication tasks.
+ */
+
+val releaseDocCopyHtml by tasks.registering(Copy::class) {
+    from("publication/html5")
+    into("build/site/release/doc/")
+}
+
+val releaseDocCopyPdf by tasks.registering(Copy::class) {
+    from("publication/pdf")
+    into("build/site/release/")
+}
+
+val releaseDocCopyJavadoc by tasks.registering(Copy::class) {
+    from(zipTree("publication/ontrack-javadoc.zip"))
+    into("build/site/release/javadoc/")
+}
+
+val releaseDocPrepare by tasks.registering {
+    dependsOn("releaseDocCopyHtml")
+    dependsOn("releaseDocCopyPdf")
+    dependsOn("releaseDocCopyJavadoc")
 }

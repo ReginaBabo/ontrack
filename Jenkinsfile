@@ -726,7 +726,6 @@ set -e
 
                 sh '''\
                     ./gradlew \\
-                        --build-file publication.gradle \\
                         --info \\
                         --profile \\
                         --console plain \\
