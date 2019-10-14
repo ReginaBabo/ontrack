@@ -19,6 +19,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("com.okta.spring:okta-spring-boot-starter:1.2.1")
 
     runtime(project(":ontrack-service"))
     runtime(project(":ontrack-repository-impl"))

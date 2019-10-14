@@ -48,12 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http.antMatcher("/**")
             // Only BASIC authentication
-            .httpBasic()
-                .authenticationEntryPoint(apiBasicAuthenticationEntryPoint)
-                .realmName("ontrack")
-                .and()
+            .oauth2Client().and().oauth2Login()
+//            .httpBasic()
+//                .authenticationEntryPoint(apiBasicAuthenticationEntryPoint)
+//                .realmName("ontrack")
+//                .and()
             // Logout set-up
-            .logout()
+            .and().logout()
                 .logoutUrl("/user/logout")
                 .logoutSuccessUrl("/user/logged-out")
                 .addLogoutHandler(basicRememberMeUserDetailsService())
