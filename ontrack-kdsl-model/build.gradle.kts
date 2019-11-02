@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    api(":ontrack-kdsl-core")
+    api(project(":ontrack-kdsl-core"))
 }
