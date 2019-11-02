@@ -27,6 +27,11 @@ include(":ontrack-acceptance")
 include(":ontrack-postgresql-migration")
 include(":ontrack-docs")
 
+// Kotlin DSL
+include(":ontrack-kdsl-client")
+include(":ontrack-kdsl-core")
+include(":ontrack-kdsl-model")
+
 // Core extensions
 include(":ontrack-extension-artifactory")
 include(":ontrack-extension-general")

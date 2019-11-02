@@ -1,18 +1,18 @@
 @startuml
 
-component "kdsl-client" as Client
+component "kdsl-client" as KDSLClient
 
-note right of Client
+note right of KDSLClient
     Generic HTTP client used
     by Ontrack. Mostly a wrapper
     around the Spring REST template.
 end note
 
-component "kdsl-model" as KDSLClient
+component "kdsl-core" as KDSLCore
 
-KDSLClient ..> Client
+KDSLCore ..> KDSLClient
 
-note right of KDSLClient
+note right of KDSLCore
     Root level of KDSL client
     classes. The connector and
     the way to build it.
@@ -21,11 +21,11 @@ note right of KDSLClient
     classes.
 end note
 
-component "kdsl-core" as KDSLCore
+component "kdsl-model" as KDSLModel
 
-KDSLCore ..> KDSLClient
+KDSLModel ..> KDSLCore
 
-note right of KDSLCore
+note right of KDSLModel
     Main KDSL classes, based on the
     core model for Ontrack (projects,
     properties, etc.).
@@ -44,7 +44,7 @@ package "ontrack-extension-xxx" {
 
     component "src/dsl" as ExtensionDSL
 
-    ExtensionDSL ..> KDSLCore
+    ExtensionDSL ..> KDSLModel
 
     note right of ExtensionDSL
         This contains the DSL-side (client side)
