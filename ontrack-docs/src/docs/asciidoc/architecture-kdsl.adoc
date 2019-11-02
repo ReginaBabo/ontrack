@@ -1,0 +1,26 @@
+[[kdsl]]
+==== Kotlin DSL
+
+The Kotlin DSL allows clients to easily interact
+with Ontrack using a typed DSL based on HTTP interactions
+(GraphQL or REST).
+
+[WARNING]
+====
+The Kotlin DSL replaces the Groovy DSL which was shipped in previous versions. The main
+advantages of the Kotlin-based DSL are:
+
+* type-safe DSL
+* extensibility
+====
+
+[[kdsl-architecture]]
+===== KDSL Architecture
+
+[plantuml,"KDSL",png]
+----
+include::architecture-kdsl.puml[]
+----
+
+[[kdsl-extensibility]]
+===== KDSL Extensibility

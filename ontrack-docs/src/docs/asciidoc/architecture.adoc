@@ -32,6 +32,10 @@ Modules like `common`, `json`, `tx` or `client` are purely utilitarian
 The main core module is the `model` one, which defines both the API of the
 Ontrack services and the domain model.
 
+Finally, the `kdsl*` modules deal with the interface and
+implementation of the <<architecture-kdsl,Kotlin-based DSL>> used as a client
+for Ontrack.
+
 [[architecture-ui]]
 ==== UI
 
@@ -153,3 +157,7 @@ One page only, pure AJAX communication between the client and the server.
 ----
 include::architecture-layers.puml[]
 ----
+
+// Sub sections for Architecture
+
+include::architecture-kdsl.adoc[]
