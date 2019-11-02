@@ -1,6 +1,5 @@
 package net.nemerosa.ontrack.kdsl.model
 
-import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Resource
 
 /**
@@ -9,6 +8,5 @@ import net.nemerosa.ontrack.kdsl.core.Resource
  * @property id Unique ID in the scope of this entity type
  */
 abstract class EntityResource(
-        ontrackConnector: OntrackConnector,
         val id: Int
-) : Resource(ontrackConnector)
+) : Resource()

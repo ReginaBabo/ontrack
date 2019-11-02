@@ -1,8 +1,8 @@
 package net.nemerosa.ontrack.kdsl.core
 
-import net.nemerosa.ontrack.kdsl.client.OntrackConnector
+import com.fasterxml.jackson.databind.JsonNode
 
 /**
  * A resource in Ontrack, based on JSON data.
  */
-abstract class Resource(ontrackConnector: OntrackConnector) : Connector(ontrackConnector)
+abstract class Resource : Connector()

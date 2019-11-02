@@ -1,6 +1,5 @@
 package net.nemerosa.ontrack.kdsl.model
 
-import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 /**
@@ -11,13 +10,12 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
  * @property disabled State of this project
  */
 class Project(
-        ontrackConnector: OntrackConnector,
         id: Int,
         creation: Signature,
         val name: String,
         val description: String,
         val disabled: Boolean
-) : ProjectEntityResource(ontrackConnector, id, creation)
+) : ProjectEntityResource(id, creation)
 
 /**
  * Getting (filtered) list of projects.
@@ -67,9 +65,32 @@ fun Ontrack.createProject(
         name: String,
         description: String = "",
         disabled: Boolean = false
-): Project {
-    TODO("Creating a project")
-}
+): Project =
+        ontrackConnector.post(
+                "structure/projects/create",
+                mapOf(
+                        "name" to name,
+                        "description" to description,
+                        "disabled" to disabled
+                )
+        ).toConnector()
+
+/**
+ * Creates a project and runs some code for it.
+ *
+ * @param T Type of object returned by this function
+ * @param name Name of the project
+ * @param description Description of the project
+ * @param disabled State of the project
+ * @param initFn Code to run against the created project
+ * @return Created project
+ */
+fun <T> Ontrack.project(
+        name: String,
+        description: String = "",
+        disabled: Boolean = false,
+        initFn: Project.() -> T
+): T = createProject(name, description, disabled).initFn()
 
 /**
  * FIXME Updates this project.
