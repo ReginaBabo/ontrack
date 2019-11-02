@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.kdsl.model
 
+import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 /**
@@ -10,12 +11,13 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
  * @property disabled State of this project
  */
 class Project(
+        ontrackConnector: OntrackConnector,
         id: Int,
+        creation: Signature,
         val name: String,
         val description: String,
-        val disabled: Boolean,
-        creation: Signature
-) : ProjectEntityResource(id, creation)
+        val disabled: Boolean
+) : ProjectEntityResource(ontrackConnector, id, creation)
 
 /**
  * Getting (filtered) list of projects.
