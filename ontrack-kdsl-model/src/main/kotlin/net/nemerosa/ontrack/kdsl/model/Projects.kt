@@ -83,7 +83,7 @@ fun Ontrack.createProject(
  * @param description Description of the project
  * @param disabled State of the project
  * @param initFn Code to run against the created project
- * @return Created project
+ * @return Object return by [initFn]
  */
 fun <T> Ontrack.project(
         name: String,
