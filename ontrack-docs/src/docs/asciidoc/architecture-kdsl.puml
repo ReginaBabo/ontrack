@@ -1,6 +1,6 @@
 @startuml
 
-component "client" as Client
+component "kdsl-client" as Client
 
 note right of Client
     Generic HTTP client used
@@ -8,7 +8,7 @@ note right of Client
     around the Spring REST template.
 end note
 
-component "kdsl-client" as KDSLClient
+component "kdsl-model" as KDSLClient
 
 KDSLClient ..> Client
 
