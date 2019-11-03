@@ -25,36 +25,9 @@ class Branch(
  */
 fun Project.branches(
         name: String? = null
-): List<Branch> {
-    // Filter
-    val filterDecl = mutableListOf<String>()
-    val filterImpl = mutableListOf<String>()
-    val filterVariables = mutableMapOf<String, Any>()
-    // Name filter
-    if (name != null) {
-        filterDecl += "${'$'}name: String!"
-        filterImpl += "name: ${'$'}name"
-        filterVariables["name"] = name
-    }
-    // Project filter
-    filterDecl += "${'$'}project: String!"
-    filterImpl += "project: ${'$'}project"
-    filterVariables["project"] = this.name
-    // Final filter
-    val filterDeclString = if (filterDecl.isNotEmpty()) {
-        "(${filterDecl.joinToString(", ")})"
-    } else {
-        ""
-    }
-    val filterImplString = if (filterImpl.isNotEmpty()) {
-        "(${filterImpl.joinToString(", ")})"
-    } else {
-        ""
-    }
-    // GraphQL query
-    val query = """
-        query Branches$filterDeclString{
-            branches$filterImplString {
+): List<Branch> =
+        """
+            branches(name: ${'$'}name, project: ${'$'}project) {
                 id
                 name
                 description
@@ -64,13 +37,13 @@ fun Project.branches(
                     time
                 }
             }
+        """.trimIndent().graphQLQuery(
+                "Branches",
+                "name" type "String" value name,
+                "project" type "String!" value this.name
+        ).data["branches"].map {
+            it.toConnector<Branch>()
         }
-    """
-    // Runs and parses the GraphQL query
-    return ontrackConnector.graphQL(query, filterVariables).data["branches"].map {
-        it.toConnector<Branch>()
-    }
-}
 
 /**
  * Creates a branch.
@@ -121,7 +94,7 @@ fun <T> Project.branch(
  * @param name Name of the branch
  * @param description Description of the branch
  * @param disabled State of the branch
- * @return Object return by [initFn]
+ * @return Created or retrieved branch
  */
 fun Project.branch(
         name: String,

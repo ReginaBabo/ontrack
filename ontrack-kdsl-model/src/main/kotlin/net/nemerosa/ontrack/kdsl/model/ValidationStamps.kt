@@ -23,9 +23,20 @@ class ValidationStamp(
  */
 fun Branch.validationStamps(
         name: String? = null
-): List<ValidationStamp> {
-    TODO("List of validation stamps for a branch")
-}
+): List<ValidationStamp> =
+        """
+            branches(id: ${'$'}id) {
+                validationStamps(name: ${'$'}name) {
+                    id
+                    name
+                    description
+                }
+            }
+        """.trimIndent().graphQLQuery(
+                "ValidationStamps",
+                "id" type "Int!" value this.id,
+                "name" type "String" value name
+        ).data["branches"][0]["validationStamps"].map { it.toConnector<ValidationStamp>() }
 
 /**
  * Creates a validation stamp.
@@ -44,7 +55,7 @@ fun Branch.createValidationStamp(
                         "name" to name,
                         "description" to description
                 )
-        ).toConnector()
+        ).adaptSignature().toConnector()
 
 /**
  * Creates or gets a validation stamp and runs some code for it.

@@ -14,6 +14,6 @@ interface OntrackConnector {
 
     fun delete(path: String)
 
-    fun graphQL(query: String, variables: Map<String, Any>): GraphQLResponse
+    fun graphQL(query: String, variables: Map<String, Any?>): GraphQLResponse
 
 }

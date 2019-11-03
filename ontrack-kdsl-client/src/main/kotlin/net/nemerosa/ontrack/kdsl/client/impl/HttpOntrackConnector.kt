@@ -67,7 +67,7 @@ class HttpOntrackConnector(
         )
     }
 
-    override fun graphQL(query: String, variables: Map<String, Any>): GraphQLResponse {
+    override fun graphQL(query: String, variables: Map<String, Any?>): GraphQLResponse {
         return restTemplate.postForObject(
                 "/graphql",
                 mapOf(
