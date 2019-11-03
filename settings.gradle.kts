@@ -32,6 +32,10 @@ include(":ontrack-kdsl-client")
 include(":ontrack-kdsl-core")
 include(":ontrack-kdsl-model")
 
+// E2E testing
+include(":ontrack-bdd-engine")
+include(":ontrack-bdd")
+
 // Core extensions
 include(":ontrack-extension-artifactory")
 include(":ontrack-extension-general")
