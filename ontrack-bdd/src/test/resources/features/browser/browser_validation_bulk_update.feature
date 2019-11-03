@@ -7,6 +7,6 @@ Feature: Buld update of validation stamps
     And a "ValidationManagers" account group
     And the "ValidationManagers" account group is granted the "GLOBAL_VALIDATION_MANAGER" role
     And an account "test" belonging to the "ValidationManagers" account group
-    When logging with the "test" account
+    When login with the "test" account
     And going to the page of the validation stamp "VS" in branch "b" of project "a"
     Then check that the validation stamp page contains the bulk update command
