@@ -14,7 +14,11 @@ class ValidationStamp(
         creation: Signature,
         val name: String,
         val description: String
-) : ProjectEntityResource(id, creation)
+) : ProjectEntityResource(id, creation) {
+
+    override val entityType: String = "VALIDATION_STAMP"
+
+}
 
 /**
  * List of validation stamps for a branch.

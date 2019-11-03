@@ -16,7 +16,11 @@ class Branch(
         val name: String,
         val description: String,
         val disabled: Boolean
-) : ProjectEntityResource(id, creation)
+) : ProjectEntityResource(id, creation) {
+
+    override val entityType: String = "BRANCH"
+
+}
 
 /**
  * List of branches for a project.

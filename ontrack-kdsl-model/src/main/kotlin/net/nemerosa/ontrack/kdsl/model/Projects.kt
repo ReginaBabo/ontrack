@@ -20,6 +20,8 @@ class Project(
         val disabled: Boolean
 ) : ProjectEntityResource(id, creation) {
 
+    override val entityType: String = "PROJECT"
+
     /**
      * Calling some code on the project
      */
