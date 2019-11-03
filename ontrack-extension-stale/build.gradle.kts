@@ -28,3 +28,20 @@ dependencies {
     dslImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     dslImplementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 }
+
+val dslJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("dsl")
+    from(sourceSets["dsl"].output)
+}
+
+configure<PublishingExtension> {
+    publications {
+        maybeCreate<MavenPublication>("mavenCustom").artifact(tasks["dslJar"])
+    }
+}
+
+tasks["assemble"].dependsOn(dslJar)
+
+artifacts {
+    add("dslImplementation", dslJar)
+}
