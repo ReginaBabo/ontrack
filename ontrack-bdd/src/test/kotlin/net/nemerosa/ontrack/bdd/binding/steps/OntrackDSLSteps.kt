@@ -30,7 +30,7 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     @Step
     fun createBranchInProject(branchName: String, projectRegisterName: String) {
         // Gets the project
-        val project = ontrackDSLWorld.getProject(projectRegisterName)
+        val project = ontrackDSLWorld.projects[projectRegisterName]
         // Creates a branch in this project
         project.branch(branchName)
     }
@@ -38,7 +38,7 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     @Step
     fun createValidationStampInBranchAndProject(validationStampName: String, branchName: String, projectRegisterName: String) {
         // Gets the project
-        val project = ontrackDSLWorld.getProject(projectRegisterName)
+        val project = ontrackDSLWorld.projects[projectRegisterName]
         // Creates/gets the branch in this project and creates a validation stamp
         project.branch(branchName) {
             validationStamp(validationStampName)
@@ -57,13 +57,13 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
 
     @Step
     fun setAccountGroupGlobalPermission(accountGroupRegisterName: String, role: String) {
-        val group = ontrackDSLWorld.getAccountGroup(accountGroupRegisterName)
+        val group = ontrackDSLWorld.accountGroups[accountGroupRegisterName]
         group.setGlobalPermission(role)
     }
 
     fun createAndRegisterAccountInGroup(accountRegisterName: String, accountGroupRegisterName: String) {
         // Gets the group
-        val group = ontrackDSLWorld.getAccountGroup(accountGroupRegisterName)
+        val group = ontrackDSLWorld.accountGroups[accountGroupRegisterName]
         // Password
         val password = uid("P")
         // Creates the account
