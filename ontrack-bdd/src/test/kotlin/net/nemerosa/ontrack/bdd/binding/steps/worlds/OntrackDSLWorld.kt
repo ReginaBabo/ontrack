@@ -11,4 +11,11 @@ class OntrackDSLWorld {
      */
     val projects = mutableMapOf<String, Project>()
 
+    /**
+     * Gets a registered project
+     */
+    fun getProject(projectRegisterName: String): Project =
+            projects[projectRegisterName]
+                    ?: throw IllegalStateException("Cannot find project registered with name $projectRegisterName")
+
 }

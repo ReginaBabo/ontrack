@@ -67,3 +67,18 @@ fun <T> Project.branch(
     val b = branches(name = name).firstOrNull() ?: createBranch(name, description, disabled)
     return b.initFn()
 }
+
+
+/**
+ * Creates or returns a branch
+ *
+ * @param name Name of the branch
+ * @param description Description of the branch
+ * @param disabled State of the branch
+ * @return Object return by [initFn]
+ */
+fun Project.branch(
+        name: String,
+        description: String = "",
+        disabled: Boolean = false
+): Branch = branch(name, description, disabled) { this }

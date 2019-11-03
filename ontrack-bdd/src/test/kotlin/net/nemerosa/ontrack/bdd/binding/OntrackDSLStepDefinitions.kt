@@ -14,4 +14,9 @@ class OntrackDSLStepDefinitions {
         ontrackDSLSteps.createAndRegisterProject(name)
     }
 
+    @Given("""a branch "(.*)" in project "(.*)"""")
+    fun branch_available(branchName: String, projectRegisterName: String) {
+        ontrackDSLSteps.createBranchInProject(branchName, projectRegisterName)
+    }
+
 }
