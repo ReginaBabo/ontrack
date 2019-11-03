@@ -4,6 +4,7 @@ import net.serenitybdd.core.annotations.findby.By
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.pages.PageObject
 import org.openqa.selenium.WebDriver
+import kotlin.test.assertTrue
 import kotlin.test.fail
 
 abstract class AbstractPage(driver: WebDriver) : PageObject(driver) {
@@ -33,5 +34,13 @@ abstract class AbstractPage(driver: WebDriver) : PageObject(driver) {
      */
     infix fun WebElementFacade.enter(text: String) {
         typeInto(this, text)
+    }
+
+    /**
+     * Checks if an element is present or not
+     */
+    fun checkElementPresent(css: String) {
+        val e: WebElementFacade? = find<WebElementFacade>(By.cssSelector(css))?.waitUntilVisible()
+        assertTrue(e != null && e.isDisplayed, "Element at [$css] is not present.")
     }
 }

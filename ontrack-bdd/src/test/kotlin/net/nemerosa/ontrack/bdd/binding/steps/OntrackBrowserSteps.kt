@@ -48,7 +48,13 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
             }
         }
         page<ValidationStampPage> {
-            open(vs.id.toString())
+            open(vs.id)
+        }
+    }
+
+    fun checkBuldUpdateCommandPresentInValidationStampPage() {
+        currentPageAt<ValidationStampPage> {
+            checkBuldUpdateCommandPresent()
         }
     }
 

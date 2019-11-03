@@ -1,7 +1,9 @@
 package net.nemerosa.ontrack.bdd.binding
 
+import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import net.nemerosa.ontrack.bdd.binding.steps.OntrackBrowserSteps
+import net.nemerosa.ontrack.bdd.pages.ValidationStampPage
 import net.thucydides.core.annotations.Steps
 
 class OntrackBrowserStepDefinitions {
@@ -22,6 +24,11 @@ class OntrackBrowserStepDefinitions {
             projectRegisterName: String
     ) {
         ontrackBrowserSteps.goToValidationStampPage(validationStampName, branchName, projectRegisterName)
+    }
+
+    @Then("""check that the validation stamp page contains the bulk update command""")
+    fun check_validation_stamp_page_contains_bulk_update_command() {
+        ontrackBrowserSteps.checkBuldUpdateCommandPresentInValidationStampPage()
     }
 
 }
