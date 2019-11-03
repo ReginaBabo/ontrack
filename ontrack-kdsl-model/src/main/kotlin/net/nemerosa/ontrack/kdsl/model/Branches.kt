@@ -21,12 +21,55 @@ class Branch(
 /**
  * List of branches for a project.
  *
- * @param name Filter on the branch name (exact match)
+ * @param name Filter on the branch name (regular expression)
  */
 fun Project.branches(
         name: String? = null
 ): List<Branch> {
-    TODO("List of branches for a project")
+    // Filter
+    val filterDecl = mutableListOf<String>()
+    val filterImpl = mutableListOf<String>()
+    val filterVariables = mutableMapOf<String, Any>()
+    // Name filter
+    if (name != null) {
+        filterDecl += "${'$'}name: String!"
+        filterImpl += "name: ${'$'}name"
+        filterVariables["name"] = name
+    }
+    // Project filter
+    filterDecl += "${'$'}project: String!"
+    filterImpl += "project: ${'$'}project"
+    filterVariables["project"] = this.name
+    // Final filter
+    val filterDeclString = if (filterDecl.isNotEmpty()) {
+        "(${filterDecl.joinToString(", ")})"
+    } else {
+        ""
+    }
+    val filterImplString = if (filterImpl.isNotEmpty()) {
+        "(${filterImpl.joinToString(", ")})"
+    } else {
+        ""
+    }
+    // GraphQL query
+    val query = """
+        query Branches$filterDeclString{
+            branches$filterImplString {
+                id
+                name
+                description
+                disabled
+                creation {
+                    user
+                    time
+                }
+            }
+        }
+    """
+    // Runs and parses the GraphQL query
+    return ontrackConnector.graphQL(query, filterVariables).data["branches"].map {
+        it.toConnector<Branch>()
+    }
 }
 
 /**
@@ -49,7 +92,7 @@ fun Project.createBranch(
                         "description" to description,
                         "disabled" to disabled
                 )
-        ).toConnector()
+        ).adaptSignature().toConnector()
 
 /**
  * Creates or returns a branch and runs some code for it.
