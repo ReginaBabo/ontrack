@@ -11,6 +11,10 @@ class Index<T> {
         index[name] = value
     }
 
+    fun clear() {
+        index.clear()
+    }
+
 }
 
 fun <T> indexOf() = Index<T>()

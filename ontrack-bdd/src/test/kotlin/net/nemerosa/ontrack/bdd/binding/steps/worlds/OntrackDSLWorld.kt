@@ -22,4 +22,13 @@ class OntrackDSLWorld {
      */
     val accountGroups = indexOf<AccountGroup>()
 
+    /**
+     * Clears all context
+     */
+    fun clear() {
+        projects.clear()
+        accounts.clear()
+        accountGroups.clear()
+    }
+
 }

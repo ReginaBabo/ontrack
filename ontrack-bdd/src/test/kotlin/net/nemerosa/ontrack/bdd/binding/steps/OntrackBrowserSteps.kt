@@ -66,6 +66,7 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
 
     @Step
     fun closeBrowser() {
+        ontrackDSLWorld.clear()
         currentPageAt<CompletePage> {
             driver.quit()
         }
