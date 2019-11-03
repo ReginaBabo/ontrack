@@ -15,4 +15,13 @@ class OntrackBrowserStepDefinitions {
         ontrackBrowserSteps.loginWithAccount(accountRegisterName)
     }
 
+    @When("""going to the page of the validation stamp "(.*)" in branch "(.*)" of project "(.*)"""")
+    fun go_to_validation_stamp_page(
+            validationStampName: String,
+            branchName: String,
+            projectRegisterName: String
+    ) {
+        ontrackBrowserSteps.goToValidationStampPage(validationStampName, branchName, projectRegisterName)
+    }
+
 }

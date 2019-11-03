@@ -30,13 +30,17 @@ fun Branch.validationStamps(
                     id
                     name
                     description
+                    creation {
+                        user
+                        time
+                    }
                 }
             }
         """.trimIndent().graphQLQuery(
                 "ValidationStamps",
                 "id" type "Int!" value this.id,
                 "name" type "String" value name
-        ).data["branches"][0]["validationStamps"].map { it.toConnector<ValidationStamp>() }
+        ).data["branches"][0]["validationStamps"].map { it.adaptSignature().toConnector<ValidationStamp>() }
 
 /**
  * Creates a validation stamp.

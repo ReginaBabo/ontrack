@@ -4,6 +4,9 @@ import net.nemerosa.ontrack.bdd.BDDConfig
 import net.nemerosa.ontrack.bdd.binding.steps.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.pages.CompletePage
 import net.nemerosa.ontrack.bdd.pages.HomePage
+import net.nemerosa.ontrack.bdd.pages.ValidationStampPage
+import net.nemerosa.ontrack.kdsl.model.branch
+import net.nemerosa.ontrack.kdsl.model.validationStamp
 import net.thucydides.core.annotations.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -35,4 +38,18 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
             open()
         }
     }
+
+    @Step
+    fun goToValidationStampPage(validationStampName: String, branchName: String, projectRegisterName: String) {
+        val project = ontrackDSLWorld.projects[projectRegisterName]
+        val vs = project {
+            branch(branchName) {
+                validationStamp(validationStampName)
+            }
+        }
+        page<ValidationStampPage> {
+            open(vs.id.toString())
+        }
+    }
+
 }

@@ -18,7 +18,14 @@ class Project(
         val name: String,
         val description: String,
         val disabled: Boolean
-) : ProjectEntityResource(id, creation)
+) : ProjectEntityResource(id, creation) {
+
+    /**
+     * Calling some code on the project
+     */
+    operator fun <T> invoke(code: Project.() -> T): T = run(code)
+
+}
 
 /**
  * Getting (filtered) list of projects.
