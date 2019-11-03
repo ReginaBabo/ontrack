@@ -19,4 +19,9 @@ class OntrackDSLStepDefinitions {
         ontrackDSLSteps.createBranchInProject(branchName, projectRegisterName)
     }
 
+    @Given("""a validation stamp "(.*)" in branch "(.*)" of project "(.*)"""")
+    fun validation_stamp_available(validationStampName: String, branchName: String, projectRegisterName: String) {
+        ontrackDSLSteps.createValidationStampInBranchAndProject(validationStampName, branchName, projectRegisterName)
+    }
+
 }

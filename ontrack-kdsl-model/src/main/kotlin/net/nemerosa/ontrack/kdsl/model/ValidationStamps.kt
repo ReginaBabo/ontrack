@@ -60,3 +60,15 @@ fun <T> Branch.validationStamp(
     val vs = validationStamps(name = name).firstOrNull() ?: createValidationStamp(name, description)
     return vs.initFn()
 }
+
+/**
+ * Creates or gets a validation stamp.
+ *
+ * @param name Name of the validation stamp
+ * @param description Description of the validation stamp
+ * @return Created or retrieved validation stamp
+ */
+fun Branch.validationStamp(
+        name: String,
+        description: String = ""
+): ValidationStamp = validationStamp(name, description) { this }
