@@ -34,4 +34,9 @@ class OntrackDSLStepDefinitions {
         ontrackDSLSteps.createAndRegisterAccountGroup(accountGroupRegisterName)
     }
 
+    @Given("""the "(.*)" account group is granted the "(.*)" role""")
+    fun account_group_global_permission(accountGroupRegisterName: String, role: String) {
+        ontrackDSLSteps.setAccountGroupGlobalPermission(accountGroupRegisterName, role)
+    }
+
 }

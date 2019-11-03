@@ -3,10 +3,7 @@ package net.nemerosa.ontrack.bdd.binding.steps
 import net.nemerosa.ontrack.bdd.BDDConfig
 import net.nemerosa.ontrack.bdd.binding.steps.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.support.uid
-import net.nemerosa.ontrack.kdsl.model.accounts
-import net.nemerosa.ontrack.kdsl.model.branch
-import net.nemerosa.ontrack.kdsl.model.project
-import net.nemerosa.ontrack.kdsl.model.validationStamp
+import net.nemerosa.ontrack.kdsl.model.*
 import net.thucydides.core.annotations.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -55,5 +52,11 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
         ontrack.accounts.accountGroup(accountGroupName).apply {
             ontrackDSLWorld.accountGroups[accountGroupRegisterName] = this
         }
+    }
+
+    @Step
+    fun setAccountGroupGlobalPermission(accountGroupRegisterName: String, role: String) {
+        val group = ontrackDSLWorld.getAccountGroup(accountGroupRegisterName)
+        group.setGlobalPermission(role)
     }
 }

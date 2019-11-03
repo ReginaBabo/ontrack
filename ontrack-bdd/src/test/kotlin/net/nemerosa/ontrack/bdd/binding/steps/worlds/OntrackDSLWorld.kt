@@ -24,4 +24,11 @@ class OntrackDSLWorld {
             projects[projectRegisterName]
                     ?: throw IllegalStateException("Cannot find project registered with name $projectRegisterName")
 
+    /**
+     * Gets a registered account group
+     */
+    fun getAccountGroup(accountGroupRegisterName: String): AccountGroup =
+            accountGroups[accountGroupRegisterName]
+                    ?: throw IllegalStateException("Cannot find account group registered with name $accountGroupRegisterName")
+
 }
