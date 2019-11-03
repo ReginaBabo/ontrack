@@ -33,6 +33,11 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     }
 
     @Step
+    fun loginAsAdmin() {
+        loginWith(bddProperties.ontrack.username, bddProperties.ontrack.password)
+    }
+
+    @Step
     fun goToHomePage() {
         page<HomePage> {
             open()
@@ -52,9 +57,17 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
         }
     }
 
+    @Step
     fun checkBuldUpdateCommandPresentInValidationStampPage() {
         currentPageAt<ValidationStampPage> {
             checkBuldUpdateCommandPresent()
+        }
+    }
+
+    @Step
+    fun closeBrowser() {
+        currentPageAt<CompletePage> {
+            driver.quit()
         }
     }
 

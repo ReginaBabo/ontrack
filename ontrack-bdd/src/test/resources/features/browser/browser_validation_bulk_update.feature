@@ -10,3 +10,11 @@ Feature: Buld update of validation stamps
     When login with the "test" account
     And going to the page of the validation stamp "VS" in branch "b" of project "a"
     Then check that the validation stamp page contains the bulk update command
+
+  Scenario: Validation bulk update accessible to administrator
+    Given a project "a"
+    And a branch "b" in project "a"
+    And a validation stamp "VS" in branch "b" of project "a"
+    When login as admin
+    And going to the page of the validation stamp "VS" in branch "b" of project "a"
+    Then check that the validation stamp page contains the bulk update command
