@@ -9,10 +9,10 @@ import net.nemerosa.ontrack.kdsl.core.Resource
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Account(
-        id: Int,
-        name: String,
-        fullName: String,
-        email: String
+        val id: Int,
+        val name: String,
+        val fullName: String,
+        val email: String
 ) : Resource()
 
 /**

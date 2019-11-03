@@ -12,7 +12,7 @@ class OntrackBrowserStepDefinitions {
     @When("""login with the "(.*)" account""")
     fun login_with_account(accountRegisterName: String) {
         ontrackBrowserSteps.goToHomePage()
-        ontrackBrowserSteps.login(accountRegisterName)
+        ontrackBrowserSteps.loginWithAccount(accountRegisterName)
     }
 
 }

@@ -16,4 +16,9 @@ abstract class AbstractOntrackBrowserSteps : AbstractOntrackDSL() {
         page<P, Unit>(code)
     }
 
+    inline fun <reified P : PageObject> currentPageAt(noinline code: P.() -> Unit) {
+        val page = pages.currentPageAt(P::class.java)
+        page.code()
+    }
+
 }
