@@ -13,6 +13,11 @@ class OntrackDSLWorld {
     val projects = mutableMapOf<String, Project>()
 
     /**
+     * Register of accounts
+     */
+    val accounts = mutableMapOf<String, AccountWithPassword>()
+
+    /**
      * Register of account groups
      */
     val accountGroups = mutableMapOf<String, AccountGroup>()

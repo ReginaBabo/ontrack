@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.bdd.binding.steps
 
 import net.nemerosa.ontrack.bdd.BDDConfig
 import net.nemerosa.ontrack.bdd.binding.steps.worlds.OntrackDSLWorld
+import net.nemerosa.ontrack.bdd.binding.steps.worlds.withPassword
 import net.nemerosa.ontrack.bdd.support.uid
 import net.nemerosa.ontrack.kdsl.model.*
 import net.thucydides.core.annotations.Step
@@ -58,5 +59,22 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     fun setAccountGroupGlobalPermission(accountGroupRegisterName: String, role: String) {
         val group = ontrackDSLWorld.getAccountGroup(accountGroupRegisterName)
         group.setGlobalPermission(role)
+    }
+
+    fun createAndRegisterAccountInGroup(accountRegisterName: String, accountGroupRegisterName: String) {
+        // Gets the group
+        val group = ontrackDSLWorld.getAccountGroup(accountGroupRegisterName)
+        // Password
+        val password = uid("P")
+        // Creates the account
+        ontrack.accounts.createAccount(
+                uid("A"),
+                "$accountRegisterName Test",
+                "$accountRegisterName@test.com",
+                password,
+                listOf(group.name)
+        ).apply {
+            ontrackDSLWorld.accounts[accountRegisterName] = this withPassword password
+        }
     }
 }

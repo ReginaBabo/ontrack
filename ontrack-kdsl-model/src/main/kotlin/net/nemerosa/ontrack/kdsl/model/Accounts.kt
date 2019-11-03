@@ -5,6 +5,17 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
 import net.nemerosa.ontrack.kdsl.core.Resource
 
 /**
+ * Account
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Account(
+        id: Int,
+        name: String,
+        fullName: String,
+        email: String
+) : Resource()
+
+/**
  * Account group
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,6 +45,14 @@ class Accounts : Resource() {
                 .map { it.toConnector<AccountGroup>() }
 
     /**
+     * Find an account group by name
+     *
+     * @param name Name of the group to find
+     * @return Group if found
+     */
+    fun findAccountGroupByName(name: String) = accountGroups.find { it.name == name }
+
+    /**
      * Creates a group
      */
     fun createAccountGroup(
@@ -54,25 +73,37 @@ class Accounts : Resource() {
     fun accountGroup(
             name: String,
             description: String = ""
-    ): AccountGroup =
-            accountGroups.find { it.name == name } ?: createAccountGroup(name, description)
+    ): AccountGroup = findAccountGroupByName(name) ?: createAccountGroup(name, description)
 
     /**
-     * Creating or updating an account
+     * Creating an account
      *
      * @param name Unique name for the account
-     * @param fullName Display name for the account (defaults to [name])
-     * @param email Email for the account (defaults to "[name]@test.com)
+     * @param fullName Display name for the account
+     * @param email Email for the account
      * @param password Password the account
      * @param groupNames Groups the account belongs to
      */
-    fun account(
+    fun createAccount(
             name: String,
-            fullName: String?,
-            email: String?,
-            password: String = "",
-            groupNames: List<String> = emptyList()) {
-        TODO("Creating or updating an account")
+            fullName: String,
+            email: String,
+            password: String,
+            groupNames: List<String> = emptyList()
+    ): Account {
+        // Loading the groups
+        val groups = groupNames.mapNotNull { findAccountGroupByName(it) }
+        // Account creation
+        return ontrackConnector.post(
+                "accounts/create",
+                mapOf(
+                        "name" to name,
+                        "fullName" to fullName,
+                        "email" to email,
+                        "password" to password,
+                        "groups" to groups.map { it.id }
+                )
+        ).toConnector()
     }
 }
 

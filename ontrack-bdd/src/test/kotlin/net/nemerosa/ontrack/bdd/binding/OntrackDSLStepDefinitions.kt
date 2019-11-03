@@ -24,9 +24,9 @@ class OntrackDSLStepDefinitions {
         ontrackDSLSteps.createValidationStampInBranchAndProject(validationStampName, branchName, projectRegisterName)
     }
 
-    @Given("""a "(.*)" account belonging to the "(.*)" account group""")
+    @Given("""an account "(.*)" belonging to the "(.*)" account group""")
     fun account_in_group_available(accountRegisterName: String, accountGroupRegisterName: String) {
-        TODO()
+        ontrackDSLSteps.createAndRegisterAccountInGroup(accountRegisterName, accountGroupRegisterName)
     }
 
     @Given("""a "(.*)" account group""")
