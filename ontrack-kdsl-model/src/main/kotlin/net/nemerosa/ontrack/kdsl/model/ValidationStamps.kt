@@ -14,6 +14,17 @@ class ValidationStamp(
 ) : ProjectEntityResource(id, creation)
 
 /**
+ * List of validation stamps for a branch.
+ *
+ * @param name Filter on the validation stamp name (exact match)
+ */
+fun Branch.validationStamps(
+        name: String? = null
+): List<ValidationStamp> {
+    TODO("List of validation stamps for a branch")
+}
+
+/**
  * Creates a validation stamp.
  *
  * @param name Name of the validation stamp
@@ -33,7 +44,7 @@ fun Branch.createValidationStamp(
         ).toConnector()
 
 /**
- * Creates a validation stamp and runs some code for it.
+ * Creates or gets a validation stamp and runs some code for it.
  *
  * @param T Type of object returned by this function
  * @param name Name of the validation stamp
@@ -45,4 +56,7 @@ fun <T> Branch.validationStamp(
         name: String,
         description: String = "",
         initFn: ValidationStamp.() -> T
-): T = createValidationStamp(name, description).initFn()
+): T {
+    val vs = validationStamps(name = name).firstOrNull() ?: createValidationStamp(name, description)
+    return vs.initFn()
+}

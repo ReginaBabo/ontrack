@@ -22,5 +22,13 @@ advantages of the Kotlin-based DSL are:
 include::architecture-kdsl.puml[]
 ----
 
+[[kdsl-principles]]
+===== KDSL Principles
+
+Methods of the KDSL are based on the two following principles:
+
+* using a verb for actions with a clear semantic, like creating a project, `createProject`
+* using the entity name for methods which create an entity when needed or returning an existing one, lik `project`
+
 [[kdsl-extensibility]]
 ===== KDSL Extensibility

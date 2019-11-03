@@ -76,7 +76,7 @@ fun Ontrack.createProject(
         ).toConnector()
 
 /**
- * Creates a project and runs some code for it.
+ * Creates a project or returns it based on name, and runs some code for it.
  *
  * @param T Type of object returned by this function
  * @param name Name of the project
@@ -90,7 +90,10 @@ fun <T> Ontrack.project(
         description: String = "",
         disabled: Boolean = false,
         initFn: Project.() -> T
-): T = createProject(name, description, disabled).initFn()
+): T {
+    val p = findProjectByName(name) ?: createProject(name, description, disabled)
+    return p.initFn()
+}
 
 /**
  * FIXME Updates this project.

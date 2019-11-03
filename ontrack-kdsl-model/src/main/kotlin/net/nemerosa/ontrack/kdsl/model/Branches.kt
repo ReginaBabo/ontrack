@@ -16,6 +16,17 @@ class Branch(
 ) : ProjectEntityResource(id, creation)
 
 /**
+ * List of branches for a project.
+ *
+ * @param name Filter on the branch name (exact match)
+ */
+fun Project.branches(
+        name: String? = null
+): List<Branch> {
+    TODO("List of branches for a project")
+}
+
+/**
  * Creates a branch.
  *
  * @param name Name of the branch
@@ -38,7 +49,7 @@ fun Project.createBranch(
         ).toConnector()
 
 /**
- * Creates a branch and runs some code for it.
+ * Creates or returns a branch and runs some code for it.
  *
  * @param T Type of object returned by this function
  * @param name Name of the branch
@@ -52,4 +63,7 @@ fun <T> Project.branch(
         description: String = "",
         disabled: Boolean = false,
         initFn: Branch.() -> T
-): T = createBranch(name, description, disabled).initFn()
+): T {
+    val b = branches(name = name).firstOrNull() ?: createBranch(name, description, disabled)
+    return b.initFn()
+}
