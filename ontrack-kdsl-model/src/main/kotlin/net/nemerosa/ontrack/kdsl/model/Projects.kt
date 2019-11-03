@@ -96,6 +96,20 @@ fun <T> Ontrack.project(
 }
 
 /**
+ * Creates a project or returns it based on name.
+ *
+ * @param name Name of the project
+ * @param description Description of the project
+ * @param disabled State of the project
+ * @return Project (created or retrieved)
+ */
+fun Ontrack.project(
+        name: String,
+        description: String = "",
+        disabled: Boolean = false
+): Project = project(name, description, disabled) { this }
+
+/**
  * FIXME Updates this project.
  *
  * @param name New name (if not `null`)
