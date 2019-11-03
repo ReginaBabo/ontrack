@@ -8,7 +8,7 @@ import net.nemerosa.ontrack.kdsl.client.support.OntrackConnectorBuilder
  * Root object of the Ontrack model. Typically extended by the model and
  * extensions for the Kotlin DSL.
  */
-class Ontrack(ontrackConnector: OntrackConnector) : Connector() {
+class Ontrack(ontrackConnector: OntrackConnector) : Resource() {
 
     init {
         this.ontrackConnector = ontrackConnector

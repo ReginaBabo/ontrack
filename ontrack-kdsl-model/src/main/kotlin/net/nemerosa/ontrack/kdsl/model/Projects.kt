@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.nemerosa.ontrack.kdsl.core.Ontrack
+import net.nemerosa.ontrack.kdsl.core.Resource
 
 /**
  * Project entity
@@ -33,61 +34,39 @@ fun Ontrack.getProjects(
         propertyType: String? = null,
         propertyValue: String? = null
 ): List<Project> {
-    // Filter
-    val filterDecl = mutableListOf<String>()
-    val filterImpl = mutableListOf<String>()
-    val filterVariables = mutableMapOf<String, Any>()
-    // Name filter
-    if (name != null) {
-        filterDecl += "${'$'}name: String!"
-        filterImpl += "name: ${'$'}name"
-        filterVariables["name"] = name
-    }
-    // Favorites filter
-    if (favoritesOnly) {
-        filterImpl += "favourites: true"
-    }
-    // Property filter
-    if (propertyType != null) {
-        if (propertyValue != null) {
-            filterDecl += """${'$'}propertyType: String!, ${'$'}propertyValue}: String!"""
-            filterImpl += """withProperty: {type: ${'$'}propertyType, value: ${'$'}propertyValue}"""
-            filterVariables["propertyType"] = propertyType
-            filterVariables["propertyValue"] = propertyValue
-        } else {
-            filterDecl += """${'$'}propertyType: String!"""
-            filterImpl += """withProperty: {type: ${'$'}propertyType}"""
-            filterVariables["propertyType"] = propertyType
+    val decl: String
+    val params = mutableListOf<Resource.GraphQLParamImpl>()
+    when {
+        name != null -> {
+            decl = "(name: ${'$'}name)"
+            params += "name" type "String!" value name
+        }
+        propertyType != null -> {
+            decl = """withProperty: {type: ${'$'}propertyType, value: ${'$'}propertyValue}"""
+            params += "propertyType" type "String" value propertyType
+            params += "propertyValue" type "String" value propertyValue
+        }
+        favoritesOnly -> {
+            decl = "(favourites: true)"
+        }
+        else -> {
+            decl = ""
         }
     }
-    // Final filter
-    val filterDeclString = if (filterDecl.isNotEmpty()) {
-        "(${filterDecl.joinToString(", ")})"
-    } else {
-        ""
-    }
-    val filterImplString = if (filterImpl.isNotEmpty()) {
-        "(${filterImpl.joinToString(", ")})"
-    } else {
-        ""
-    }
-    // GraphQL query
     val query = """
-        query Projects$filterDeclString{
-            projects$filterImplString {
-                id
-                name
-                description
-                disabled
-                creation {
-                    user
-                    time
-                }
+        projects$decl {
+            id
+            name
+            description
+            disabled
+            creation {
+                user
+                time
             }
         }
-    """
-    // Runs and parses the GraphQL query
-    return ontrackConnector.graphQL(query, filterVariables).data["projects"].map {
+    """.trimIndent()
+    // Query
+    return query.graphQLQuery("Projects", *params.toTypedArray()).data["projects"].map {
         it.toConnector<Project>()
     }
 }
