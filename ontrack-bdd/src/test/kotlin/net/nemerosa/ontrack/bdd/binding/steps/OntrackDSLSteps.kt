@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.bdd.binding.steps
 import net.nemerosa.ontrack.bdd.BDDConfig
 import net.nemerosa.ontrack.bdd.binding.steps.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.support.uid
+import net.nemerosa.ontrack.kdsl.model.accounts
 import net.nemerosa.ontrack.kdsl.model.branch
 import net.nemerosa.ontrack.kdsl.model.project
 import net.nemerosa.ontrack.kdsl.model.validationStamp
@@ -43,6 +44,16 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
         // Creates/gets the branch in this project and creates a validation stamp
         project.branch(branchName) {
             validationStamp(validationStampName)
+        }
+    }
+
+    @Step
+    fun createAndRegisterAccountGroup(accountGroupRegisterName: String) {
+        // Actual name of the account group
+        val accountGroupName = uid("AG")
+        // Gets or creates the account group, registers it and returns it
+        ontrack.accounts.accountGroup(accountGroupName).apply {
+            ontrackDSLWorld.accountGroups[accountGroupRegisterName] = this
         }
     }
 }

@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.bdd.binding.steps.worlds
 
+import net.nemerosa.ontrack.kdsl.model.AccountGroup
 import net.nemerosa.ontrack.kdsl.model.Project
 import org.springframework.stereotype.Component
 
@@ -10,6 +11,11 @@ class OntrackDSLWorld {
      * Register of projects
      */
     val projects = mutableMapOf<String, Project>()
+
+    /**
+     * Register of account groups
+     */
+    val accountGroups = mutableMapOf<String, AccountGroup>()
 
     /**
      * Gets a registered project

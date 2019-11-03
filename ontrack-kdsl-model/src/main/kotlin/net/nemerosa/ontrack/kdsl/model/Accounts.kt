@@ -1,21 +1,61 @@
 package net.nemerosa.ontrack.kdsl.model
 
-import net.nemerosa.ontrack.kdsl.core.Connector
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.nemerosa.ontrack.kdsl.core.Ontrack
+import net.nemerosa.ontrack.kdsl.core.Resource
+
+/**
+ * Account group
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+class AccountGroup(
+        id: Int,
+        val name: String,
+        val description: String
+) : EntityResource(id)
 
 /**
  * Account DSL extension
  */
-class Accounts : Connector() {
+class Accounts : Resource() {
+
+    /**
+     * List of account groups
+     */
+    val accountGroups: List<AccountGroup>
+        get() = """
+            accountGroups {
+                id
+                name
+                description
+            }
+        """.trimIndent().graphQLQuery("AccountGroups")
+                .data["accountGroups"]
+                .map { it.toConnector<AccountGroup>() }
+
     /**
      * Creates a group
+     */
+    fun createAccountGroup(
+            name: String,
+            description: String = ""
+    ): AccountGroup =
+            ontrackConnector.post(
+                    "accounts/groups/create",
+                    mapOf(
+                            "name" to name,
+                            "description" to description
+                    )
+            ).toConnector()
+
+    /**
+     * Creates or gets a group
      */
     fun accountGroup(
             name: String,
             description: String = ""
-    ) {
-        TODO("Gets or creates the group")
-    }
+    ): AccountGroup =
+            accountGroups.find { it.name == name } ?: createAccountGroup(name, description)
 
     /**
      * Creating or updating an account
