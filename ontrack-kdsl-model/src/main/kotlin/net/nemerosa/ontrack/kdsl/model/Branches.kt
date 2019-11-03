@@ -1,5 +1,7 @@
 package net.nemerosa.ontrack.kdsl.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 /**
  * Branch entity
  *
@@ -7,6 +9,7 @@ package net.nemerosa.ontrack.kdsl.model
  * @property description Description of this branch
  * @property disabled State of this branch
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Branch(
         id: Int,
         creation: Signature,

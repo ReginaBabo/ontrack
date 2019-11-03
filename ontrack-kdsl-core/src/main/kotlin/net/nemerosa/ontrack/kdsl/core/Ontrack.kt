@@ -11,6 +11,7 @@ import net.nemerosa.ontrack.kdsl.client.support.OntrackConnectorBuilder
 class Ontrack(ontrackConnector: OntrackConnector) : Connector() {
 
     init {
+        this.ontrackConnector = ontrackConnector
         init()
     }
 

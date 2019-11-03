@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.kdsl.client.impl
 
 import com.fasterxml.jackson.databind.JsonNode
+import net.nemerosa.ontrack.kdsl.client.GraphQLResponse
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpStatus
@@ -66,4 +67,14 @@ class HttpOntrackConnector(
         )
     }
 
+    override fun graphQL(query: String, variables: Map<String, Any>): GraphQLResponse {
+        return restTemplate.postForObject(
+                "/graphql",
+                mapOf(
+                        "query" to query,
+                        "variables" to variables
+                ),
+                GraphQLResponse::class.java
+        ) ?: throw RuntimeException("Cannot get any response from GraphQL end point")
+    }
 }
