@@ -36,5 +36,5 @@ fun Project.staleProperty(
 /**
  * Gets the stale property
  */
-val Project.slateProperty: StaleProperty?
+val Project.staleProperty: StaleProperty?
     get() = getProperty<StaleProperty>("net.nemerosa.ontrack.extension.stale.StalePropertyType")
