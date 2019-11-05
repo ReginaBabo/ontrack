@@ -26,7 +26,7 @@ abstract class ProjectEntityResource(
      */
     fun setProperty(type: String, value: Any) {
         ontrackConnector.put(
-                "properties/{entityType}/$id/$type/edit",
+                "properties/$entityType/$id/$type/edit",
                 value
         )
     }

@@ -67,6 +67,7 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     @Step
     fun closeBrowser() {
         ontrackDSLWorld.clear()
+        // FIXME One must not rely on the current page (not available for pure DSL tests)
         currentPageAt<CompletePage> {
             driver.quit()
         }
