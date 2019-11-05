@@ -33,6 +33,8 @@ end note
 
 component "bdd-model" as BDDModel
 
+BDDModel .right.> KDSLModel
+
 note bottom of BDDModel
     BDD steps for Ontrack
 end note

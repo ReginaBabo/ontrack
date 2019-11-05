@@ -176,6 +176,47 @@ class OntrackExtensionPlugin : Plugin<Project> {
 
         }
 
+        /**
+         * BDD extensions management
+         */
+
+        val bddDir = target.file("src/bdd")
+        if (bddDir.exists() && bddDir.isDirectory) {
+            val kotlinVersion: String by target
+            val javaConvention = target.convention.getPlugin(JavaPluginConvention::class.java)
+            val sourceSets = javaConvention.sourceSets
+            sourceSets.create("bdd")
+
+            val bddImplementation by target.configurations.getting
+
+            target.dependencies {
+                bddImplementation(project(":ontrack-bdd-model"))
+                bddImplementation(project(path = target.path, configuration = "dslConfig"))
+                bddImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+                bddImplementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+            }
+
+            val bddJar by target.tasks.registering(Jar::class) {
+                archiveClassifier.set("bdd")
+                from(sourceSets["bdd"].output)
+            }
+
+            target.configure<PublishingExtension> {
+                publications {
+                    maybeCreate<MavenPublication>("mavenCustom").artifact(target.tasks["bddJar"])
+                }
+            }
+
+            target.tasks["assemble"].dependsOn(bddJar)
+
+            val bddConfig by target.configurations.creating
+
+            target.artifacts {
+                add("bddConfig", bddJar)
+            }
+
+        }
+
     }
 
 }

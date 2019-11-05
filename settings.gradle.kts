@@ -34,6 +34,8 @@ include(":ontrack-kdsl-model")
 
 // E2E testing
 include(":ontrack-bdd-engine")
+include(":ontrack-bdd-model")
+include(":ontrack-bdd-definitions")
 include(":ontrack-bdd")
 
 // Core extensions
