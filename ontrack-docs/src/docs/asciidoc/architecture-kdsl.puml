@@ -31,11 +31,17 @@ note right of KDSLModel
     properties, etc.).
 end note
 
+component "bdd-model" as BDDModel
+
+note bottom of BDDModel
+    BDD steps for Ontrack
+end note
+
 package "ontrack-extension-xxx" {
 
     component "src/main" as ExtensionJAR
 
-    note right of ExtensionJAR
+    note top of ExtensionJAR
         This contains the server-side
         code of the extension. This is published
         as a JAR file consumed by the Ontrack
@@ -46,7 +52,7 @@ package "ontrack-extension-xxx" {
 
     ExtensionDSL ..> KDSLModel
 
-    note right of ExtensionDSL
+    note top of ExtensionDSL
         This contains the DSL-side (client side)
         code of the extension. This is published
         as a JAR file consumed by the _clients_
@@ -54,6 +60,50 @@ package "ontrack-extension-xxx" {
         modules.
     end note
 
+    component "src/bdd" as ExtensionBDD
+
+    note top of ExtensionBDD
+        This contains the BDD steps and definitions
+        to be used by general tests.
+
+        It can consume the extension DSL
+    end note
+
+    ExtensionBDD .right.> ExtensionDSL
+    ExtensionBDD .down.> BDDModel
+
 }
+
+component "bdd-engine" as BDDEngine
+
+note bottom of BDDEngine
+    Main BDD runner, used
+    by a BDD application
+end note
+
+component "bdd-definitions" as BDDDefinitions
+
+BDDDefinitions .right.> BDDModel
+
+note bottom of BDDDefinitions
+    Exports definitions for
+    being used by
+    external extensions.
+end note
+
+component "bdd" as BDDAcceptance <<app>>
+
+note top of BDDAcceptance
+    Main E2E tests of Ontrack,
+    testing the core
+    application and all
+     the core extensions.
+
+    Packaged as an application.
+end note
+
+BDDAcceptance .down.> BDDDefinitions
+BDDAcceptance .left.> BDDEngine
+BDDAcceptance .right.> ExtensionBDD
 
 @enduml
