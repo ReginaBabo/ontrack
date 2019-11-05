@@ -10,7 +10,7 @@ end note
 
 component "kdsl-core" as KDSLCore
 
-KDSLCore ..> KDSLClient
+KDSLCore ..> KDSLClient : api
 
 note right of KDSLCore
     Root level of KDSL client
@@ -23,7 +23,7 @@ end note
 
 component "kdsl-model" as KDSLModel
 
-KDSLModel ..> KDSLCore
+KDSLModel ..> KDSLCore : api
 
 note right of KDSLModel
     Main KDSL classes, based on the
@@ -33,7 +33,7 @@ end note
 
 component "bdd-model" as BDDModel
 
-BDDModel .right.> KDSLModel
+BDDModel .right.> KDSLModel : api
 
 note bottom of BDDModel
     BDD steps for Ontrack
@@ -52,7 +52,7 @@ package "ontrack-extension-xxx" {
 
     component "src/dsl" as ExtensionDSL
 
-    ExtensionDSL ..> KDSLModel
+    ExtensionDSL ..> KDSLModel : api
 
     note top of ExtensionDSL
         This contains the DSL-side (client side)
@@ -71,7 +71,7 @@ package "ontrack-extension-xxx" {
         It can consume the extension DSL
     end note
 
-    ExtensionBDD .right.> ExtensionDSL
+    ExtensionBDD .right.> ExtensionDSL : api
     ExtensionBDD .down.> BDDModel
 
 }
@@ -85,7 +85,7 @@ end note
 
 component "bdd-definitions" as BDDDefinitions
 
-BDDDefinitions .right.> BDDModel
+BDDDefinitions .right.> BDDModel : api
 
 note bottom of BDDDefinitions
     Exports definitions for

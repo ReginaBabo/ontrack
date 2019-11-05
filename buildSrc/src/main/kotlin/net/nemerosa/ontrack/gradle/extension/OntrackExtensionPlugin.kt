@@ -188,10 +188,11 @@ class OntrackExtensionPlugin : Plugin<Project> {
             sourceSets.create("bdd")
 
             val bddImplementation by target.configurations.getting
+            val bddApi by target.configurations.getting
 
             target.dependencies {
+                bddApi(project(path = target.path, configuration = "dslConfig"))
                 bddImplementation(project(":ontrack-bdd-model"))
-                bddImplementation(project(path = target.path, configuration = "dslConfig"))
                 bddImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
                 bddImplementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
             }
@@ -209,7 +210,9 @@ class OntrackExtensionPlugin : Plugin<Project> {
 
             target.tasks["assemble"].dependsOn(bddJar)
 
-            val bddConfig by target.configurations.creating
+            val bddConfig by target.configurations.creating {
+                extendsFrom(target.configurations["dslConfig"])
+            }
 
             target.artifacts {
                 add("bddConfig", bddJar)
