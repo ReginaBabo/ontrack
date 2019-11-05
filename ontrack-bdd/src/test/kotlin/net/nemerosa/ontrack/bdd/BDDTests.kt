@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.bdd
 
 import cucumber.api.CucumberOptions
+import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.serenitybdd.cucumber.CucumberWithSerenity
 import net.serenitybdd.junit.spring.integration.SpringIntegrationClassRule
 import net.thucydides.core.annotations.Managed
