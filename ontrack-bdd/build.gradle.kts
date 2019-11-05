@@ -21,6 +21,7 @@ val bootJar = tasks.getByName<BootJar>("bootJar") {
     }
     classpath(configurations.named("testRuntimeClasspath"))
     mainClassName = "net.nemerosa.ontrack.bdd.BDDApp"
+    requiresUnpack("**/cucumber-java-*.jar")
 }
 
 val normaliseJar by tasks.registering(Copy::class) {
