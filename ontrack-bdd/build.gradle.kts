@@ -1,7 +1,7 @@
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation(project(":ontrack-bdd-engine"))
-    implementation(project(":ontrack-kdsl-model"))
+    testImplementation("org.springframework.boot:spring-boot-starter")
+    testImplementation(project(":ontrack-bdd-engine"))
+    testImplementation(project(":ontrack-kdsl-model"))
 
-    implementation(project(":ontrack-extension-stale", "dsl"))
+    testImplementation(project(":ontrack-extension-stale", "dslConfig"))
 }

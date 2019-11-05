@@ -168,8 +168,10 @@ class OntrackExtensionPlugin : Plugin<Project> {
 
             target.tasks["assemble"].dependsOn(dslJar)
 
+            val dslConfig by target.configurations.creating
+
             target.artifacts {
-                add("dslImplementation", dslJar)
+                add("dslConfig", dslJar)
             }
 
         }
