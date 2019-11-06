@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.extension.stale.bdd
+package net.nemerosa.ontrack.bdd.extension.stale
 
 import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.steps.AbstractOntrackDSL

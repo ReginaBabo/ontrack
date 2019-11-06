@@ -1,8 +1,8 @@
-package net.nemerosa.ontrack.extension.stale.bdd
+package net.nemerosa.ontrack.bdd.extension.stale
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import net.nemerosa.ontrack.extension.stale.bdd.OntrackExtensionStaleSteps
+import net.nemerosa.ontrack.bdd.extension.stale.OntrackExtensionStaleSteps
 import net.thucydides.core.annotations.Steps
 
 class OntrackExtensionStaleStepDefinitions {

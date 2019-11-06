@@ -1,39 +1,42 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id("com.github.johnrengelman.shadow") version "5.1.0"
+}
 
 description = "BDD scenarios for Ontrack E2E tests, including for core extensions."
 
-apply(plugin = "org.springframework.boot")
-
 dependencies {
-    testImplementation(project(":ontrack-bdd-engine"))
-    testImplementation(project(":ontrack-bdd-definitions"))
+    implementation(project(":ontrack-bdd-engine"))
+    implementation(project(":ontrack-bdd-definitions"))
 
-    testImplementation(project(":ontrack-extension-stale", "bddConfig"))
+    implementation(project(":ontrack-extension-stale", "bddConfig"))
 }
+
 /**
  * Packaging
  */
 
-val bootJar = tasks.getByName<BootJar>("bootJar") {
-    bootInf {
-        from(sourceSets["test"].output)
-        into("classes")
+val shadowJar by tasks.named<ShadowJar>("shadowJar") {
+    isZip64 = true
+    archiveClassifier.set("app")
+    manifest {
+        attributes(
+                "Main-Class" to "net.nemerosa.ontrack.bdd.BDDApp"
+        )
     }
-    classpath(configurations.named("testRuntimeClasspath"))
-    mainClassName = "net.nemerosa.ontrack.bdd.BDDApp"
-    // Cucumber backend detection needs this to be loaded
-    requiresUnpack("**/cucumber-*.jar")
-    requiresUnpack("**/serenity-*.jar")
-    // Required for the detection of feature files
-    requiresUnpack("**/ontrack-bdd-definitions-*.jar")
+}
+
+tasks.named("assemble") {
+    dependsOn(shadowJar)
 }
 
 val normaliseJar by tasks.registering(Copy::class) {
-    dependsOn(bootJar)
+    dependsOn(shadowJar)
     from("$buildDir/libs/")
-    include("ontrack-bdd-$version.jar")
+    include("ontrack-bdd-$version-app.jar")
     into("$buildDir/libs/")
-    rename("ontrack-bdd-$version.jar", "ontrack-bdd.jar")
+    rename("ontrack-bdd-$version-app.jar", "ontrack-bdd-app.jar")
 }
 
 tasks.named("assemble") {
@@ -41,7 +44,7 @@ tasks.named("assemble") {
 }
 
 rootProject.tasks.named<Zip>("publicationPackage") {
-    from(bootJar)
+    from(shadowJar)
 }
 
 // Disable unit tests (none in this project)
@@ -53,7 +56,7 @@ tasks.named<Test>("test") {
 configure<PublishingExtension> {
     publications {
         named<MavenPublication>("mavenCustom") {
-            setArtifacts(listOf(bootJar))
+            setArtifacts(listOf(shadowJar))
         }
     }
 }
