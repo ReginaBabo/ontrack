@@ -10,9 +10,6 @@ RUN mkdir -p /ontrack/bdd/app
 COPY bdd.sh /ontrack/bdd/app/
 RUN chmod a+x /ontrack/bdd/app/bdd.sh
 
-# Acceptance JAR
-COPY ontrack-bdd-app.jar /ontrack/bdd/app/
-
 # General Java options
 ENV JAVA_OPTIONS ''
 
@@ -35,3 +32,6 @@ ENV ONTRACK_ACCEPTANCE_SELENIUM_GRID_URL='' \
 
 # Running the acceptance application
 ENTRYPOINT /ontrack/bdd/app/bdd.sh
+
+# Acceptance JAR
+COPY ontrack-bdd-app.jar /ontrack/bdd/app/
