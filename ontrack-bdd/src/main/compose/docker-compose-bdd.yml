@@ -37,7 +37,7 @@ services:
             condition: service_started
       environment:
          JAVA_OPTIONS: "-Xmx2048m -Xms2048m"
-         BDD_MODEL_ONTRACK_URL: "http://ontrack:8080"
+         BDD_MODEL_ONTRACK_URI: "http://ontrack:8080"
          BDD_MODEL_ONTRACK_USERNAME: "admin"
          BDD_MODEL_ONTRACK_PASSWORD: "admin"
          SERENITY_OPTIONS: "-Dwebdriver.driver=remote -Dwebdriver.remote.driver=chrome -Dwebdriver.remote.url=http://selenium:4444/wd/hub -Dwebdriver.timeouts.implicitlywait=30"
