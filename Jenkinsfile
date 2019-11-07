@@ -135,10 +135,12 @@ echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --us
 
 docker tag nemerosa/ontrack:${version} docker.nemerosa.net/nemerosa/ontrack:${version}
 docker tag nemerosa/ontrack-acceptance:${version} docker.nemerosa.net/nemerosa/ontrack-acceptance:${version}
+docker tag nemerosa/ontrack-bdd:${version} docker.nemerosa.net/nemerosa/ontrack-bdd:${version}
 docker tag nemerosa/ontrack-extension-test:${version} docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
 
 docker push docker.nemerosa.net/nemerosa/ontrack:${version}
 docker push docker.nemerosa.net/nemerosa/ontrack-acceptance:${version}
+docker push docker.nemerosa.net/nemerosa/ontrack-bdd:${version}
 docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
 """
             }
