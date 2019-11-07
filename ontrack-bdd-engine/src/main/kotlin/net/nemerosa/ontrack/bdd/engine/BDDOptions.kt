@@ -20,7 +20,7 @@ class BDDOptions {
             metaVar = "NAME",
             required = false
     )
-    var outputFileName = "acceptance.xml"
+    var outputFileName = "bdd.xml"
 
     @Option(
             name = "--cucumber-options",

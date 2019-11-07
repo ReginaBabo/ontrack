@@ -166,6 +166,100 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
             }
         }
 
+        stage('BDD') {
+            agent {
+                docker {
+                    image buildImageVersion
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                not {
+                    branch 'master'
+                }
+            }
+            environment {
+                ONTRACK_VERSION = "${version}"
+                CODECOV_TOKEN = credentials("CODECOV_TOKEN")
+            }
+            steps {
+                // Runs the acceptance tests
+                timeout(time: 25, unit: 'MINUTES') {
+                    sh """
+                        echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+
+                        echo "Launching tests..."
+                        cd ontrack-bdd/src/main/compose
+                        docker-compose --project-name bdd --file docker-compose-bdd.yml --file docker-compose-jacoco.yml up --exit-code-from ontrack_bdd
+                        """
+                }
+            }
+            post {
+                success {
+                    sh '''
+                        #!/bin/bash
+                        set -e
+                        echo "Getting Jacoco coverage"
+                        mkdir -p build/jacoco/
+                        cp ontrack-bdd/src/main/compose/jacoco/jacoco.exec build/jacoco/bdd.exec
+                        cp ontrack-bdd/src/main/compose/jacoco-kdsl/jacoco.exec build/jacoco/kdsl.exec
+                    '''
+                    // Collection of coverage in Docker
+                    sh '''
+                        ./gradlew \\
+                            codeDockerCoverageReport \\
+                            -x classes \\
+                            -PjacocoExecFile=build/jacoco/bdd.exec \\
+                            -PjacocoReportFile=build/reports/jacoco/bdd.xml \\
+                            --stacktrace \\
+                            --profile \\
+                            --console plain
+                    '''
+                    // Collection of coverage in DSL
+                    sh '''
+                        ./gradlew \\
+                            codeDockerCoverageReport \\
+                            -x classes \\
+                            -PjacocoExecFile=build/jacoco/kdsl.exec \\
+                            -PjacocoReportFile=build/reports/jacoco/kdsl.xml \\
+                            --stacktrace \\
+                            --profile \\
+                            --console plain
+                    '''
+                    // Upload to Codecov
+                    sh '''
+                        curl -s https://codecov.io/bash | bash -s -- -c -F bdd -f build/reports/jacoco/bdd.xml
+                        curl -s https://codecov.io/bash | bash -s -- -c -F kdsl -f build/reports/jacoco/kdsl.xml
+                    '''
+                }
+                always {
+                    sh '''
+                        #!/bin/bash
+                        set -e
+                        echo "Cleanup..."
+                        rm -rf build/acceptance
+                        mkdir -p build
+                        cp -r ontrack-acceptance/src/main/compose/build build/acceptance
+                        cd ontrack-acceptance/src/main/compose
+                        docker-compose --project-name local --file docker-compose.yml --file docker-compose-jacoco.yml down --volumes
+                    '''
+                    script {
+                        def results = junit('build/acceptance/*.xml')
+                        if (!pr) {
+                            ontrackValidate(
+                                    project: projectName,
+                                    branch: branchName,
+                                    build: version,
+                                    validationStamp: 'ACCEPTANCE',
+                                    testResults: results,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Local acceptance tests') {
             agent {
                 docker {
