@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.ConfigurationProperties
 import javax.annotation.PostConstruct
 
-@ConfigurationProperties("bdd")
+@ConfigurationProperties("bdd.model")
 class BDDProperties {
 
     private val logger = LoggerFactory.getLogger(BDDProperties::class.java)
