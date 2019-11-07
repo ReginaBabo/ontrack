@@ -1,8 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 plugins {
     id("com.github.johnrengelman.shadow") version "5.1.0"
 }
+
+apply(plugin = "com.bmuschko.docker-remote-api")
 
 description = "BDD scenarios for Ontrack E2E tests, including for core extensions."
 
@@ -45,6 +48,21 @@ tasks.named("assemble") {
 
 rootProject.tasks.named<Zip>("publicationPackage") {
     from(shadowJar)
+}
+
+// Docker packaging
+
+val bddDockerPrepareEnv by tasks.registering(Copy::class) {
+    dependsOn(normaliseJar)
+    from("${buildDir}/libs/ontrack-bdd-app.jar")
+    into("${projectDir}/src/main/docker")
+}
+
+val dockerBuild by tasks.registering(DockerBuildImage::class) {
+    dependsOn(bddDockerPrepareEnv)
+    inputDir.set(file("src/main/docker"))
+    tags.add("nemerosa/ontrack-bdd:$version")
+    tags.add("nemerosa/ontrack-bdd:latest")
 }
 
 // Disable unit tests (none in this project)
