@@ -21,6 +21,7 @@ class OntrackBrowserStepDefinitions {
     fun login_as_admin() {
         ontrackBrowserSteps.goToHomePage()
         ontrackBrowserSteps.loginAsAdmin()
+        ontrackBrowserSteps.goToHomePage()
     }
 
     @When("""going to the page of the validation stamp "(.*)" in branch "(.*)" of project "(.*)"""")
