@@ -12,7 +12,7 @@ infix fun BranchModelMatcher.and(other: BranchModelMatcher?): BranchModelMatcher
         } else {
             object : BranchModelMatcher {
                 override fun matches(branch: Branch): Boolean {
-                    return this.matches(branch) || other.matches(branch)
+                    return this@and.matches(branch) || other.matches(branch)
                 }
             }
         }
