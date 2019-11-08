@@ -1,0 +1,10 @@
+[[architecture-branch-model]]
+==== Branch models
+
+A project can be associated with a _branch model_ which defines a way
+to qualify automatically its branches.
+
+[plantuml,"architecture-branch-model",png]
+----
+include::architecture-branch-model.puml[]
+----

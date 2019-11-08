@@ -77,6 +77,8 @@ include::architecture-jobs.adoc[]
 
 include::architecture-encryption.adoc[]
 
+include::architecture-branch-model.adoc[]
+
 [[architecture-build-filters]]
 ==== Build filters
 

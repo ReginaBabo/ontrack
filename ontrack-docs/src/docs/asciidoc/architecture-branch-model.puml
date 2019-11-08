@@ -1,0 +1,76 @@
+@startuml
+
+package "model" {
+
+    interface BranchModelMatcher {
+        matches(branch: Branch): Boolean
+    }
+
+    interface BranchModelMatcherProvider {
+        getBranchModelMatcher(project: Project): BranchModelMatcher?
+    }
+
+    BranchModelMatcherProvider ..> BranchModelMatcher : returns
+
+    interface BranchModelMatcherService {
+        getBranchModelMatcher(project: Project): BranchModelMatcher?
+    }
+
+    BranchModelMatcherService ..> BranchModelMatcher : returns
+
+}
+
+package "service" {
+
+    class BranchModelMatcherServiceImpl {
+        getBranchModelMatcher(project: Project): BranchModelMatcher?
+    }
+
+    BranchModelMatcherServiceImpl ..|> BranchModelMatcherService
+    BranchModelMatcherServiceImpl o--> BranchModelMatcherProvider : branchModelMatcherProviders
+
+}
+
+package "git" {
+
+    class BranchingModel {
+        patterns: Map<String, String>
+    }
+
+    interface BranchingModelService {
+        getBranchingModel(project: Project): BranchingModel
+    }
+
+    BranchingModelService ..> BranchingModel : returns
+
+    ' Property
+
+    class BranchingModelProperty {
+        patterns: List<NameValue>
+    }
+
+    class BranchingModelPropertyType <<property>>
+
+    BranchingModelPropertyType ..> BranchingModelProperty : manages
+
+    ' Git implementation
+
+    class BranchingModelServiceImpl {
+        getBranchingModel(project: Project): BranchingModel
+    }
+
+    BranchingModelServiceImpl ..|> BranchingModelService
+    BranchingModelServiceImpl ..> BranchingModelPropertyType : uses
+
+    ' Provider
+
+    class GitBranchModelMatcherProvider {
+        getBranchModelMatcher(project: Project): BranchModelMatcher?
+    }
+
+    GitBranchModelMatcherProvider .right.|> BranchModelMatcherProvider
+    GitBranchModelMatcherProvider o--> BranchingModelService
+
+}
+
+@enduml
