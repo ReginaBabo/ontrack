@@ -8,3 +8,4 @@ to qualify automatically its branches.
 ----
 include::architecture-branch-model.puml[]
 ----
+
