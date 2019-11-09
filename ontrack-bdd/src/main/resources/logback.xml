@@ -9,12 +9,12 @@
         </encoder>
     </appender>
 
-    <logger name="root" level="DEBUG"/>
-<!--    <logger name="net.serenitybdd" level="DEBUG"/>-->
-<!--    <logger name="net.thucydides.core" level="DEBUG"/>-->
-<!--    <logger name="net.nemerosa.ontrack.bdd" level="DEBUG"/>-->
-<!--    <logger name="org.springframework" level="ERROR"/>-->
-    <!--<logger name="org.apache.http.wire" level="DEBUG"/>-->
+    <logger name="root" level="WARN"/>
+    <logger name="net.serenitybdd" level="INFO"/>
+    <logger name="net.thucydides.core" level="INFO"/>
+    <logger name="net.nemerosa.ontrack.bdd" level="DEBUG"/>
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.apache.http.wire" level="ERROR"/>
 
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
