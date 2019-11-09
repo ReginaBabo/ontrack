@@ -260,6 +260,15 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                             )
                         }
                     }
+                    publishHTML([
+                            allowMissing         : false,
+                            alwaysLinkToLastBuild: false,
+                            keepAll              : false,
+                            reportDir            : 'target/site/serenity',
+                            reportFiles          : 'index.html',
+                            reportName           : 'Serenity Report',
+                            reportTitles         : ''
+                    ])
                 }
             }
         }
@@ -942,7 +951,7 @@ set -e
             }
             steps {
                 // Merge to master
-                sshagent (credentials: ['SSH_JENKINS_GITHUB']) {
+                sshagent(credentials: ['SSH_JENKINS_GITHUB']) {
                     sh '''
                         git config --local user.email "jenkins@nemerosa.net"
                         git config --local user.name "Jenkins"
