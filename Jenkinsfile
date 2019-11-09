@@ -239,12 +239,19 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                 }
                 always {
                     script {
+                        sh '''
+                            rm -rf build/bdd
+                            mkdir -p build/bdd
+                            cp -r ontrack-bdd/src/main/compose/build/* build/bdd/
+                        '''
+                        def results = junit('build/bdd/*.xml')
                         if (!pr) {
                             ontrackValidate(
                                     project: projectName,
                                     branch: branchName,
                                     build: version,
                                     validationStamp: 'ACCEPTANCE',
+                                    testResults: results,
                             )
                         }
                     }

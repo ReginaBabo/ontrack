@@ -5,8 +5,7 @@ FROM openjdk:8u222-jdk
 VOLUME /ontrack/bdd/output
 
 # Root directory
-RUN mkdir -p /ontrack/bdd/app
-WORKDIR /ontrack/bdd/app
+WORKDIR /ontrack/bdd/output
 
 # Startup script
 COPY bdd.sh /ontrack/bdd/app/
