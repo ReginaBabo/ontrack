@@ -238,25 +238,13 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                     '''
                 }
                 always {
-                    sh '''
-                        #!/bin/bash
-                        set -e
-                        echo "Cleanup..."
-                        rm -rf build/acceptance
-                        mkdir -p build
-                        cp -r ontrack-acceptance/src/main/compose/build build/acceptance
-                        cd ontrack-acceptance/src/main/compose
-                        docker-compose --project-name local --file docker-compose.yml --file docker-compose-jacoco.yml down --volumes
-                    '''
                     script {
-                        def results = junit('build/acceptance/*.xml')
                         if (!pr) {
                             ontrackValidate(
                                     project: projectName,
                                     branch: branchName,
                                     build: version,
                                     validationStamp: 'ACCEPTANCE',
-                                    testResults: results,
                             )
                         }
                     }
@@ -269,6 +257,12 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                             reportName           : 'Serenity Report',
                             reportTitles         : ''
                     ])
+                }
+                cleanup {
+                    sh '''
+                        cd ontrack-bdd/src/main/compose
+                        docker-compose --project-name bdd --file docker-compose-bdd.yml --file docker-compose-jacoco.yml down --volumes
+                    '''
                 }
             }
         }
