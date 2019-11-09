@@ -255,14 +255,13 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                             )
                         }
                     }
-                    publishHTML([
+                    publishHTML(target: [
                             allowMissing         : false,
                             alwaysLinkToLastBuild: false,
-                            keepAll              : false,
+                            keepAll              : true,
                             reportDir            : 'build/bdd/target/site/serenity',
                             reportFiles          : 'index.html',
-                            reportName           : 'Serenity Report',
-                            reportTitles         : ''
+                            reportName           : 'Serenity Report'
                     ])
                 }
                 cleanup {
