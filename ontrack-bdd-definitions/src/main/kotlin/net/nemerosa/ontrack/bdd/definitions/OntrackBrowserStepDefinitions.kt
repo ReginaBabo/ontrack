@@ -15,6 +15,7 @@ class OntrackBrowserStepDefinitions {
     fun login_with_account(accountRegisterName: String) {
         ontrackBrowserSteps.goToHomePage()
         ontrackBrowserSteps.loginWithAccount(accountRegisterName)
+        ontrackBrowserSteps.goToHomePage()
     }
 
     @When("""login as admin""")
