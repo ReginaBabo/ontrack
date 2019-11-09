@@ -244,7 +244,7 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                             mkdir -p build/bdd
                             cp -r ontrack-bdd/src/main/compose/build/* build/bdd/
                         '''
-                        def results = junit('build/bdd/*.xml')
+                        def results = junit('build/bdd/build/*.xml')
                         if (!pr) {
                             ontrackValidate(
                                     project: projectName,
@@ -259,7 +259,7 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                             allowMissing         : false,
                             alwaysLinkToLastBuild: false,
                             keepAll              : false,
-                            reportDir            : 'target/site/serenity',
+                            reportDir            : 'build/bdd/target/site/serenity',
                             reportFiles          : 'index.html',
                             reportName           : 'Serenity Report',
                             reportTitles         : ''
