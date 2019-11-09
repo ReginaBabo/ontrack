@@ -188,13 +188,15 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
             steps {
                 // Runs the acceptance tests
                 timeout(time: 25, unit: 'MINUTES') {
-                    sh """
-                        echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
-
-                        echo "Launching tests..."
-                        cd ontrack-bdd/src/main/compose
-                        docker-compose --project-name bdd --file docker-compose-bdd.yml --file docker-compose-jacoco.yml up --exit-code-from ontrack_bdd
-                        """
+                    ansiColor('xterm') {
+                        sh """
+                            echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+    
+                            echo "Launching tests..."
+                            cd ontrack-bdd/src/main/compose
+                            docker-compose --project-name bdd --file docker-compose-bdd.yml --file docker-compose-jacoco.yml up --exit-code-from ontrack_bdd
+                            """
+                    }
                 }
             }
             post {
