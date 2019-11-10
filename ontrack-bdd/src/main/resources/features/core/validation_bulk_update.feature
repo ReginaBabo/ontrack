@@ -1,6 +1,6 @@
-Feature: Buld update of validation stamps
+Feature: Bulk update of validation stamps
 
-  @feature=validation_build_update
+  @feature=validation_bulk_update
   Scenario: Validation bulk update accessible to global validation manager
     Given a project "a"
     And a branch "b" in project "a"
@@ -12,7 +12,7 @@ Feature: Buld update of validation stamps
     And going to the page of the validation stamp "VS" in branch "b" of project "a"
     Then check that the validation stamp page contains the bulk update command
 
-  @feature=validation_build_update
+  @feature=validation_bulk_update
   Scenario: Validation bulk update accessible to administrator
     Given a project "a"
     And a branch "b" in project "a"
