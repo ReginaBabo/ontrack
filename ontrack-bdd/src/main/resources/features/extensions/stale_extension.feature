@@ -1,6 +1,5 @@
 Feature: Stale extension
 
-  @feature=extension
   @extension=stale
   Scenario: Stale property
     Given a project "a"
@@ -14,7 +13,6 @@ Feature: Stale extension
       | deletingDuration  | 30 |
       | promotionsToKeep  |    |
 
-  @feature=extension
   @extension=stale
   Scenario: Stale property with promotions to keep
     Given a project "a"
