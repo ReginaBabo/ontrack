@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver
 import org.springframework.test.context.ContextConfiguration
 
 @RunWith(CucumberWithSerenity::class)
-@CucumberOptions(features = ["classpath:features"])
+@CucumberOptions(features = ["classpath:features"], plugin = ["json"])
 @ContextConfiguration(classes = [BDDConfig::class])
 class BDDTests {
 
