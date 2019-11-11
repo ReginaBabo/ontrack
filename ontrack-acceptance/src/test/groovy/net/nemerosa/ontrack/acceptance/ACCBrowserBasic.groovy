@@ -45,23 +45,6 @@ class ACCBrowserBasic extends AcceptanceTestClient {
     }
 
     @Test
-    @AcceptanceTest(AcceptanceTestContext.SMOKE)
-    void 'Project creation'() {
-        browser { browser ->
-            HomePage home = loginAsAdmin(browser)
-
-            def projectName = uid('P')
-            home.createProject {
-                name = projectName
-                description = "Project ${projectName}"
-            }
-
-            // Checks the project is visible in the list
-            assert home.isProjectPresent(projectName)
-        }
-    }
-
-    @Test
     void 'Project creation - name already exists'() {
         def projectName = doCreateProject().path('name').asText()
         browser { browser ->

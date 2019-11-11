@@ -13,8 +13,12 @@ class OntrackBrowserHomeStepDefinitions {
 
     @When("""I create a project "(.*)"""")
     fun createProject(projectRef: String) {
-        ontrackBrowserSteps.goToHomePage()
         ontrackBrowserSteps.createProject(projectRef)
+    }
+
+    @Then("""project "(.*)" is present in home page""")
+    fun checkProjectInHomePage(projectRef: String) {
+        ontrackBrowserSteps.checkProjectInHomePage(projectRef)
     }
 
 }

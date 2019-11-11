@@ -4,7 +4,6 @@ import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.pages.CompletePage
 import net.nemerosa.ontrack.bdd.model.pages.HomePage
 import net.nemerosa.ontrack.bdd.model.pages.ValidationStampPage
-import net.nemerosa.ontrack.bdd.model.support.uid
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.kdsl.model.branch
 import net.nemerosa.ontrack.kdsl.model.validationStamp
@@ -75,8 +74,16 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     fun createProject(projectRef: String) {
         currentPageAt<HomePage> {
             createProject {
-                name = uid(projectRef)
+                val projectName = ontrackDSLWorld.uniqueName("project", projectRef)
+                name = projectName
             }
+        }
+    }
+
+    @Step
+    fun checkProjectInHomePage(projectRef: String) {
+        currentPageAt<HomePage> {
+            checkProjectIsPresent(ontrackDSLWorld.uniqueName("project", projectRef))
         }
     }
 

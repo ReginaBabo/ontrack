@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.bdd.model.pages
 
 import net.serenitybdd.core.annotations.findby.By
+import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.At
 import net.thucydides.core.annotations.WhenPageOpens
 import org.openqa.selenium.WebDriver
@@ -21,6 +22,10 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
         dialog.ok()
         // Returns the dialog
         return dialog
+    }
+
+    fun checkProjectIsPresent(name: String) {
+        name.asLink?.waitUntilVisible<WebElementFacade>()
     }
 
 }
