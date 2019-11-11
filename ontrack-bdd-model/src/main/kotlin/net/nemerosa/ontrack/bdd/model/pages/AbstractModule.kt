@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.bdd.model.pages
 import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.By
 import org.openqa.selenium.support.PageFactory
+import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -16,6 +17,13 @@ abstract class AbstractModule(
 
     private fun init() {
         PageFactory.initElements(parent.driver, this)
+    }
+
+    protected fun element(by: By) = object : ReadOnlyProperty<AbstractModule, WebElementFacade> {
+        override fun getValue(thisRef: AbstractModule, property: KProperty<*>): WebElementFacade {
+            return parent.find<WebElementFacade>(by)
+        }
+
     }
 
     protected fun textInput(by: By) = object : ReadWriteProperty<AbstractModule, String> {
