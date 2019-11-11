@@ -42,8 +42,6 @@ class BDDRunner(
                 runtimeOptions
         )
 
-        System.setProperty("acceptance.output", options.outputDir.absolutePath)
-
         val ok = runner.run(
                 runner = CucumberWithSerenity(testClass.java),
                 outputDir = options.outputDir,
