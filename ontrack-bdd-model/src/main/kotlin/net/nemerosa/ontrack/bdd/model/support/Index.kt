@@ -15,6 +15,8 @@ class Index<T> {
         index.clear()
     }
 
+    fun getOrNull(name: String): T? = index[name]
+
 }
 
 fun <T> indexOf() = Index<T>()

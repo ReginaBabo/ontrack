@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.bdd.definitions
 import cucumber.api.java.After
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import net.nemerosa.ontrack.bdd.model.pages.ProjectPage
 import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserHomeSteps
 import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserSteps
 import net.thucydides.core.annotations.Steps
@@ -41,6 +42,11 @@ class OntrackBrowserStepDefinitions {
     @Then("""check that the validation stamp page contains the bulk update command""")
     fun check_validation_stamp_page_contains_bulk_update_command() {
         ontrackBrowserSteps.checkBuldUpdateCommandPresentInValidationStampPage()
+    }
+
+    @When("""I go to project page for "(.*)"""")
+    fun goToProjectPage(projectRef: String) {
+        ontrackBrowserSteps.goToProjectPage(projectRef)
     }
 
     @After

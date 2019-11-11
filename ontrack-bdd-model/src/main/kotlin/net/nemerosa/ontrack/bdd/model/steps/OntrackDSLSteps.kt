@@ -1,8 +1,8 @@
 package net.nemerosa.ontrack.bdd.model.steps
 
 import net.nemerosa.ontrack.bdd.model.BDDConfig
-import net.nemerosa.ontrack.bdd.model.support.uid
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
+import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
 import net.nemerosa.ontrack.bdd.model.worlds.withPassword
 import net.nemerosa.ontrack.kdsl.model.*
 import net.thucydides.core.annotations.Step
@@ -17,10 +17,13 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     @Autowired
     private lateinit var ontrackDSLWorld: OntrackDSLWorld
 
+    @Autowired
+    private lateinit var ontrackUtilityWorld: OntrackUtilityWorld
+
     @Step
     fun createAndRegisterProject(name: String) {
         // Actual name of the project
-        val projectName = uid("P")
+        val projectName = ontrackUtilityWorld.uniqueName("project", "P")
         // Gets or creates the project, registers it and returns it
         ontrack.project(projectName).apply {
             ontrackDSLWorld.projects[name] = this
@@ -48,7 +51,7 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     @Step
     fun createAndRegisterAccountGroup(accountGroupRegisterName: String) {
         // Actual name of the account group
-        val accountGroupName = uid("AG")
+        val accountGroupName = ontrackUtilityWorld.uniqueName("accountGroup", "AG")
         // Gets or creates the account group, registers it and returns it
         ontrack.accounts.accountGroup(accountGroupName).apply {
             ontrackDSLWorld.accountGroups[accountGroupRegisterName] = this
@@ -65,10 +68,10 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
         // Gets the group
         val group = ontrackDSLWorld.accountGroups[accountGroupRegisterName]
         // Password
-        val password = uid("P")
+        val password = ontrackUtilityWorld.uniqueName("password", "P")
         // Creates the account
         ontrack.accounts.createAccount(
-                uid("A"),
+                ontrackUtilityWorld.uniqueName("account", "A"),
                 "$accountRegisterName Test",
                 "$accountRegisterName@test.com",
                 password,

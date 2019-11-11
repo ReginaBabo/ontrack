@@ -9,7 +9,7 @@ class OntrackDSLStepDefinitions {
     @Steps
     lateinit var ontrackDSLSteps: OntrackDSLSteps
 
-    @Given("""^a project "(.*)$"""")
+    @Given("""^a project "(.*)"$""")
     fun project_available(name: String) {
         ontrackDSLSteps.createAndRegisterProject(name)
     }

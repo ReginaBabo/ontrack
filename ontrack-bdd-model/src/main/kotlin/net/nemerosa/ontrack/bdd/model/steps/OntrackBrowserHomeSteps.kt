@@ -50,7 +50,7 @@ class OntrackBrowserHomeSteps : AbstractOntrackBrowserSteps() {
     }
 
     @Step
-    fun goToProjectPage(projectRef: String) {
+    fun navigateToProjectPage(projectRef: String) {
         currentPageAt<HomePage> {
             clickOnProject(ontrackUtilityWorld.replaceTokens(projectRef))
         }

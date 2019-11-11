@@ -25,9 +25,9 @@ class OntrackBrowserHomeStepDefinitions {
         ontrackBrowserHomeSteps.checkProjectDialogInError(message)
     }
 
-    @When("""I go to project "(.*)"""")
-    fun goToProjectPage(projectRef: String) {
-        ontrackBrowserHomeSteps.goToProjectPage(projectRef)
+    @When("""I navigate to project "(.*)"""")
+    fun navigateToProjectPage(projectRef: String) {
+        ontrackBrowserHomeSteps.navigateToProjectPage(projectRef)
     }
 
 }

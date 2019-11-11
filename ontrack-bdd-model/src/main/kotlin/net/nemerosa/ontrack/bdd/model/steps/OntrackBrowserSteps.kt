@@ -2,10 +2,12 @@ package net.nemerosa.ontrack.bdd.model.steps
 
 import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.pages.CompletePage
+import net.nemerosa.ontrack.bdd.model.pages.ProjectPage
 import net.nemerosa.ontrack.bdd.model.pages.ValidationStampPage
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
 import net.nemerosa.ontrack.kdsl.model.branch
+import net.nemerosa.ontrack.kdsl.model.findProjectByName
 import net.nemerosa.ontrack.kdsl.model.validationStamp
 import net.thucydides.core.annotations.Step
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,6 +59,19 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     fun checkBuldUpdateCommandPresentInValidationStampPage() {
         currentPageAt<ValidationStampPage> {
             checkBuldUpdateCommandPresent()
+        }
+    }
+
+    @Step
+    fun goToProjectPage(projectRef: String) {
+        // Gets the project name as a reference
+        val projectName = ontrackDSLWorld.projects.getOrNull(projectRef)?.name
+                ?: ontrackUtilityWorld.replaceTokens(projectRef)
+        // Loads the project by name
+        val project = ontrack.findProjectByName(projectName)
+                ?: throw IllegalStateException("Cannot find project $projectName referenced by $projectRef")
+        page<ProjectPage> {
+            open(project.id)
         }
     }
 
