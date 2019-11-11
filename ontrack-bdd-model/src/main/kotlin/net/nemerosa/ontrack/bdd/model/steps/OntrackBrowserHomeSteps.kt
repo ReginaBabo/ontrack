@@ -42,4 +42,11 @@ class OntrackBrowserHomeSteps : AbstractOntrackBrowserSteps() {
         }
     }
 
+    @Step
+    fun checkProjectDialogInError(message: String) {
+        currentPageAt<HomePage> {
+            checkProjectDialogInError(ontrackUtilityWorld.replaceTokens(message))
+        }
+    }
+
 }

@@ -20,4 +20,9 @@ class OntrackBrowserHomeStepDefinitions {
         ontrackBrowserHomeSteps.checkProjectInHomePage(projectRef)
     }
 
+    @Then("""project dialog shows error "(.*)"""")
+    fun checkProjectDialogInError(message: String) {
+        ontrackBrowserHomeSteps.checkProjectDialogInError(message)
+    }
+
 }

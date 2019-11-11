@@ -28,6 +28,10 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
         name.asLink?.waitUntilVisible<WebElementFacade>()
     }
 
+    fun checkProjectDialogInError(message: String) {
+        ProjectDialog(this).checkError(message)
+    }
+
 }
 
 class ProjectDialog(parent: AbstractPage) : AbstractDialog<ProjectDialog>(parent) {
