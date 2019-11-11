@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.kdsl.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 import net.nemerosa.ontrack.kdsl.core.Resource
 import net.nemerosa.ontrack.kdsl.core.support.DSLException
@@ -18,13 +19,27 @@ val Ontrack.labels: Labels
 /**
  * Label
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Label(
         val id: Int,
         val category: String?,
         val name: String,
         val description: String?,
-        val color: String
+        val color: String,
+        val computedBy: LabelProviderDescription?,
+        val foregroundColor: String,
+        val display: String
 )
+
+/**
+ * Descriptor
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class LabelProviderDescription(
+        val id: String,
+        val name: String
+)
+
 
 /**
  * Creating a global label
@@ -48,6 +63,9 @@ val Labels.list: List<Label>
             name
             description
             color
+            computedBy { id name }
+            foregroundColor
+            display
         }
     """.trimIndent().graphQLQuery("Labels")
             .data["labels"]
@@ -64,6 +82,9 @@ fun Labels.findLabel(category: String?, name: String): Label? =
                 name
                 description
                 color
+                computedBy { id name }
+                foregroundColor
+                display
             }
         """.trimIndent().graphQLQuery(
                 "LabelSearch",
@@ -93,17 +114,20 @@ fun Project.assignLabel(category: String?, name: String, createIfMissing: Boolea
 val Project.labels: List<Label>
     get() =
         """
-            projects(id: ${"$"}) {
+            projects(id: ${"$"}id) {
                 labels {
                     id
                     category
                     name
                     description
                     color
+                    computedBy { id name }
+                    foregroundColor
+                    display
                 }
             }
         """.graphQLQuery("Labels", "id" type "Int" value id)
-                .data["projects"].map { it.toObject<Label>() }
+                .data["projects"][0]["labels"].map { it.toObject<Label>() }
 
 /**
  * Thrown when a label cannot be found

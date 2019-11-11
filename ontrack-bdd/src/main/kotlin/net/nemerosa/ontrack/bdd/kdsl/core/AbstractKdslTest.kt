@@ -4,6 +4,6 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 abstract class AbstractKdslTest {
 
-    protected lateinit var ontrack: Ontrack
+    protected val ontrack: Ontrack = Ontrack.connect()
 
 }

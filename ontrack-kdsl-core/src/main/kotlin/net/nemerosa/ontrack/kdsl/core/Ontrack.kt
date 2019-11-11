@@ -20,7 +20,7 @@ class Ontrack(ontrackConnector: OntrackConnector) : Resource() {
          * Utility method to get an [Ontrack] instance.
          */
         @JvmStatic
-        fun connect(properties: OntrackConnectorProperties): Ontrack {
+        fun connect(properties: OntrackConnectorProperties? = null): Ontrack {
             val ontrackConnector = OntrackConnectorBuilder.getOrCreateFromEnv(properties)
             return Ontrack(ontrackConnector)
         }
