@@ -26,6 +26,11 @@ abstract class Connector {
      */
     open fun init() {}
 
+    /**
+     * Access to the Ontrack root
+     */
+    val ontrack: Ontrack get() = Ontrack(ontrackConnector)
+
     inline fun <reified T> JsonNode?.toObject(): T =
             this?.parse<T>() ?: throw IllegalStateException("Cannot convert a null JSON object")
 
