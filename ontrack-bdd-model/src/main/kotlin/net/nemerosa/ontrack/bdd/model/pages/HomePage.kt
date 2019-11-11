@@ -13,4 +13,20 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
         waitForPresenceOf(".ot-command-api")
     }
 
+    fun createProject(configure: ProjectDialog.() -> Unit): ProjectDialog {
+        val createProjectCommand = "ot-command-project-new".byClass
+        createProjectCommand.click()
+        val dialog = ProjectDialog(this).waitFor()
+        dialog.configure()
+        dialog.ok()
+        // Returns the dialog
+        return dialog
+    }
+
+}
+
+class ProjectDialog(parent: AbstractPage) : AbstractDialog<ProjectDialog>(parent) {
+
+    var name: String by textInput(By.name("name"))
+
 }
