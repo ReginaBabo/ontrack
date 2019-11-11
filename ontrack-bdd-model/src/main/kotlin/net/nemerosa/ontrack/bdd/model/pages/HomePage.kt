@@ -32,6 +32,14 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
         ProjectDialog(this).checkError(message)
     }
 
+    fun clickOnProject(name: String) {
+        name.asLink?.apply {
+            waitUntilVisible<WebElementFacade>()
+        }?.apply {
+            click()
+        } ?: throw IllegalStateException("Cannot find project with name $name")
+    }
+
 }
 
 class ProjectDialog(parent: AbstractPage) : AbstractDialog<ProjectDialog>(parent) {

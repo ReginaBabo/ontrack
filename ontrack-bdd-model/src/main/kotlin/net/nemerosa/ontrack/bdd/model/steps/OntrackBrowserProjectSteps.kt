@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.bdd.model.steps
 
 import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.pages.HomePage
+import net.nemerosa.ontrack.bdd.model.pages.ProjectPage
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
 import net.thucydides.core.annotations.Step
@@ -11,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration
 
 @Component
 @ContextConfiguration(classes = [BDDConfig::class])
-class OntrackBrowserHomeSteps : AbstractOntrackBrowserSteps() {
+class OntrackBrowserProjectSteps : AbstractOntrackBrowserSteps() {
 
     @Autowired
     private lateinit var ontrackDSLWorld: OntrackDSLWorld
@@ -53,6 +54,22 @@ class OntrackBrowserHomeSteps : AbstractOntrackBrowserSteps() {
     fun goToProjectPage(projectRef: String) {
         currentPageAt<HomePage> {
             clickOnProject(ontrackUtilityWorld.replaceTokens(projectRef))
+        }
+    }
+
+    @Step
+    fun createBranch(branchRef: String) {
+        currentPageAt<ProjectPage> {
+            createBranch {
+                name = ontrackUtilityWorld.replaceTokens(branchRef)
+            }
+        }
+    }
+
+    @Step
+    fun checkBranchInProjectPage(branchRef: String) {
+        currentPageAt<ProjectPage> {
+            checkBranchIsPresent(ontrackUtilityWorld.replaceTokens(branchRef))
         }
     }
 

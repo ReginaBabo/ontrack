@@ -29,7 +29,7 @@ class OntrackUtilityWorld {
      * Replacing generic unique names in a string
      */
     fun replaceTokens(input: String): String {
-        val regex = "<([a-z]*):([a-z]*)>".toRegex()
+        val regex = "<([a-z]*):([a-zA-Z0-9]*)>".toRegex()
         return regex.replace(input) { result ->
             val group = result.groupValues[1]
             val key = result.groupValues[2]
