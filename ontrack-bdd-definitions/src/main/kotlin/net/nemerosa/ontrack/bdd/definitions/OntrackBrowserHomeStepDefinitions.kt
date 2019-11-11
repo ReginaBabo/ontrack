@@ -1,24 +1,23 @@
 package net.nemerosa.ontrack.bdd.definitions
 
-import cucumber.api.java.After
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserSteps
+import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserHomeSteps
 import net.thucydides.core.annotations.Steps
 
 class OntrackBrowserHomeStepDefinitions {
 
     @Steps
-    lateinit var ontrackBrowserSteps: OntrackBrowserSteps
+    lateinit var ontrackBrowserHomeSteps: OntrackBrowserHomeSteps
 
     @When("""I create a project "(.*)"""")
     fun createProject(projectRef: String) {
-        ontrackBrowserSteps.createProject(projectRef)
+        ontrackBrowserHomeSteps.createProject(projectRef)
     }
 
     @Then("""project "(.*)" is present in home page""")
     fun checkProjectInHomePage(projectRef: String) {
-        ontrackBrowserSteps.checkProjectInHomePage(projectRef)
+        ontrackBrowserHomeSteps.checkProjectInHomePage(projectRef)
     }
 
 }

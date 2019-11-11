@@ -2,9 +2,9 @@ package net.nemerosa.ontrack.bdd.model.steps
 
 import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.pages.CompletePage
-import net.nemerosa.ontrack.bdd.model.pages.HomePage
 import net.nemerosa.ontrack.bdd.model.pages.ValidationStampPage
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
+import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
 import net.nemerosa.ontrack.kdsl.model.branch
 import net.nemerosa.ontrack.kdsl.model.validationStamp
 import net.thucydides.core.annotations.Step
@@ -18,6 +18,9 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
 
     @Autowired
     private lateinit var ontrackDSLWorld: OntrackDSLWorld
+
+    @Autowired
+    private lateinit var ontrackUtilityWorld: OntrackUtilityWorld
 
     @Step
     fun loginWith(username: String, password: String) {
@@ -35,13 +38,6 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     @Step
     fun loginAsAdmin() {
         loginWith(bddProperties.ontrack.username, bddProperties.ontrack.password)
-    }
-
-    @Step
-    fun goToHomePage() {
-        page<HomePage> {
-            open()
-        }
     }
 
     @Step
@@ -67,24 +63,8 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     @Step
     fun closeBrowser() {
         ontrackDSLWorld.clear()
+        ontrackUtilityWorld.clear()
         pages.driver.quit()
-    }
-
-    @Step
-    fun createProject(projectRef: String) {
-        currentPageAt<HomePage> {
-            createProject {
-                val projectName = ontrackDSLWorld.uniqueName("project", projectRef)
-                name = projectName
-            }
-        }
-    }
-
-    @Step
-    fun checkProjectInHomePage(projectRef: String) {
-        currentPageAt<HomePage> {
-            checkProjectIsPresent(ontrackDSLWorld.uniqueName("project", projectRef))
-        }
     }
 
 }

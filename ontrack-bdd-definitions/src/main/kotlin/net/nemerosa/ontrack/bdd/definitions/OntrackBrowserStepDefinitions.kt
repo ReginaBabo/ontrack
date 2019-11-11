@@ -3,26 +3,30 @@ package net.nemerosa.ontrack.bdd.definitions
 import cucumber.api.java.After
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserHomeSteps
 import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserSteps
 import net.thucydides.core.annotations.Steps
 
 class OntrackBrowserStepDefinitions {
 
     @Steps
+    lateinit var ontrackBrowserHomeSteps: OntrackBrowserHomeSteps
+
+    @Steps
     lateinit var ontrackBrowserSteps: OntrackBrowserSteps
 
     @When("""login with the "(.*)" account""")
     fun login_with_account(accountRegisterName: String) {
-        ontrackBrowserSteps.goToHomePage()
+        ontrackBrowserHomeSteps.goToHomePage()
         ontrackBrowserSteps.loginWithAccount(accountRegisterName)
-        ontrackBrowserSteps.goToHomePage()
+        ontrackBrowserHomeSteps.goToHomePage()
     }
 
     @When("""login as admin""")
     fun login_as_admin() {
-        ontrackBrowserSteps.goToHomePage()
+        ontrackBrowserHomeSteps.goToHomePage()
         ontrackBrowserSteps.loginAsAdmin()
-        ontrackBrowserSteps.goToHomePage()
+        ontrackBrowserHomeSteps.goToHomePage()
     }
 
     @When("""going to the page of the validation stamp "(.*)" in branch "(.*)" of project "(.*)"""")
