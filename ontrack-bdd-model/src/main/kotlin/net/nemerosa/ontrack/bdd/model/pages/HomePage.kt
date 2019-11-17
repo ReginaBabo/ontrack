@@ -15,6 +15,7 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
     }
 
     fun createProject(configure: ProjectDialog.() -> Unit): ProjectDialog {
+        waitForPresenceOf(".ot-command-project-new")
         val createProjectCommand = "ot-command-project-new".byClass
         createProjectCommand.click()
         val dialog = ProjectDialog(this).waitFor()

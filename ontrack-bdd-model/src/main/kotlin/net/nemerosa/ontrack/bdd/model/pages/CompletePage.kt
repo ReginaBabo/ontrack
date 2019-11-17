@@ -19,6 +19,8 @@ open class CompletePage(driver: WebDriver) : AbstractPage(driver) {
         "password".byName enter password
 
         "btn-primary".byClass.click()
+
+        waitForPresenceOf("#header-user-menu")
     }
 
 }
