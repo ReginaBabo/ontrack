@@ -57,3 +57,11 @@ val dockerBuild by tasks.registering(DockerBuildImage::class) {
 rootProject.tasks.named<Zip>("publicationPackage") {
     from(bootJar)
 }
+
+configure<PublishingExtension> {
+    publications {
+        named<MavenPublication>("mavenCustom") {
+            setArtifacts(listOf(bootJar))
+        }
+    }
+}
