@@ -40,7 +40,6 @@ data class LabelProviderDescription(
         val name: String
 )
 
-
 /**
  * Creating a global label
  */
@@ -51,6 +50,33 @@ fun Labels.createLabel(category: String?, name: String, description: String = ""
                 "description" to description,
                 "color" to color
         )).toObject()
+
+/**
+ * Creating or updating a global label
+ */
+fun Labels.label(category: String?, name: String, description: String = "", color: String = "#000000"): Label {
+    val label = findLabel(category, name)
+    return if (label != null) {
+        if (label.category != category) {
+            throw LabelCannotChangeCategoryException(label.category, label.name, category)
+        } else {
+            ontrackConnector.put("rest/labels/${label.id}/update", mapOf(
+                    "category" to category,
+                    "name" to name,
+                    "description" to description,
+                    "color" to color
+            ))
+            findLabel(category, name) ?: throw LabelNotFoundException(category, name)
+        }
+    } else {
+        ontrackConnector.post("rest/labels/create", mapOf(
+                "category" to category,
+                "name" to name,
+                "description" to description,
+                "color" to color
+        )).toObject()
+    }
+}
 
 /**
  * List of labels
@@ -109,6 +135,16 @@ fun Project.assignLabel(category: String?, name: String, createIfMissing: Boolea
 }
 
 /**
+ * Unassigning a label to a project
+ */
+fun Project.unassignLabel(category: String?, name: String, createIfMissing: Boolean = false) {
+    val label = ontrack.labels.findLabel(category, name)
+    if (label != null) {
+        ontrackConnector.put("/rest/labels/projects/$id/unassign/${label.id}", emptyMap<String, String>())
+    }
+}
+
+/**
  * Gets list of labels for a project
  */
 val Project.labels: List<Label>
@@ -134,4 +170,8 @@ val Project.labels: List<Label>
  */
 class LabelNotFoundException(category: String?, name: String) : DSLException(
         """Cannot find label: $category:$name"""
+)
+
+class LabelCannotChangeCategoryException(category: String?, name: String, newCategory: String?) : DSLException(
+        """Cannot change a category for an existing label ($category:$name) to ($newCategory:$name)"""
 )

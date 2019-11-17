@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.acceptance
 
 import net.nemerosa.ontrack.acceptance.support.AcceptanceTestSuite
+import net.nemerosa.ontrack.acceptance.support.KDSL
 import org.junit.Test
 
 import static net.nemerosa.ontrack.test.TestUtils.uid
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertTrue
 class ACCDSLProjectLabels extends AbstractACCDSL {
 
     @Test
+    @KDSL("KdslTestProjectLabels")
     void 'Creating and assigning project labels'() {
         def projectName = uid('P')
         def project = ontrack.project(projectName)
@@ -35,6 +37,7 @@ class ACCDSLProjectLabels extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestProjectLabels")
     void 'Idempotent creation of labels'() {
         // Creating a global label
         def name = uid('L')
@@ -53,6 +56,7 @@ class ACCDSLProjectLabels extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestProjectLabels")
     void 'Assigning and unassigning project labels'() {
         def projectName = uid('P')
         def project = ontrack.project(projectName)
@@ -77,6 +81,7 @@ class ACCDSLProjectLabels extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestProjectLabels")
     void 'Creating and assigning project label in same operation'() {
         def projectName = uid('P')
         def project = ontrack.project(projectName)
