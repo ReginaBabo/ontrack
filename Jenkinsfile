@@ -136,11 +136,13 @@ echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --us
 docker tag nemerosa/ontrack:${version} docker.nemerosa.net/nemerosa/ontrack:${version}
 docker tag nemerosa/ontrack-acceptance:${version} docker.nemerosa.net/nemerosa/ontrack-acceptance:${version}
 docker tag nemerosa/ontrack-bdd:${version} docker.nemerosa.net/nemerosa/ontrack-bdd:${version}
+docker tag nemerosa/ontrack-kdsl-test:${version} docker.nemerosa.net/nemerosa/ontrack-kdsl-test:${version}
 docker tag nemerosa/ontrack-extension-test:${version} docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
 
 docker push docker.nemerosa.net/nemerosa/ontrack:${version}
 docker push docker.nemerosa.net/nemerosa/ontrack-acceptance:${version}
 docker push docker.nemerosa.net/nemerosa/ontrack-bdd:${version}
+docker push docker.nemerosa.net/nemerosa/ontrack-kdsl-test:${version}
 docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
 """
             }
@@ -233,8 +235,8 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                     '''
                     // Upload to Codecov
                     sh '''
-                        curl -s https://codecov.io/bash | bash -s -- -c -F bdd -f build/reports/jacoco/bdd.xml
-                        curl -s https://codecov.io/bash | bash -s -- -c -F kdsl -f build/reports/jacoco/kdsl.xml
+                        curl -s https://codecov.io/bash | bash -s -- -c -F bdd-server -f build/reports/jacoco/bdd.xml
+                        curl -s https://codecov.io/bash | bash -s -- -c -F bdd-client -f build/reports/jacoco/kdsl.xml
                     '''
                 }
                 always {
@@ -250,7 +252,7 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                                     project: projectName,
                                     branch: branchName,
                                     build: version,
-                                    validationStamp: 'ACCEPTANCE',
+                                    validationStamp: 'BDD',
                                     testResults: results,
                             )
                         }
@@ -268,6 +270,103 @@ docker push docker.nemerosa.net/nemerosa/ontrack-extension-test:${version}
                     sh '''
                         cd ontrack-bdd/src/main/compose
                         docker-compose --project-name bdd --file docker-compose-bdd.yml --file docker-compose-jacoco.yml down --volumes
+                    '''
+                }
+            }
+        }
+
+        stage('KDSL') {
+            agent {
+                docker {
+                    image buildImageVersion
+                    args "--volume /var/run/docker.sock:/var/run/docker.sock"
+                }
+            }
+            when {
+                beforeAgent true
+                not {
+                    branch 'master'
+                }
+            }
+            environment {
+                ONTRACK_VERSION = "${version}"
+                CODECOV_TOKEN = credentials("CODECOV_TOKEN")
+            }
+            steps {
+                // Runs the acceptance tests
+                timeout(time: 25, unit: 'MINUTES') {
+                    ansiColor('xterm') {
+                        sh """
+                            echo \${DOCKER_REGISTRY_CREDENTIALS_PSW} | docker login docker.nemerosa.net --username \${DOCKER_REGISTRY_CREDENTIALS_USR} --password-stdin
+    
+                            echo "Launching tests..."
+                            cd ontrack-kdsl-test/src/main/compose
+                            docker-compose --project-name kdsl --file docker-compose.yml --file docker-compose-jacoco.yml up --exit-code-from ontrack_kdsl
+                            """
+                    }
+                }
+            }
+            post {
+                success {
+                    sh '''
+                        #!/bin/bash
+                        set -e
+                        echo "Getting Jacoco coverage"
+                        mkdir -p build/jacoco/
+                        cp ontrack-kdsl-test/src/main/compose/jacoco/jacoco.exec build/jacoco/kdsl-test-server.exec
+                        cp ontrack-kdsl-test/src/main/compose/jacoco-kdsl/jacoco.exec build/jacoco/kdsl-test-client.exec
+                    '''
+                    // Collection of coverage in Docker
+                    sh '''
+                        ./gradlew \\
+                            codeDockerCoverageReport \\
+                            -x classes \\
+                            -PjacocoExecFile=build/jacoco/kdsl-test-server.exec \\
+                            -PjacocoReportFile=build/reports/jacoco/kdsl-test-server.xml \\
+                            --stacktrace \\
+                            --profile \\
+                            --console plain
+                    '''
+                    // Collection of coverage in DSL
+                    sh '''
+                        ./gradlew \\
+                            codeDockerCoverageReport \\
+                            -x classes \\
+                            -PjacocoExecFile=build/jacoco/kdsl-test-client.exec \\
+                            -PjacocoReportFile=build/reports/jacoco/kdsl-test-client.xml \\
+                            --stacktrace \\
+                            --profile \\
+                            --console plain
+                    '''
+                    // Upload to Codecov
+                    sh '''
+                        curl -s https://codecov.io/bash | bash -s -- -c -F kdsl-server -f build/reports/jacoco/kdsl-test-server.xml
+                        curl -s https://codecov.io/bash | bash -s -- -c -F kdsl-client -f build/reports/jacoco/kdsl-test-client.xml
+                    '''
+                }
+                always {
+                    script {
+                        sh '''
+                            rm -rf build/kdsl-test
+                            mkdir -p build/kdsl-test
+                            cp -r ontrack-kdsl-test/src/main/compose/build/* build/kdsl-test/
+                        '''
+                        def results = junit('build/kdsl-test/build/*.xml')
+                        if (!pr) {
+                            ontrackValidate(
+                                    project: projectName,
+                                    branch: branchName,
+                                    build: version,
+                                    validationStamp: 'KDSL',
+                                    testResults: results,
+                            )
+                        }
+                    }
+                }
+                cleanup {
+                    sh '''
+                        cd ontrack-kdsl-test/src/main/compose
+                        docker-compose --project-name kdsl --file docker-compose.yml --file docker-compose-jacoco.yml down --volumes
                     '''
                 }
             }
