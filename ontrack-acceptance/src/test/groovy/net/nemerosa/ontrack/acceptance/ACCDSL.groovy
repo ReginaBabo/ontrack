@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.acceptance
 
 import net.nemerosa.ontrack.acceptance.support.AcceptanceTest
 import net.nemerosa.ontrack.acceptance.support.AcceptanceTestSuite
+import net.nemerosa.ontrack.acceptance.support.KDSL
 import net.nemerosa.ontrack.dsl.Branch
 import net.nemerosa.ontrack.dsl.MetaInfo
 import net.nemerosa.ontrack.dsl.ObjectAlreadyExistsException
@@ -24,6 +25,7 @@ import static org.junit.Assert.assertTrue
 class ACCDSL extends AbstractACCDSL {
 
     @Test
+    @KDSL("KdslTestAuthorizations")
     void 'Branch not found before not authorised'() {
         // Creating a branch
         def testBranch = doCreateBranch()

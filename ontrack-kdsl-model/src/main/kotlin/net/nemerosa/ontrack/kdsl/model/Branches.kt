@@ -1,6 +1,8 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 /**
  * Branch entity
@@ -13,10 +15,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 class Branch(
         id: Int,
         creation: Signature,
+        @JsonProperty
+        private val projectId: Int,
         val name: String,
         val description: String,
         val disabled: Boolean
 ) : ProjectEntityResource(id, creation) {
+
+    /**
+     * Gets the project associated with this branch
+     */
+    val project: Project get() = ontrack.getProjectByID(projectId)
 
     override val entityType: String = "BRANCH"
 
@@ -33,6 +42,9 @@ fun Project.branches(
         """
             branches(name: ${'$'}name, project: ${'$'}project) {
                 id
+                project {
+                    id
+                }
                 name
                 description
                 disabled
@@ -46,7 +58,7 @@ fun Project.branches(
                 "name" type "String" value name,
                 "project" type "String!" value this.name
         ).data["branches"].map {
-            it.toConnector<Branch>()
+            it.adaptProjectId().toConnector<Branch>()
         }
 
 /**
@@ -69,7 +81,7 @@ fun Project.createBranch(
                         "description" to description,
                         "disabled" to disabled
                 )
-        ).adaptSignature().toConnector()
+        ).adaptSignature().adaptProjectId().toConnector()
 
 /**
  * Creates or returns a branch and runs some code for it.
@@ -105,3 +117,12 @@ fun Project.branch(
         description: String = "",
         disabled: Boolean = false
 ): Branch = branch(name, description, disabled) { this }
+
+/**
+ * Looking for a branch by name
+ */
+fun Ontrack.branch(project: String, branch: String): Branch? =
+        ontrackConnector.get("structure/entity/branch/$project/$branch")
+                ?.adaptProjectId()
+                ?.adaptSignature()
+                ?.toConnector()

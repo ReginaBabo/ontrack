@@ -87,9 +87,22 @@ fun Ontrack.getProjects(
  * @return Project
  * @throws EntityNotFoundException If no project can be found for this ID
  */
-fun Ontrack.getProjectByID(id: Int): Project {
-    TODO("Getting one project by ID")
-}
+fun Ontrack.getProjectByID(id: Int): Project =
+        """
+            projects(id: ${"$"}id) {
+                id
+                name
+                description
+                disabled
+                creation {
+                    user
+                    time
+                }
+            }
+        """.trimIndent().graphQLQuery(
+                "ProjectById",
+                "id" type "Int!" value id
+        ).data["projects"][0].toConnector()
 
 /**
  * Gets a project by its name.

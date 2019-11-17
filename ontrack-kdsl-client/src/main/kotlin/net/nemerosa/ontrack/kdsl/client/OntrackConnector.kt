@@ -16,4 +16,9 @@ interface OntrackConnector {
 
     fun graphQL(query: String, variables: Map<String, Any?>): GraphQLResponse
 
+    /**
+     * Creates an anonymous connection
+     */
+    fun asAnonymous(): OntrackConnector
+
 }

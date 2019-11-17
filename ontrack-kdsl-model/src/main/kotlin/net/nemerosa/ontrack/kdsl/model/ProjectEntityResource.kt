@@ -1,8 +1,10 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import net.nemerosa.ontrack.kdsl.core.parseInto
+import net.nemerosa.ontrack.kdsl.core.support.DSLException
 import net.nemerosa.ontrack.kdsl.core.toJson
 import kotlin.reflect.KClass
 
@@ -48,6 +50,27 @@ abstract class ProjectEntityResource(
 
 }
 
+fun JsonNode?.adaptProjectId(): JsonNode? {
+    return if (this is ObjectNode) {
+        val projectNode = get("project")
+        when {
+            projectNode == null || projectNode.isNull -> throw NoProjectIdException()
+            else -> {
+                val projectId = projectNode.get("id")
+                if (projectId == null || projectId.isNull || !projectId.isInt) {
+                    throw NoProjectIdException()
+                } else {
+                    val id = projectId.asInt()
+                    this.remove("project")
+                    this.set("projectId", IntNode(id))
+                }
+            }
+        }
+    } else {
+        this
+    }
+}
+
 fun JsonNode?.adaptSignature(): JsonNode? {
     return when (this) {
         is ObjectNode -> {
@@ -69,3 +92,5 @@ fun JsonNode?.adaptSignature(): JsonNode? {
         else -> this
     }
 }
+
+class NoProjectIdException : DSLException("No project.id found in JSON node")

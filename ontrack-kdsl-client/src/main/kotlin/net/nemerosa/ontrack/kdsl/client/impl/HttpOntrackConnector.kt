@@ -24,6 +24,9 @@ class HttpOntrackConnector(
             }
             .build()
 
+    override fun asAnonymous(): OntrackConnector =
+            HttpOntrackConnector(url = url, username = null, password = null)
+
     override fun download(path: String): ByteArray {
         return restTemplate.getForObject(
                 "/$path",

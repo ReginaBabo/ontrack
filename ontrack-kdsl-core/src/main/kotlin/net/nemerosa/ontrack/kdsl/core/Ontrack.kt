@@ -25,4 +25,9 @@ class Ontrack(ontrackConnector: OntrackConnector) : Resource() {
             return Ontrack(ontrackConnector)
         }
     }
+
+    /**
+     * Creates an anonymous connection
+     */
+    fun asAnonymous(): Ontrack = Ontrack(ontrackConnector.asAnonymous())
 }
