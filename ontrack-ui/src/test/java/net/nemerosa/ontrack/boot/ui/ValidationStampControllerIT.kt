@@ -5,7 +5,7 @@ import net.nemerosa.ontrack.json.JsonUtils
 import net.nemerosa.ontrack.model.security.ValidationStampCreate
 import net.nemerosa.ontrack.model.structure.ServiceConfiguration
 import net.nemerosa.ontrack.model.structure.ValidationStampInput
-import net.nemerosa.ontrack.test.assertIs
+import net.nemerosa.ontrack.test.support.assertIs
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals

@@ -6,7 +6,7 @@ import net.nemerosa.ontrack.model.structure.NameDescription
 import net.nemerosa.ontrack.model.structure.ValidationRunStatusID
 import net.nemerosa.ontrack.model.structure.config
 import net.nemerosa.ontrack.model.structure.data
-import net.nemerosa.ontrack.test.assertIs
+import net.nemerosa.ontrack.test.support.assertIs
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals

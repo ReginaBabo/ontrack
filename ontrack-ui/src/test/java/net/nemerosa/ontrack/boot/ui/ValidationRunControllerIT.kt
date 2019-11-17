@@ -9,7 +9,7 @@ import net.nemerosa.ontrack.model.structure.ValidationRun
 import net.nemerosa.ontrack.model.structure.ValidationRunStatusService
 import net.nemerosa.ontrack.model.structure.ValidationStamp
 import net.nemerosa.ontrack.model.structure.config
-import net.nemerosa.ontrack.test.assertIs
+import net.nemerosa.ontrack.test.support.assertIs
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals

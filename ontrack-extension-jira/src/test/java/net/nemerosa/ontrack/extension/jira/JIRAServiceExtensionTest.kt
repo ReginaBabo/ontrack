@@ -14,7 +14,7 @@ import net.nemerosa.ontrack.extension.jira.tx.JIRASession
 import net.nemerosa.ontrack.extension.jira.tx.JIRASessionFactory
 import net.nemerosa.ontrack.model.structure.PropertyService
 import net.nemerosa.ontrack.model.support.MessageAnnotationUtils
-import net.nemerosa.ontrack.test.assertPresent
+import net.nemerosa.ontrack.test.support.assertPresent
 import net.nemerosa.ontrack.tx.DefaultTransactionService
 import org.junit.Before
 import org.junit.Test

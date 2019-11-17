@@ -1,7 +1,7 @@
 package net.nemerosa.ontrack.job.support
 
 import net.nemerosa.ontrack.job.*
-import net.nemerosa.ontrack.test.assertPresent
+import net.nemerosa.ontrack.test.support.assertPresent
 import org.junit.After
 import org.junit.Before
 import java.util.*

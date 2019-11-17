@@ -13,7 +13,7 @@ import net.nemerosa.ontrack.model.structure.PredefinedValidationStamp
 import net.nemerosa.ontrack.model.structure.config
 import net.nemerosa.ontrack.test.TestUtils
 import net.nemerosa.ontrack.test.TestUtils.uid
-import net.nemerosa.ontrack.test.assertPresent
+import net.nemerosa.ontrack.test.support.assertPresent
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.*

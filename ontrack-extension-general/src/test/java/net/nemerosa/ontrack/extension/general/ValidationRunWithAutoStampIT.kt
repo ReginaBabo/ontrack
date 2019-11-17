@@ -5,8 +5,8 @@ import net.nemerosa.ontrack.extension.general.validation.FractionValidationDataT
 import net.nemerosa.ontrack.extension.general.validation.ThresholdConfig
 import net.nemerosa.ontrack.it.AbstractDSLTestSupport
 import net.nemerosa.ontrack.model.structure.*
-import net.nemerosa.ontrack.test.TestUtils
-import net.nemerosa.ontrack.test.assertIs
+import net.nemerosa.ontrack.test.support.uid
+import net.nemerosa.ontrack.test.support.assertIs
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -20,7 +20,7 @@ class ValidationRunWithAutoStampIT : AbstractDSLTestSupport() {
     @Test
     fun `Validation run with data and predefined validation stamp without data type`() {
         // Creates a predefined validation stamp
-        val psName = TestUtils.uid("VS")
+        val psName = uid("VS")
         asAdmin().execute {
             predefinedValidationStampService.newPredefinedValidationStamp(
                     PredefinedValidationStamp.of(
@@ -68,7 +68,7 @@ class ValidationRunWithAutoStampIT : AbstractDSLTestSupport() {
     @Test
     fun `Validation run with data and predefined validation stamp with data type`() {
         // Creates a predefined validation stamp with data
-        val psName = TestUtils.uid("VS")
+        val psName = uid("VS")
         asAdmin().execute {
             predefinedValidationStampService.newPredefinedValidationStamp(
                     PredefinedValidationStamp.of(

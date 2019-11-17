@@ -5,25 +5,22 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.nemerosa.ontrack.json.ObjectMapperFactory;
+import net.nemerosa.ontrack.test.support.TestExtensionsKt;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.Assert.assertEquals;
 
 public final class TestUtils {
 
     private static final ObjectMapper mapper = ObjectMapperFactory.create();
-    private static final AtomicLong counter = new AtomicLong();
 
     private TestUtils() {
     }
@@ -38,7 +35,7 @@ public final class TestUtils {
     }
 
     public static String uid(String prefix) {
-        return prefix + new SimpleDateFormat("mmssSSS").format(new Date()) + counter.incrementAndGet();
+        return TestExtensionsKt.uid(prefix);
     }
 
     public static String getEnvIfPresent(String systemProperty, String envProperty, String defaulValue) {

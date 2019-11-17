@@ -24,8 +24,8 @@ import net.nemerosa.ontrack.model.security.GlobalSettings
 import net.nemerosa.ontrack.model.structure.Build
 import net.nemerosa.ontrack.model.structure.Project
 import net.nemerosa.ontrack.model.structure.ValidationRunStatusID
-import net.nemerosa.ontrack.test.TestUtils.uid
-import net.nemerosa.ontrack.test.assertIs
+import net.nemerosa.ontrack.test.support.uid
+import net.nemerosa.ontrack.test.support.assertIs
 import org.junit.Test
 import org.mockito.Matchers
 import org.springframework.beans.factory.annotation.Autowired

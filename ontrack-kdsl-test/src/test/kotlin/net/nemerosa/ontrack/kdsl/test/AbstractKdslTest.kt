@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.bdd.kdsl.core
+package net.nemerosa.ontrack.kdsl.test
 
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 

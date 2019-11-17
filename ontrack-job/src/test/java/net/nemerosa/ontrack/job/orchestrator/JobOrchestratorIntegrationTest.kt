@@ -3,8 +3,8 @@ package net.nemerosa.ontrack.job.orchestrator
 import net.nemerosa.ontrack.job.*
 import net.nemerosa.ontrack.job.support.AbstractJobTest
 import net.nemerosa.ontrack.job.support.ConfigurableJob
-import net.nemerosa.ontrack.test.assertNotPresent
-import net.nemerosa.ontrack.test.assertPresent
+import net.nemerosa.ontrack.test.support.assertNotPresent
+import net.nemerosa.ontrack.test.support.assertPresent
 import org.junit.Test
 import java.util.stream.Stream
 import kotlin.test.assertFalse

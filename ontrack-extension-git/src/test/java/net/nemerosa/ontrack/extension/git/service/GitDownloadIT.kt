@@ -2,7 +2,7 @@ package net.nemerosa.ontrack.extension.git.service
 
 import net.nemerosa.ontrack.extension.git.AbstractGitTestSupport
 import net.nemerosa.ontrack.model.security.ProjectConfig
-import net.nemerosa.ontrack.test.assertPresent
+import net.nemerosa.ontrack.test.support.assertPresent
 import org.junit.Test
 import kotlin.test.assertEquals
 

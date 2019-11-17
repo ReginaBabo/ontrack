@@ -1,5 +1,11 @@
 @startuml
 
+component "test-support" as TestSupport
+
+note bottom of TestSupport
+    Generic test utilities
+end note
+
 component "kdsl-client" as KDSLClient
 
 note right of KDSLClient
@@ -34,10 +40,20 @@ end note
 component "bdd-model" as BDDModel
 
 BDDModel .right.> KDSLModel : api
+BDDModel .down.> TestSupport
 
 note bottom of BDDModel
     BDD steps for Ontrack
 end note
+
+component "kdsl-test" as KDSLTest <<app>>
+
+note bottom of KDSLTest
+    KDSL integration tests
+end note
+
+KDSLTest .up.> KDSLModel
+KDSLTest .left.> TestSupport
 
 package "ontrack-extension-xxx" {
 

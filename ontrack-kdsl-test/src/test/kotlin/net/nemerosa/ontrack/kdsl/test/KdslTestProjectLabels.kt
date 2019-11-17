@@ -1,7 +1,7 @@
-package net.nemerosa.ontrack.bdd.kdsl.core
+package net.nemerosa.ontrack.kdsl.test
 
-import net.nemerosa.ontrack.bdd.model.support.uid
 import net.nemerosa.ontrack.kdsl.model.*
+import net.nemerosa.ontrack.test.support.uid
 import org.junit.Test
 import kotlin.test.assertTrue
 

@@ -6,9 +6,9 @@ import net.nemerosa.ontrack.extension.sonarqube.SonarQubeExtensionFeature
 import net.nemerosa.ontrack.model.structure.Build
 import net.nemerosa.ontrack.model.structure.createBranch
 import net.nemerosa.ontrack.model.structure.createBuild
-import net.nemerosa.ontrack.test.assertIs
-import net.nemerosa.ontrack.test.assertNotPresent
-import net.nemerosa.ontrack.test.assertPresent
+import net.nemerosa.ontrack.test.support.assertIs
+import net.nemerosa.ontrack.test.support.assertNotPresent
+import net.nemerosa.ontrack.test.support.assertPresent
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals

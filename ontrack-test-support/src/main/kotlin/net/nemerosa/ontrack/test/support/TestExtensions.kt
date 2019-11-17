@@ -1,7 +1,13 @@
-package net.nemerosa.ontrack.test
+package net.nemerosa.ontrack.test.support
 
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.fail
+
+private val counter = AtomicInteger()
+
+fun uid(prefix: String = ""): String = prefix + SimpleDateFormat("mmssSSS").format(Date()) + counter.incrementAndGet()
 
 inline fun <reified T> assertIs(value: Any?, code: (T) -> Unit) {
     if (value is T) {

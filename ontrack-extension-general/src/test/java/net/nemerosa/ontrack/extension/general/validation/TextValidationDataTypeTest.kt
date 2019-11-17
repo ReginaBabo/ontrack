@@ -3,7 +3,7 @@ package net.nemerosa.ontrack.extension.general.validation
 import com.fasterxml.jackson.databind.node.TextNode
 import net.nemerosa.ontrack.extension.general.GeneralExtensionFeature
 import net.nemerosa.ontrack.json.JsonUtils
-import net.nemerosa.ontrack.test.assertIs
+import net.nemerosa.ontrack.test.support.assertIs
 import org.junit.Test
 import kotlin.test.assertEquals
 

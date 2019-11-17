@@ -2,7 +2,6 @@ rootProject.name = "ontrack"
 
 include(":ontrack-common")
 include(":ontrack-json")
-include(":ontrack-test-utils")
 include(":ontrack-model")
 include(":ontrack-client")
 include(":ontrack-job")
@@ -12,7 +11,6 @@ include(":ontrack-git")
 include(":ontrack-extension-api")
 include(":ontrack-extension-support")
 include(":ontrack-extension-plugin")
-include(":ontrack-it-utils")
 include(":ontrack-database")
 include(":ontrack-repository")
 include(":ontrack-repository-impl")
@@ -27,10 +25,16 @@ include(":ontrack-acceptance")
 include(":ontrack-postgresql-migration")
 include(":ontrack-docs")
 
+// Test support
+include(":ontrack-test-support")
+include(":ontrack-test-utils")
+include(":ontrack-it-utils")
+
 // Kotlin DSL
 include(":ontrack-kdsl-client")
 include(":ontrack-kdsl-core")
 include(":ontrack-kdsl-model")
+include(":ontrack-kdsl-test")
 
 // E2E testing
 include(":ontrack-bdd-engine")

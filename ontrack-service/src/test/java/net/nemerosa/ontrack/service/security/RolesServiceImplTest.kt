@@ -1,7 +1,7 @@
 package net.nemerosa.ontrack.service.security
 
 import net.nemerosa.ontrack.model.security.*
-import net.nemerosa.ontrack.test.assertPresent
+import net.nemerosa.ontrack.test.support.assertPresent
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before

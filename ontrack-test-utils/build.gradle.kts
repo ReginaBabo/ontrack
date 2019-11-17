@@ -3,10 +3,9 @@ plugins {
 }
 
 dependencies {
-    api("junit:junit")
     api(project(":ontrack-json"))
+    api(project(":ontrack-test-support"))
 
     implementation("org.apache.commons:commons-lang3")
     implementation("commons-io:commons-io")
-    implementation("org.jetbrains.kotlin:kotlin-test")
 }

@@ -1,6 +1,6 @@
 package net.nemerosa.ontrack.bdd.model.worlds
 
-import net.nemerosa.ontrack.bdd.model.support.uid
+import net.nemerosa.ontrack.test.support.uid
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
