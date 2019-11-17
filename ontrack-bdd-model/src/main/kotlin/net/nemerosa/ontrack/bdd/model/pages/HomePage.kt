@@ -15,9 +15,9 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
     }
 
     fun createProject(configure: ProjectDialog.() -> Unit): ProjectDialog {
-        waitForPresenceOf(".ot-command-project-new")
-        val createProjectCommand = "ot-command-project-new".byClass
-        createProjectCommand.click()
+        val newProjectCommand = "ot-command-project-new".byClass
+        newProjectCommand.waitUntilClickable<WebElementFacade>()
+        newProjectCommand.click()
         val dialog = ProjectDialog(this).waitFor()
         dialog.configure()
         dialog.ok()
@@ -26,7 +26,7 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
     }
 
     fun checkProjectIsPresent(name: String) {
-        name.asLink?.waitUntilVisible<WebElementFacade>()
+        name.asLink.waitUntilVisible<WebElementFacade>()
     }
 
     fun checkProjectDialogInError(message: String) {
@@ -34,11 +34,7 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
     }
 
     fun clickOnProject(name: String) {
-        name.asLink?.apply {
-            waitUntilVisible<WebElementFacade>()
-        }?.apply {
-            click()
-        } ?: throw IllegalStateException("Cannot find project with name $name")
+        name.asLink.click()
     }
 
 }

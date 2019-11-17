@@ -12,8 +12,8 @@ abstract class AbstractPage(driver: WebDriver) : PageObject(driver) {
     /**
      * Given some text, returns a link element whole text is matching. Returns null if no match.
      */
-    val String.asLink: WebElementFacade?
-        get() = find<WebElementFacade>(By.linkText(this))?.waitUntilVisible()
+    val String.asLink: WebElementFacade
+        get() = find<WebElementFacade>(By.linkText(this)).waitUntilVisible()
 
     /**
      * Given a form name, returns the required associated element
