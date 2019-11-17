@@ -155,3 +155,11 @@ val bootJar = tasks.getByName<BootJar>("bootJar") {
 rootProject.tasks.named<Zip>("publicationPackage") {
     from(bootJar)
 }
+
+configure<PublishingExtension> {
+    publications {
+        named<MavenPublication>("mavenCustom") {
+            setArtifacts(listOf(bootJar))
+        }
+    }
+}

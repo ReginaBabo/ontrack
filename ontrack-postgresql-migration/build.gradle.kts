@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 apply(plugin = "org.springframework.boot")
 
 dependencies {
@@ -12,4 +14,14 @@ dependencies {
     runtimeOnly(project(":ontrack-database"))
     runtimeOnly("com.h2database:h2:1.4.197")
 
+}
+
+val bootJar = tasks.getByName<BootJar>("bootJar")
+
+configure<PublishingExtension> {
+    publications {
+        named<MavenPublication>("mavenCustom") {
+            setArtifacts(listOf(bootJar))
+        }
+    }
 }
