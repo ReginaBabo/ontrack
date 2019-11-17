@@ -1,12 +1,15 @@
-package net.nemerosa.ontrack.kdsl.test
+package net.nemerosa.ontrack.kdsl.test.core
 
 import net.nemerosa.ontrack.kdsl.model.*
+import net.nemerosa.ontrack.kdsl.test.app.SpringTest
+import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import net.nemerosa.ontrack.test.support.uid
 import org.junit.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@SpringTest
 class KdslTestProjectLabels : AbstractKdslTest() {
 
     @Test

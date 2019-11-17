@@ -8,8 +8,10 @@ apply(plugin = "com.bmuschko.docker-remote-api")
 description = "Tests for Ontrack KDSL tests, including for core extensions."
 
 dependencies {
-    implementation(project(":ontrack-test-support"))
-    implementation(project(":ontrack-kdsl-model"))
+    testImplementation(project(":ontrack-test-support"))
+    testImplementation(project(":ontrack-test-engine"))
+    testImplementation(project(":ontrack-kdsl-model"))
+    testImplementation("org.springframework.boot:spring-boot-starter")
 
-    implementation(project(":ontrack-extension-stale", "dslConfig"))
+    testImplementation(project(":ontrack-extension-stale", "dslConfig"))
 }

@@ -3,13 +3,15 @@ package net.nemerosa.ontrack.kdsl.test.extension.stale
 import net.nemerosa.ontrack.extension.stale.dsl.StaleProperty
 import net.nemerosa.ontrack.extension.stale.dsl.staleProperty
 import net.nemerosa.ontrack.kdsl.model.project
-import net.nemerosa.ontrack.kdsl.test.AbstractKdslTest
+import net.nemerosa.ontrack.kdsl.test.app.SpringTest
+import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import net.nemerosa.ontrack.test.support.uid
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
+@SpringTest
 class KdslTestExtensionStale : AbstractKdslTest() {
 
     @Test

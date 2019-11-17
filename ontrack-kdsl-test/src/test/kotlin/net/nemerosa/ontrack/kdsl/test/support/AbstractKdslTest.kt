@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.kdsl.test
+package net.nemerosa.ontrack.kdsl.test.support
 
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 import net.nemerosa.ontrack.kdsl.model.*

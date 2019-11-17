@@ -1,7 +1,7 @@
 package net.nemerosa.ontrack.bdd.engine
 
 import cucumber.runtime.RuntimeOptions
-import net.nemerosa.ontrack.bdd.engine.support.junit.JUnitRunner
+import net.nemerosa.ontrack.test.engine.junit.JUnitRunner
 import net.serenitybdd.cucumber.CucumberWithSerenity
 import net.thucydides.core.model.TestResult
 import net.thucydides.core.reports.html.HtmlAggregateStoryReporter

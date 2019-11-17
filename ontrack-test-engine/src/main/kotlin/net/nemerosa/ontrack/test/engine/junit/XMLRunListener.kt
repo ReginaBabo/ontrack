@@ -1,6 +1,6 @@
-package net.nemerosa.ontrack.bdd.engine.support.junit
+package net.nemerosa.ontrack.test.engine.junit
 
-import net.nemerosa.ontrack.bdd.engine.support.xml.Xml
+import net.nemerosa.ontrack.test.engine.xml.Xml
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.junit.runner.Description
 import org.junit.runner.notification.Failure

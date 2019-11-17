@@ -1,7 +1,6 @@
-package net.nemerosa.ontrack.bdd.engine.support.junit
+package net.nemerosa.ontrack.test.engine.junit
 
 import org.junit.runner.JUnitCore
-import org.junit.runner.Result
 import org.junit.runner.Runner
 import java.io.File
 
@@ -16,6 +15,17 @@ class JUnitRunner {
             runner: Runner,
             outputDir: File,
             outputFilename: String
+    ): Boolean = run(listOf(runner), outputDir, outputFilename)
+
+    /**
+     * @param runners JUnit runners to launch
+     * @param outputDir Output directory
+     * @param outputFilename Name of the output
+     */
+    fun run(
+            runners: Collection<Runner>,
+            outputDir: File,
+            outputFilename: String
     ): Boolean {
         // JUnit runtime
         val junit = JUnitCore()
@@ -25,13 +35,17 @@ class JUnitRunner {
         junit.addListener(xmlRunListener)
 
         // Runs the tests
-        val result: Result = junit.run(runner)
+        val ok = runners.map {
+            junit.run(it)
+        }.all {
+            it.wasSuccessful()
+        }
 
         // Rendering
         xmlRunListener.render(File(outputDir, outputFilename))
 
         // Result
-        return result.wasSuccessful()
+        return ok
 
     }
 }

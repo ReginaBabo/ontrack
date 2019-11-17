@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.bdd.engine.support.xml
+package net.nemerosa.ontrack.test.engine.xml
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element

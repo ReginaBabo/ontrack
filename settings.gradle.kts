@@ -26,6 +26,7 @@ include(":ontrack-postgresql-migration")
 include(":ontrack-docs")
 
 // Test support
+include(":ontrack-test-engine")
 include(":ontrack-test-support")
 include(":ontrack-test-utils")
 include(":ontrack-it-utils")

@@ -1,9 +1,12 @@
-package net.nemerosa.ontrack.kdsl.test
+package net.nemerosa.ontrack.kdsl.test.core
 
 import net.nemerosa.ontrack.kdsl.model.branch
+import net.nemerosa.ontrack.kdsl.test.app.SpringTest
+import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import org.junit.Test
 import kotlin.test.assertNull
 
+@SpringTest
 class KdslTestAuthorizations : AbstractKdslTest() {
 
     @Test
