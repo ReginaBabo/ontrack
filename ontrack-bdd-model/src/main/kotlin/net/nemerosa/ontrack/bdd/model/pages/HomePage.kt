@@ -26,6 +26,7 @@ class HomePage(driver: WebDriver) : CompletePage(driver) {
     }
 
     fun checkProjectIsPresent(name: String) {
+        waitForPage()
         name.asLink.waitUntilVisible<WebElementFacade>()
     }
 

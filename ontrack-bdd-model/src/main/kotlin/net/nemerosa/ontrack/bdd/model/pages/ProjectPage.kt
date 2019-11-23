@@ -29,7 +29,7 @@ class ProjectPage(driver: WebDriver) : CompletePage(driver) {
     }
 
     fun checkBranchIsPresent(name: String) {
-        name.asLink?.waitUntilVisible<WebElementFacade>()
+        name.asLink.waitUntilVisible<WebElementFacade>()
     }
 
 }

@@ -32,6 +32,7 @@ class OntrackBrowserHomeSteps : AbstractOntrackBrowserSteps() {
             createProject {
                 name = ontrackUtilityWorld.replaceTokens(projectRef)
             }
+            waitForPage()
         }
     }
 

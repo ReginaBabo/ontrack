@@ -10,6 +10,11 @@ import kotlin.test.fail
 abstract class AbstractPage(driver: WebDriver) : PageObject(driver) {
 
     /**
+     * Generic sync for the page
+     */
+    fun waitForPage() = callWhenPageOpensMethods()
+
+    /**
      * Given some text, returns a link element whole text is matching. Returns null if no match.
      */
     val String.asLink: WebElementFacade
