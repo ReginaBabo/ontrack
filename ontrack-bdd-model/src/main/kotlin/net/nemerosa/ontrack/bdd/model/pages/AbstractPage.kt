@@ -30,6 +30,13 @@ abstract class AbstractPage(driver: WebDriver) : PageObject(driver) {
                 ?: fail("Cannot find element with class = $this")
 
     /**
+     * Waits for the element to be visible
+     */
+    fun String.waitUntilVisible() {
+        findBy<WebElementFacade>(this).waitUntilVisible<WebElementFacade>()
+    }
+
+    /**
      * DSL form to type some text into an element
      */
     infix fun WebElementFacade.enter(text: String) {

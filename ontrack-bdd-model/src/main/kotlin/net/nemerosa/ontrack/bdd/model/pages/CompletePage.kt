@@ -3,7 +3,6 @@ package net.nemerosa.ontrack.bdd.model.pages
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.WhenPageOpens
 import org.openqa.selenium.WebDriver
-import kotlin.test.fail
 
 open class CompletePage(driver: WebDriver) : AbstractPage(driver) {
 
@@ -13,7 +12,7 @@ open class CompletePage(driver: WebDriver) : AbstractPage(driver) {
     }
 
     fun userMenuLogin(username: String, password: String) {
-        "Sign in".asLink?.click() ?: fail("Cannot find Sign in link.")
+        "Sign in".asLink.click()
 
         "name".byName enter username
         "password".byName enter password
@@ -21,7 +20,7 @@ open class CompletePage(driver: WebDriver) : AbstractPage(driver) {
         "btn-primary".byClass.click()
 
         waitUntilEverythingIsLoaded()
-        waitForPresenceOf("#header-user-menu")
+        "#header-user-menu".waitUntilVisible()
     }
 
 }
