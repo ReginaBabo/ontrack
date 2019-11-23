@@ -19,7 +19,7 @@ open class CompletePage(driver: WebDriver) : AbstractPage(driver) {
 
         "btn-primary".byClass.click()
 
-        waitUntilEverythingIsLoaded()
+        callWhenPageOpensMethods()
         "#header-user-menu".waitUntilVisible()
     }
 
