@@ -81,6 +81,7 @@ class ACCDSL extends AbstractACCDSL {
 
     @Test
     @AcceptanceTest(AcceptanceTestContext.SMOKE)
+    @KDSL("KdslTestBranches")
     void 'Project branches'() {
         // Project and two branches
         def name = uid('P')
