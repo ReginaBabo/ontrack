@@ -46,6 +46,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestProjects")
     void 'Project default description is empty'() {
         def name = uid('P')
         ontrack.project(name) {
@@ -61,6 +62,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestProjects")
     void 'List of projects'() {
         def name = uid('P')
         ontrack.project(name)
@@ -68,6 +70,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestProjects")
     void 'Finding a project by name'() {
         def name = uid('P')
         def name2 = uid('P')
