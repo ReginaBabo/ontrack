@@ -30,26 +30,10 @@ class Branch(
  * List of branches for a project.
  */
 fun Project.branches(): List<Branch> =
-        """
-            branches(project: ${'$'}project) {
-                id
-                project {
-                    id
-                }
-                name
-                description
-                disabled
-                creation {
-                    user
-                    time
-                }
-            }
-        """.trimIndent().graphQLQuery(
-                "Branches",
-                "project" type "String!" value this.name
-        ).data["branches"].map {
-            it.adaptProjectId().toConnector<Branch>()
-        }
+        ontrackConnector.get("structure/projects/$id/branches")
+                ?.get("resources")
+                ?.map { it.adaptSignature().toConnector<Branch>() }
+                ?: emptyList()
 
 /**
  * List of branches for a project, filtered.

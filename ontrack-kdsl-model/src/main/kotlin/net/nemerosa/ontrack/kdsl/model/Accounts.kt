@@ -34,15 +34,10 @@ class Accounts : Resource() {
      * List of account groups
      */
     val accountGroups: List<AccountGroup>
-        get() = """
-            accountGroups {
-                id
-                name
-                description
-            }
-        """.trimIndent().graphQLQuery("AccountGroups")
-                .data["accountGroups"]
-                .map { it.toConnector<AccountGroup>() }
+        get() = ontrackConnector.get("accounts/groups")
+                ?.get("resources")
+                ?.map { it.toConnector<AccountGroup>() }
+                ?: emptyList()
 
     /**
      * Find an account group by name
