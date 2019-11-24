@@ -13,6 +13,7 @@ apply(plugin = "org.springframework.boot")
 dependencies {
     implementation(project(":ontrack-ui-support"))
     implementation(project(":ontrack-ui-graphql"))
+    implementation(project(":ontrack-graphql"))
     implementation(project(":ontrack-extension-api"))
     implementation(project(":ontrack-extension-support"))
     implementation(project(":ontrack-job"))

@@ -11,7 +11,7 @@ import java.util.concurrent.Callable
 
 @Transactional
 @RestController
-@RequestMapping("/graphql")
+@RequestMapping("/graphql-legacy")
 class GraphqlController(
         private val graphQLService: GraphQLService
 ) {
