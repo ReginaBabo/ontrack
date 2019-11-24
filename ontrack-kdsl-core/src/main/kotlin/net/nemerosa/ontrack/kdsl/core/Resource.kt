@@ -12,7 +12,6 @@ abstract class Resource : Connector() {
      *
      * @param queryName Name to give to the query
      */
-    @Deprecated("Use REST API end points")
     fun String.graphQLQuery(
             queryName: String,
             vararg params: GraphQLParamImpl

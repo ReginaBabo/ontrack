@@ -84,14 +84,7 @@ fun Labels.label(category: String?, name: String, description: String = "", colo
 val Labels.list: List<Label>
     get() = """
         labels {
-            id
-            category
-            name
-            description
-            color
-            computedBy { id name }
-            foregroundColor
-            display
+            $GRAPHQL_LABEL
         }
     """.trimIndent().graphQLQuery("Labels")
             .data["labels"]
@@ -103,14 +96,7 @@ val Labels.list: List<Label>
 fun Labels.findLabel(category: String?, name: String): Label? =
         """
             labels(category: ${'$'}category, name: ${'$'}name) {
-                id
-                category
-                name
-                description
-                color
-                computedBy { id name }
-                foregroundColor
-                display
+                $GRAPHQL_LABEL
             }
         """.trimIndent().graphQLQuery(
                 "LabelSearch",
@@ -152,14 +138,7 @@ val Project.labels: List<Label>
         """
             projects(id: ${"$"}id) {
                 labels {
-                    id
-                    category
-                    name
-                    description
-                    color
-                    computedBy { id name }
-                    foregroundColor
-                    display
+                    $GRAPHQL_LABEL
                 }
             }
         """.graphQLQuery("Labels", "id" type "Int" value id)
@@ -175,3 +154,17 @@ class LabelNotFoundException(category: String?, name: String) : DSLException(
 class LabelCannotChangeCategoryException(category: String?, name: String, newCategory: String?) : DSLException(
         """Cannot change a category for an existing label ($category:$name) to ($newCategory:$name)"""
 )
+
+/**
+ * GraphQL label definition
+ */
+private const val GRAPHQL_LABEL = """
+    id
+    category
+    name
+    description
+    color
+    computedBy { id name }
+    foregroundColor
+    display
+"""

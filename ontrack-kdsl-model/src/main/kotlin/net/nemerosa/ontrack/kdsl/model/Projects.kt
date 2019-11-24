@@ -66,14 +66,7 @@ fun Ontrack.getProjects(
     }
     val query = """
         projects$decl {
-            id
-            name
-            description
-            disabled
-            creation {
-                user
-                time
-            }
+            $GRAPHQL_PROJECT
         }
     """.trimIndent()
     // Query
@@ -92,14 +85,7 @@ fun Ontrack.getProjects(
 fun Ontrack.getProjectByID(id: Int): Project =
         """
             projects(id: ${"$"}id) {
-                id
-                name
-                description
-                disabled
-                creation {
-                    user
-                    time
-                }
+                $GRAPHQL_PROJECT
             }
         """.trimIndent().graphQLQuery(
                 "ProjectById",
@@ -192,3 +178,17 @@ fun Project.update(
 fun Project.delete() {
     TODO("Deletes this project")
 }
+
+/**
+ * GraphQL fragment for project
+ */
+private const val GRAPHQL_PROJECT = """
+    id
+    name
+    description
+    disabled
+    creation {
+        user
+        time
+    } 
+"""
