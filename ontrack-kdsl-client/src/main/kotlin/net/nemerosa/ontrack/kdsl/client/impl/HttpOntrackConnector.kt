@@ -6,6 +6,7 @@ import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.util.UriComponentsBuilder
 
 class HttpOntrackConnector(
         val url: String,
@@ -51,10 +52,12 @@ class HttpOntrackConnector(
 
     override fun get(path: String, query: Map<String, Any>): JsonNode? {
         return try {
+            val builder = query.entries.fold(UriComponentsBuilder.fromPath(path)) { r, t ->
+                r.queryParam(t.key, t.value)
+            }
             restTemplate.getForObject(
-                    "/$path",
-                    JsonNode::class.java,
-                    query
+                    "/${builder.build().toUriString()}",
+                    JsonNode::class.java
             )
         } catch (ex: HttpClientErrorException) {
             if (ex.statusCode == HttpStatus.NOT_FOUND) {
