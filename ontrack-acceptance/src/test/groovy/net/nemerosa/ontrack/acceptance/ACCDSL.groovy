@@ -219,6 +219,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filtering build on promotion'() {
         Branch branch = createBuildsAndPromotions()
         // Filtering builds on promotion
@@ -227,6 +228,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filtering build - with validation (any)'() {
         Branch branch = createBuildsAndPromotions()
         ontrack.build(branch.project, branch.name, '2').validate('SMOKE', 'FAILED')
@@ -236,6 +238,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filtering build - with validation (passed)'() {
         Branch branch = createBuildsAndPromotions()
         ontrack.build(branch.project, branch.name, '2').validate('SMOKE', 'FAILED')
@@ -245,6 +248,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filtering build - since validation (any)'() {
         Branch branch = createBuildsAndPromotions()
         ontrack.build(branch.project, branch.name, '1').validate('SMOKE', 'PASSED')
@@ -254,6 +258,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filtering build - since validation (passed)'() {
         Branch branch = createBuildsAndPromotions()
         ontrack.build(branch.project, branch.name, '1').validate('SMOKE', 'PASSED')

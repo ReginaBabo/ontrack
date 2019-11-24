@@ -25,6 +25,15 @@ class Build(
 }
 
 /**
+ * Looks for a build by name. Fails if not found.
+ */
+fun Ontrack.build(project: String, branch: String, build: String): Build =
+        ontrackConnector.get("structure/entity/build/$project/$branch/$build")
+                ?.adaptSignature()
+                ?.toConnector()
+                ?: throw BuildNotFoundException(project, branch, build)
+
+/**
  * Gets a build using its ID
  */
 fun Ontrack.getBuildByID(id: Int): Build =
