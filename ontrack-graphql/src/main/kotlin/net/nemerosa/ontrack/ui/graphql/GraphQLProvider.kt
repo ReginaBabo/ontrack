@@ -6,6 +6,7 @@ import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
+import net.nemerosa.ontrack.graphql.support.GQLScalarJSON
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
@@ -38,6 +39,7 @@ class GraphQLProvider {
 
     private fun buildRuntimeWiring(): RuntimeWiring {
         return RuntimeWiring.newRuntimeWiring()
+                .scalar(GQLScalarJSON.INSTANCE)
                 // TODO Provides wiring
                 .build()
     }
