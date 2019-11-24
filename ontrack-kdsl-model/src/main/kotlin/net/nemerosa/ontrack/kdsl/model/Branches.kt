@@ -33,11 +33,36 @@ class Branch(
 
 /**
  * List of branches for a project.
+ */
+fun Project.branches(): List<Branch> =
+        """
+            branches(project: ${'$'}project) {
+                id
+                project {
+                    id
+                }
+                name
+                description
+                disabled
+                creation {
+                    user
+                    time
+                }
+            }
+        """.trimIndent().graphQLQuery(
+                "Branches",
+                "project" type "String!" value this.name
+        ).data["branches"].map {
+            it.adaptProjectId().toConnector<Branch>()
+        }
+
+/**
+ * List of branches for a project, filtered.
  *
  * @param name Filter on the branch name (regular expression)
  */
 fun Project.branches(
-        name: String? = null
+        name: String
 ): List<Branch> =
         """
             branches(name: ${'$'}name, project: ${'$'}project) {
