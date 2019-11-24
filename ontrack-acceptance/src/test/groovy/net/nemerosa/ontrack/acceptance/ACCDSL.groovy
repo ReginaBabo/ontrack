@@ -102,6 +102,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildSearch")
     void 'Build search: default'() {
         Branch branch = createBuildsAndPromotions()
         def builds = ontrack.project(branch.project).search()
@@ -109,6 +110,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildSearch")
     void 'Build search: count'() {
         Branch branch = createBuildsAndPromotions()
         def builds = ontrack.project(branch.project).search(maximumCount: 1)
@@ -116,6 +118,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildSearch")
     void 'Build search: promotion'() {
         Branch branch = createBuildsAndPromotions()
         def builds = ontrack.project(branch.project).search(promotionName: 'BRONZE')

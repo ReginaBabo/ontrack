@@ -22,7 +22,7 @@ fun Branch.filter(
     return json
             ?.get("buildViews")
             ?.map { buildView ->
-                buildView["build"].toConnector<Build>()
+                buildView["build"].adaptSignature().toConnector<Build>()
             }
             ?: emptyList()
 }
