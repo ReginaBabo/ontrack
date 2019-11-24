@@ -28,4 +28,21 @@ class KdslTestBranches : AbstractKdslTest() {
         )
     }
 
+    @Test
+    fun `Project branches filtered by name`() {
+        val name = uid("P")
+        // Project and two branches
+        project {
+            (1..5).forEach {
+                branch("B$it")
+            }
+        }
+        // Filter by regex
+        val branches = ontrack.findProjectByName(name)?.branches(name = "B(1|2)")
+        assertEquals(
+                (2 downTo 1).map { "B$it" },
+                branches?.map { it.name }
+        )
+    }
+
 }
