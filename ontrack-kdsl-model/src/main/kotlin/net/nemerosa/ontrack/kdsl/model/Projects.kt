@@ -16,7 +16,7 @@ class Project(
         id: Int,
         creation: Signature,
         val name: String,
-        val description: String,
+        val description: String?,
         val disabled: Boolean
 ) : ProjectEntityResource(id, creation) {
 
