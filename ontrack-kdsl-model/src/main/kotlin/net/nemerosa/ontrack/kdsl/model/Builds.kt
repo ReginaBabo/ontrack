@@ -1,6 +1,5 @@
 package net.nemerosa.ontrack.kdsl.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -56,3 +55,29 @@ fun <T> Branch.build(
     }
     return actualBuild.initFn()
 }
+
+/**
+ * Creates or gets a build
+ *
+ * @param name Name of the build
+ * @param description Description of the build
+ * @return Creates build
+ */
+fun Branch.build(
+        name: String,
+        description: String = ""
+) = build(name, description) { this }
+
+/**
+ * Previous build
+ */
+val Build.previousBuild: Build?
+    get() = ontrackConnector.get("structure/builds/$id/previous")
+            ?.adaptSignature()?.toConnector()
+
+/**
+ * Next build
+ */
+val Build.nextBuild: Build?
+    get() = ontrackConnector.get("structure/builds/$id/next")
+            ?.adaptSignature()?.toConnector()

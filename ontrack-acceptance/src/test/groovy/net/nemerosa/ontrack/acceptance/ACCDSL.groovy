@@ -126,6 +126,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuilds")
     void 'Build previous and next'() {
         // Project and branch
         def name = uid('P')
