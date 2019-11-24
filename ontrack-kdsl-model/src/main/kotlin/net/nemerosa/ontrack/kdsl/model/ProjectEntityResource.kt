@@ -64,20 +64,19 @@ abstract class ProjectEntityResource(
 
 }
 
-fun JsonNode?.adaptProjectId(projectPath: String = "project"): JsonNode? {
+fun JsonNode?.adaptProjectId(projectPath: String = "project"): JsonNode? = adapt(
+        "projectId",
+        "${projectPath}.id"
+)
+
+fun JsonNode?.adapt(newField: String, oldField: String): JsonNode? {
     return if (this is ObjectNode) {
-        val projectNode = deepPath(projectPath)
+        val oldNode = deepPath(oldField)
         when {
-            projectNode.isMissingNode || projectNode.isNull -> throw NoProjectIdException()
+            oldNode.isMissingNode || oldNode.isNull -> throw NoFieldException(oldField)
             else -> {
-                val projectId = projectNode.get("id")
-                if (projectId == null || projectId.isNull || !projectId.isInt) {
-                    throw NoProjectIdException()
-                } else {
-                    val id = projectId.asInt()
-                    this.removeDeepPath(projectPath)
-                    this.set("projectId", IntNode(id))
-                }
+                this.removeDeepPath(oldField)
+                this.set(newField, oldNode)
             }
         }
     } else {
@@ -107,4 +106,4 @@ fun JsonNode?.adaptSignature(): JsonNode? {
     }
 }
 
-class NoProjectIdException : DSLException("No project.id found in JSON node")
+class NoFieldException(path: String) : DSLException("No path $path found in JSON node")

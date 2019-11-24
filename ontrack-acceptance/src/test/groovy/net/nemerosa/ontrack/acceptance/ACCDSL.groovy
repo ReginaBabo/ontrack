@@ -268,6 +268,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestPromotionRuns")
     void 'Promotion runs'() {
         def branch = createBuildsAndPromotions()
         // Creates a run
@@ -280,6 +281,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestPromotionRuns")
     void 'Promotion run deletion'() {
         def branch = createBuildsAndPromotions()
         // Creates two runs

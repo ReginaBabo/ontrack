@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 /**
  * Promotion level entity
@@ -22,6 +23,16 @@ class PromotionLevel(
     override val entityType: String = "PROMOTION_LEVEL"
 
 }
+
+/**
+ * Gets a promotion level by ID
+ */
+fun Ontrack.getPromotionLevelByID(id: Int) =
+        ontrackConnector.get("structure/promotionLevels/$id")
+                ?.adaptProjectId("branch.project")
+                ?.adaptSignature()
+                ?.toConnector<PromotionLevel>()
+                ?: throw EntityNotFoundException("promotion level", id)
 
 /**
  * List of promotion levels for a branch.

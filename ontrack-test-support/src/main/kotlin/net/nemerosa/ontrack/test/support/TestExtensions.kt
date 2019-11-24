@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.test.support
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.test.assertTrue
 import kotlin.test.fail
 
 private val counter = AtomicInteger()
@@ -30,3 +31,5 @@ fun <T> assertNotPresent(o: Optional<T>, message: String = "Optional is not pres
         fail(message)
     }
 }
+
+fun <T> assertAll(c: Collection<T>, check: (T) -> Boolean) = assertTrue(c.all(check))
