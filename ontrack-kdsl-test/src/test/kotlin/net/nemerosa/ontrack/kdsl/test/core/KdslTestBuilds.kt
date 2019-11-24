@@ -30,4 +30,15 @@ class KdslTestBuilds : AbstractKdslTest() {
             assertNull(build[2].nextBuild)
         }
     }
+
+    @Test
+    fun `Build update`() {
+        branch {
+            // Creates a build
+            build("1", "Build 1")
+            // Updates the build
+            val build = build("1", "Build 2")
+            assertEquals("Build 2", build.description)
+        }
+    }
 }

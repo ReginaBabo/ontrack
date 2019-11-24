@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 /**
  * Build entity
@@ -24,6 +25,15 @@ class Build(
 }
 
 /**
+ * Gets a build using its ID
+ */
+fun Ontrack.getBuildByID(id: Int): Build =
+        ontrackConnector.get("structure/builds/$id")
+                ?.adaptSignature()
+                ?.toConnector()
+                ?: throw EntityNotFoundException("build", id)
+
+/**
  * Creates or gets a build and runs some code for it.
  *
  * @param T Type of object returned by this function
@@ -43,7 +53,14 @@ fun <T> Branch.build(
             buildExactMatch = true
     ).firstOrNull()
     val actualBuild = if (build != null) {
-        TODO("Update")
+        ontrackConnector.put(
+                "structure/builds/${build.id}/update",
+                mapOf(
+                        "name" to name,
+                        "description" to description
+                )
+        )
+        ontrack.getBuildByID(build.id)
     } else {
         ontrackConnector.post(
                 "structure/branches/${id}/builds/create",
@@ -51,7 +68,7 @@ fun <T> Branch.build(
                         "name" to name,
                         "description" to description
                 )
-        ).adaptProjectId("branch.project").adaptSignature().toConnector<Build>()
+        ).adaptProjectId("branch.project").adaptSignature().toConnector()
     }
     return actualBuild.initFn()
 }
