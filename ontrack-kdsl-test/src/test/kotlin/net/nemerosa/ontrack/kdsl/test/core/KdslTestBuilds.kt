@@ -1,12 +1,15 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
 import net.nemerosa.ontrack.kdsl.model.build
+import net.nemerosa.ontrack.kdsl.model.createBuild
 import net.nemerosa.ontrack.kdsl.model.nextBuild
 import net.nemerosa.ontrack.kdsl.model.previousBuild
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest
 import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import org.junit.Test
+import org.springframework.web.client.HttpClientErrorException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 @SpringTest
@@ -39,6 +42,18 @@ class KdslTestBuilds : AbstractKdslTest() {
             // Updates the build
             val build = build("1", "Build 2")
             assertEquals("Build 2", build.description)
+        }
+    }
+
+    @Test
+    fun `Build creation twice`() {
+        branch {
+            // Creates a build
+            build("1", "Build 1")
+            // Creates the build a second time
+            assertFailsWith<HttpClientErrorException.BadRequest> {
+                createBuild("1", "Build 2")
+            }
         }
     }
 }

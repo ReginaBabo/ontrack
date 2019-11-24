@@ -62,6 +62,20 @@ fun <T> Branch.build(
         )
         ontrack.getBuildByID(build.id)
     } else {
+        createBuild(name, description)
+    }
+    return actualBuild.initFn()
+}
+
+/**
+ * Creates a build for the branch
+ *
+ * @receiver Branch where to create the build
+ * @param name Build name
+ * @param description Build description
+ * @return Created build
+ */
+fun Branch.createBuild(name: String, description: String): Build =
         ontrackConnector.post(
                 "structure/branches/${id}/builds/create",
                 mapOf(
@@ -69,9 +83,6 @@ fun <T> Branch.build(
                         "description" to description
                 )
         ).adaptProjectId("branch.project").adaptSignature().toConnector()
-    }
-    return actualBuild.initFn()
-}
 
 /**
  * Creates or gets a build
