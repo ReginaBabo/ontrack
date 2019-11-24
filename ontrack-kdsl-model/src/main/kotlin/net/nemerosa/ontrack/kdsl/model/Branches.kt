@@ -16,16 +16,11 @@ class Branch(
         id: Int,
         creation: Signature,
         @JsonProperty
-        private val projectId: Int,
+        override val projectId: Int,
         val name: String,
         val description: String,
         val disabled: Boolean
 ) : ProjectEntityResource(id, creation) {
-
-    /**
-     * Gets the project associated with this branch
-     */
-    val project: Project get() = ontrack.getProjectByID(projectId)
 
     override val entityType: String = "BRANCH"
 

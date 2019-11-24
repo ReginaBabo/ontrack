@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * Validation stamp entity
@@ -11,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 @JsonIgnoreProperties(ignoreUnknown = true)
 class ValidationStamp(
         id: Int,
+        @JsonProperty
+        override val projectId: Int,
         creation: Signature,
         val name: String,
         val description: String

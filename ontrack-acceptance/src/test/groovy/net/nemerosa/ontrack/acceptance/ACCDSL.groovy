@@ -93,6 +93,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Getting last promoted build'() {
         def branch = createBuildsAndPromotions()
         // Getting the last promoted builds

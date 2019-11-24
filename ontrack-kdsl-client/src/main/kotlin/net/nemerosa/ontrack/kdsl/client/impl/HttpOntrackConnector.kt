@@ -49,6 +49,22 @@ class HttpOntrackConnector(
         }
     }
 
+    override fun get(path: String, query: Map<String, Any>): JsonNode? {
+        return try {
+            restTemplate.getForObject(
+                    "/$path",
+                    JsonNode::class.java,
+                    query
+            )
+        } catch (ex: HttpClientErrorException) {
+            if (ex.statusCode == HttpStatus.NOT_FOUND) {
+                null
+            } else {
+                throw ex
+            }
+        }
+    }
+
     override fun post(path: String, payload: Any?): JsonNode? =
             restTemplate.postForObject(
                     "/$path",

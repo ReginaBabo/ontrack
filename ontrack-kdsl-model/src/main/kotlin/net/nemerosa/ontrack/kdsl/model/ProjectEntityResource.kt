@@ -3,7 +3,9 @@ package net.nemerosa.ontrack.kdsl.model
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import net.nemerosa.ontrack.kdsl.core.deepPath
 import net.nemerosa.ontrack.kdsl.core.parseInto
+import net.nemerosa.ontrack.kdsl.core.removeDeepPath
 import net.nemerosa.ontrack.kdsl.core.support.DSLException
 import net.nemerosa.ontrack.kdsl.core.toJson
 import kotlin.reflect.KClass
@@ -22,6 +24,18 @@ abstract class ProjectEntityResource(
      * Entity type
      */
     abstract val entityType: String
+
+    /**
+     * Project ID
+     */
+    abstract val projectId: Int
+
+    /**
+     * Gets the project associated with this entity
+     */
+    val project: Project by lazy {
+        ontrack.getProjectByID(projectId)
+    }
 
     /**
      * Sets a property on this entity
@@ -50,18 +64,18 @@ abstract class ProjectEntityResource(
 
 }
 
-fun JsonNode?.adaptProjectId(): JsonNode? {
+fun JsonNode?.adaptProjectId(projectPath: String = "project"): JsonNode? {
     return if (this is ObjectNode) {
-        val projectNode = get("project")
+        val projectNode = deepPath(projectPath)
         when {
-            projectNode == null || projectNode.isNull -> throw NoProjectIdException()
+            projectNode.isMissingNode || projectNode.isNull -> throw NoProjectIdException()
             else -> {
                 val projectId = projectNode.get("id")
                 if (projectId == null || projectId.isNull || !projectId.isInt) {
                     throw NoProjectIdException()
                 } else {
                     val id = projectId.asInt()
-                    this.remove("project")
+                    this.removeDeepPath(projectPath)
                     this.set("projectId", IntNode(id))
                 }
             }

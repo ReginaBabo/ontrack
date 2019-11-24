@@ -22,6 +22,8 @@ class Project(
 
     override val entityType: String = "PROJECT"
 
+    override val projectId: Int = id
+
     /**
      * Calling some code on the project
      */

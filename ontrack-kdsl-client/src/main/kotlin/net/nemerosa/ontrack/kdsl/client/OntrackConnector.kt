@@ -8,6 +8,8 @@ interface OntrackConnector {
 
     fun get(path: String): JsonNode?
 
+    fun get(path: String, query: Map<String, Any>): JsonNode?
+
     fun post(path: String, payload: Any?): JsonNode?
 
     fun put(path: String, payload: Any)
