@@ -25,15 +25,12 @@ class PromotionLevel(
 
 /**
  * List of promotion levels for a branch.
- *
- * @param name Filter on the promotion level name (exact match)
  */
-fun Branch.promotionLevels(
-        name: String? = null
-): List<PromotionLevel> =
+val Branch.promotionLevels: List<PromotionLevel>
+    get() =
         """
             branches(id: ${'$'}id) {
-                promotionLevels(name: ${'$'}name) {
+                promotionLevels {
                     id
                     name
                     description
@@ -45,8 +42,7 @@ fun Branch.promotionLevels(
             }
         """.trimIndent().graphQLQuery(
                 "PromotionLevels",
-                "id" type "Int!" value this.id,
-                "name" type "String" value name
+                "id" type "Int!" value this.id
         ).data["branches"][0]["promotionLevels"].map { it.adaptSignature().toConnector<PromotionLevel>() }
 
 
@@ -83,7 +79,7 @@ fun <T> Branch.promotionLevel(
         description: String = "",
         initFn: PromotionLevel.() -> T
 ): T {
-    val pl = promotionLevels(name = name).firstOrNull() ?: createPromotionLevel(name, description)
+    val pl = promotionLevels.firstOrNull { it.name == name } ?: createPromotionLevel(name, description)
     return pl.initFn()
 }
 
