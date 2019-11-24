@@ -15,6 +15,7 @@ dependencies {
     testImplementation(project(":ontrack-test-engine"))
     testImplementation(project(":ontrack-kdsl-model"))
     testImplementation("org.springframework.boot:spring-boot-starter")
+    testImplementation("org.springframework:spring-web")
 
     testImplementation(project(":ontrack-extension-stale", "dslConfig"))
 }
