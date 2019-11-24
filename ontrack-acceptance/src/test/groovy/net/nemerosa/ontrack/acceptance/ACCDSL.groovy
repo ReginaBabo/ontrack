@@ -179,6 +179,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filter interval'() {
         Branch branch = createBuildsAndPromotions()
         def results = branch.intervalFilter from: '3', to: '1'
@@ -186,6 +187,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filter interval in reverse order'() {
         Branch branch = createBuildsAndPromotions()
         def results = branch.intervalFilter from: '1', to: '3'
@@ -193,6 +195,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filter interval - only two'() {
         Branch branch = createBuildsAndPromotions()
         def results = branch.intervalFilter from: '2', to: '3'
@@ -200,6 +203,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filter interval - only one'() {
         Branch branch = createBuildsAndPromotions()
         def results = branch.intervalFilter from: '2', to: '2'
@@ -207,6 +211,7 @@ class ACCDSL extends AbstractACCDSL {
     }
 
     @Test
+    @KDSL("KdslTestBuildFilters")
     void 'Filter interval - not existing'() {
         Branch branch = createBuildsAndPromotions()
         def results = branch.intervalFilter from: '2', to: '4'
