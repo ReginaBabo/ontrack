@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class GraphQLProvider {
+class GraphQLProvider(
+        private val contributors: List<GraphQLContributor>
+) {
 
     @Bean
     @Lazy
@@ -38,10 +40,15 @@ class GraphQLProvider {
     }
 
     private fun buildRuntimeWiring(): RuntimeWiring {
-        return RuntimeWiring.newRuntimeWiring()
+        val wiring = RuntimeWiring.newRuntimeWiring()
+                // Scalars
                 .scalar(GQLScalarJSON.INSTANCE)
-                // TODO Provides wiring
-                .build()
+        // Gets all contributors
+        contributors.forEach { contributor ->
+            contributor.wire(wiring)
+        }
+        // OK
+        return wiring.build()
     }
 
 }
