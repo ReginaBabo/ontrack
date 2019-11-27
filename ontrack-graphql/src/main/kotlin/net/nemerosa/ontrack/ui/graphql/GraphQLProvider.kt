@@ -7,6 +7,7 @@ import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import net.nemerosa.ontrack.graphql.support.GQLScalarJSON
+import net.nemerosa.ontrack.ui.graphql.support.GQLScalarID
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
@@ -43,6 +44,7 @@ class GraphQLProvider(
         val wiring = RuntimeWiring.newRuntimeWiring()
                 // Scalars
                 .scalar(GQLScalarJSON.INSTANCE)
+                .scalar(GQLScalarID.INSTANCE)
         // Gets all contributors
         contributors.forEach { contributor ->
             contributor.wire(wiring)

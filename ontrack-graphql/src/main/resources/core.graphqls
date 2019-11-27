@@ -11,8 +11,8 @@
 #}
 
 type AccountGroup {
-    id: Int!
-    name: String
+    id: ID!
+    name: String!
     description: String
     # TODO accounts: [Account!]!
 #    globalRole: GlobalRole
@@ -21,8 +21,8 @@ type AccountGroup {
 }
 
 type AccountGroupMapping {
-    id: Int!
-    name: String
+    id: ID!
+    name: String!
     type: String
     group: AccountGroup
 }
@@ -295,8 +295,8 @@ scalar JSON
 #
 # TODO type Project implements ProjectEntity {
 type Project {
-    id: Int!
-    name: String
+    id: ID!
+    name: String!
     description: String
 #    creation: Signature
     # TODO    gitChangeLog(
