@@ -293,10 +293,11 @@ scalar JSON
 #    size: Int
 #}
 #
-#type Project implements ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
+# TODO type Project implements ProjectEntity {
+type Project {
+    id: Int!
+    name: String
+    description: String
 #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
@@ -334,7 +335,7 @@ scalar JSON
 #        hasValue: Boolean = false
 #    ): [Property!]!
 #    projectRoles(role: String): [ProjectAuthorization!]!
-#    disabled: Boolean!
+    disabled: Boolean!
 #    branches(
 #        name: String
 #        favourite: Boolean
@@ -348,7 +349,7 @@ scalar JSON
 #        validationStamp: String
 #        statuses: String
 #    ): ValidationRunPaginated
-#}
+}
 
 #type ProjectAuthorization {
 #    id: String
@@ -471,12 +472,12 @@ type Query {
 #    ): [Account!]!
 #    globalRoles(role: String): [GlobalRole!]!
 #    validationRuns(id: Int!): [ValidationRun!]!
-#    projects(
-#        id: Int
-#        name: String
-#        favourites: Boolean
-#        withProperty: PropertyFilter
-#    ): [Project!]!
+    projects(
+        id: Int
+        name: String
+        favourites: Boolean
+        # TODO withProperty: PropertyFilter
+    ): [Project!]!
 #    userRootActions: UserRootActions
 #    labels(
 #        category: String
