@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*
 import java.io.IOException
 import java.util.concurrent.Callable
 
-@Transactional
-@RestController
-@RequestMapping("/graphql")
+//@Transactional
+//@RestController
+// FIXME @RequestMapping("/graphql")
 class GraphqlController(
         private val graphQLService: GraphQLService
 ) {

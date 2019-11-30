@@ -1,0 +1,662 @@
+#type Account {
+#    id: Int!
+#    name: String
+#    fullName: String
+#    email: String
+#    authenticationSource: String
+#    role: String
+#    groups: [AccountGroup!]!
+#    globalRole: GlobalRole
+#    authorizedProjects: [AuthorizedProject!]!
+#}
+
+type AccountGroup {
+    id: Int!
+    name: String!
+    description: String
+    # TODO accounts: [Account!]!
+#    globalRole: GlobalRole
+#    authorizedProjects: [AuthorizedProject!]!
+    mappings: [AccountGroupMapping!]!
+}
+
+type AccountGroupMapping {
+    id: Int!
+    name: String!
+    type: String
+    group: AccountGroup
+}
+
+#type Action {
+#    id: String
+#    name: String
+#    type: String
+#    uri: String
+#}
+
+#type AuthorizedProject {
+#    role: ProjectRole!
+#    project: Project!
+#}
+
+#type Branch implements ProjectEntity {
+#    id: Int!
+#    name: String
+#    description: String
+#    creation: Signature
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+#    decorations(type: String): [Decoration!]!
+    # TODO    sVNBranchConfigurationProperty: Property
+    # TODO    sVNRevisionChangeLogIssueValidator: Property
+    # TODO    sVNSyncProperty: Property
+    # TODO    gitBranchConfigurationProperty: Property
+    # TODO    messageProperty: Property
+    # TODO    linkProperty: Property
+    # TODO    previousPromotionConditionProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsJobProperty: Property
+    # TODO    artifactoryPromotionSyncProperty: Property
+#    properties(
+#        type: String
+#        hasValue: Boolean = false
+#    ): [Property!]!
+#    buildDiffActions: [Action!]!
+#    otherBranches: [Branch!]!
+#    disabled: Boolean!
+#    type: BranchType
+#    project: Project
+#    promotionLevels: [PromotionLevel!]!
+#    validationStamps(name: String): [ValidationStamp!]!
+#    builds(
+#        count: Int
+#        lastPromotions: Boolean
+#        filter: StandardBuildFilter
+#        generic: GenericBuildFilter
+#    ): [Build!]!
+#}
+#
+#type BranchInfo {
+#    branch: Branch
+#    firstBuild: Build
+#    promotions: [PromotionRun!]!
+#}
+#
+#type BranchInfos {
+#    type: String
+#    branchInfoList: [BranchInfo!]!
+#}
+#
+#enum BranchType {
+#    CLASSIC
+#    TEMPLATE_DEFINITION
+#    TEMPLATE_INSTANCE
+#}
+#
+#type Build implements ProjectEntity {
+#    id: Int!
+#    name: String
+#    description: String
+#    creation: Signature
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+#    decorations(type: String): [Decoration!]!
+    # TODO    gitCommitProperty: Property
+    # TODO    releaseProperty: Property
+    # TODO    messageProperty: Property
+    # TODO    linkProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsBuildProperty: Property
+#    properties(
+#        type: String
+#        hasValue: Boolean = false
+#    ): [Property!]!
+#    branch: Branch
+#    promotionRuns(
+#        promotion: String
+#        lastPerLevel: Boolean
+#    ): [PromotionRun!]!
+#    validationRuns(
+#        validationStamp: String
+#        count: Int = 50
+#    ): [ValidationRun!]!
+#    validationRunsPaginated(
+#        offset: Int = 0
+#        size: Int = 20
+#    ): ValidationRunPaginated
+#    validations(validationStamp: String): [Validation!]!
+#    using(
+#        offset: Int = 0
+#        size: Int = 20
+#        project: String
+#        branch: String
+#    ): BuildPaginated
+#    usedBy(
+#        offset: Int = 0
+#        size: Int = 20
+#        project: String
+#        branch: String
+#    ): BuildPaginated
+#    runInfo: RunInfo
+#}
+#
+#type BuildFilterValidation {
+#    error: String
+#}
+#
+#enum BuildLinkDirection {
+#    TO
+#    FROM
+#    BOTH
+#}
+#
+#type BuildPaginated {
+#    pageInfo: PageInfo
+#    pageItems: [Build!]!
+#}
+#
+#input BuildSearchForm {
+#    branchName: String
+#    buildExactMatch: Boolean
+#    buildName: String
+#    linkedFrom: String
+#    linkedTo: String
+#    maximumCount: Int
+#    promotionName: String
+#    property: String
+#    propertyValue: String
+#    validationStampName: String
+#}
+#
+#type Decoration {
+#    decorationType: String
+#    data: JSON
+#    error: String
+#    feature: ExtensionFeatureDescription
+#}
+#
+#type ExtensionFeatureDescription {
+#    id: String
+#    name: String
+#    description: String
+#    version: String
+#}
+#
+#input GenericBuildFilter {
+#    type: String
+#    data: String
+#}
+
+# TODO type GitChangeLog {
+#    commits: [GitUICommit!]!
+#}
+#
+# TODO type GitCommit {
+#    author: GitPerson
+#    commitTime: LocalDateTime
+#    committer: GitPerson
+#    fullMessage: String
+#    id: String
+#    shortId: String
+#    shortMessage: String
+#}
+#
+# TODO type GitPerson {
+#    email: String
+#    name: String
+#}
+#
+# TODO type GitUICommit {
+#    annotatedMessage: String
+#    author: String
+#    authorEmail: String
+#    commit: GitCommit
+#    formattedMessage: String
+#    fullAnnotatedMessage: String
+#    id: String
+#    link: String
+#    message: String
+#    shortId: String
+#    timestamp: LocalDateTime
+#}
+
+#type GlobalRole {
+#    id: String
+#    name: String
+#    description: String
+#    groups: [AccountGroup!]!
+#    accounts: [Account!]!
+#}
+
+# TODO type IssueServiceConfigurationRepresentation {
+#    id: String
+#    name: String
+#    serviceId: String
+#}
+
+scalar JSON
+
+#type Label {
+#    category: String
+#    color: String
+#    computedBy: LabelProviderDescription
+#    description: String
+#    display: String
+#    foregroundColor: String
+#    id: Int
+#    name: String
+#    projects: [Project!]!
+#    links: LabelLinks
+#}
+#
+#type LabelLinks {
+#    _update: String
+#    _delete: String
+#}
+#
+#type LabelProviderDescription {
+#    id: String
+#    name: String
+#}
+
+# TODO scalar LocalDateTime
+
+#scalar Long
+
+# TODO type OntrackGitCommitInfo {
+#    uiCommit: GitUICommit
+#    branchInfosList: [BranchInfos!]!
+#}
+#
+# TODO type OntrackGitIssueInfo {
+#    issueServiceConfigurationRepresentation: IssueServiceConfigurationRepresentation
+#    issue: JSON
+#    commitInfo: OntrackGitCommitInfo
+#}
+
+#type PageInfo {
+#    totalSize: Int
+#    currentOffset: Int
+#    currentSize: Int
+#    previousPage: PageRequest
+#    nextPage: PageRequest
+#    pageTotal: Int
+#    pageIndex: Int
+#}
+#
+#type PageRequest {
+#    offset: Int
+#    size: Int
+#}
+#
+# TODO type Project implements ProjectEntity {
+type Project {
+    id: Int!
+    name: String!
+    description: String
+#    creation: Signature
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+    # TODO    gitIssueInfo(
+    #        token: String!
+    #        first: Boolean
+    #    ): OntrackGitIssueInfo
+    # TODO    gitCommitInfo(
+    #        commit: String!
+    #        first: Boolean
+    #    ): OntrackGitCommitInfo
+#    decorations(type: String): [Decoration!]!
+    # TODO    sVNProjectConfigurationProperty: Property
+    # TODO    gitHubProjectConfigurationProperty: Property
+    # TODO    gitLabProjectConfigurationProperty: Property
+    # TODO    stashProjectConfigurationProperty: Property
+    # TODO    gitProjectConfigurationProperty: Property
+    # TODO    branchingModelProperty: Property
+    # TODO    messageProperty: Property
+    # TODO    autoValidationStampProperty: Property
+    # TODO    autoPromotionLevelProperty: Property
+    # TODO    linkProperty: Property
+    # TODO    previousPromotionConditionProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    mainBuildLinksProjectProperty: Property
+    # TODO    buildLinkDisplayProperty: Property
+    # TODO    jenkinsJobProperty: Property
+    # TODO    staleProperty: Property
+    # TODO    sonarQubeProperty: Property
+    # TODO    jIRAFollowLinksProperty: Property
+#    properties(
+#        type: String
+#        hasValue: Boolean = false
+#    ): [Property!]!
+#    projectRoles(role: String): [ProjectAuthorization!]!
+    disabled: Boolean!
+#    branches(
+#        name: String
+#        favourite: Boolean
+#        useModel: Boolean
+#    ): [Branch!]!
+#    labels: [Label!]!
+#    validationRuns(
+#        offset: Int = 0
+#        size: Int = 20
+#        branch: String
+#        validationStamp: String
+#        statuses: String
+#    ): ValidationRunPaginated
+}
+
+#type ProjectAuthorization {
+#    id: String
+#    name: String
+#    description: String
+#    groups: [AccountGroup!]!
+#    accounts: [Account!]!
+#}
+#
+#interface ProjectEntity {
+#    id: Int!
+#    name: String
+#    description: String
+#    creation: Signature
+#}
+#
+#type ProjectRole {
+#    id: String
+#    name: String
+#    description: String
+#}
+#
+#type PromotionLevel implements ProjectEntity {
+#    id: Int!
+#    name: String
+#    description: String
+#    creation: Signature
+#    _image: String
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+#    decorations(type: String): [Decoration!]!
+    # TODO    messageProperty: Property
+    # TODO    autoPromotionProperty: Property
+    # TODO    linkProperty: Property
+    # TODO    previousPromotionConditionProperty: Property
+    # TODO    promotionDependenciesProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsJobProperty: Property
+#    properties(
+#        type: String
+#        hasValue: Boolean = false
+#    ): [Property!]!
+#    image: Boolean
+#    branch: Branch
+#    promotionRuns(
+#        first: Int
+#        last: Int
+#    ): [PromotionRun!]!
+#}
+#
+#type PromotionRun implements ProjectEntity {
+#    id: Int!
+#    name: String
+#    description: String
+#    creation: Signature
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+#    decorations(type: String): [Decoration!]!
+    # TODO    messageProperty: Property
+    # TODO    linkProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsBuildProperty: Property
+#    properties(
+#        type: String
+#        hasValue: Boolean = false
+#    ): [Property!]!
+#    build: Build!
+#    promotionLevel: PromotionLevel!
+#}
+#
+#type Property {
+#    type: PropertyType
+#    value: JSON
+#    editable: Boolean
+#}
+#
+#input PropertyFilter {
+#    type: String
+#    value: String
+#}
+#
+#type PropertyType {
+#    typeName: String
+#    name: String
+#    description: String
+#}
+
+type Query {
+    # TODO    svnConfigurations(name: String): [SVNConfiguration!]!
+    # TODO    gitChangeLog(
+    #        from: Int!
+    #        to: Int!
+    #    ): GitChangeLog
+#    builds(
+#        id: Int
+#        project: String
+#        branch: String
+#        buildBranchFilter: StandardBuildFilter
+#        buildProjectFilter: BuildSearchForm
+#    ): [Build!]!
+#    promotionRuns(id: Int!): [PromotionRun!]!
+#    accountGroupMappings(
+#        type: String!
+#        name: String
+#        group: String
+#    ): [AccountGroupMapping!]!
+    accountGroups(
+        id: Int
+        name: String
+        mapping: String
+    ): [AccountGroup!]!
+#    accounts(
+#        id: Int
+#        name: String
+#        group: String
+#    ): [Account!]!
+#    globalRoles(role: String): [GlobalRole!]!
+#    validationRuns(id: Int!): [ValidationRun!]!
+    projects(
+        id: Int
+        name: String
+        favourites: Boolean
+        # TODO withProperty: PropertyFilter
+    ): [Project!]!
+#    userRootActions: UserRootActions
+#    labels(
+#        category: String
+#        name: String
+#    ): [Label!]!
+#    branches(
+#        id: Int
+#        project: String
+#        name: String
+#        favourite: Boolean
+#        withProperty: PropertyFilter
+#    ): [Branch!]!
+#    validationStamp(id: Int!): ValidationStamp
+#    buildFilterValidation(
+#        branchId: Int!
+#        filter: GenericBuildFilter!
+#    ): BuildFilterValidation
+}
+
+#type RunInfo {
+#    id: Int
+#    sourceType: String
+#    sourceUri: String
+#    triggerType: String
+#    triggerData: String
+#    runTime: Int
+#    creation: Signature
+#}
+#
+#type ServiceConfiguration {
+#    id: String
+#    data: JSON
+#}
+#
+#type Signature {
+#    user: String
+#    time: String
+#}
+#
+#input StandardBuildFilter {
+#    count: Int = 10
+#    sincePromotionLevel: String
+#    withPromotionLevel: String
+#    afterDate: String
+#    beforeDate: String
+#    sinceValidationStamp: String
+#    sinceValidationStampStatus: String
+#    withValidationStamp: String
+#    withValidationStampStatus: String
+#    withProperty: String
+#    withPropertyValue: String
+#    sinceProperty: String
+#    sincePropertyValue: String
+#    linkedFrom: String
+#    linkedFromPromotion: String
+#    linkedTo: String
+#    linkedToPromotion: String
+#}
+
+# TODO type SVNConfiguration {
+#    browserForChange: String
+#    browserForPath: String
+#    browserForRevision: String
+#    indexationInterval: Int
+#    indexationStart: Long
+#    issueServiceConfigurationIdentifier: String
+#    name: String
+#    tagFilterPattern: String
+#    url: String
+#    user: String
+#}
+#
+#type UserRootActions {
+#    projectCreate: String
+#}
+#
+#type Validation {
+#    validationStamp: ValidationStamp
+#    validationRuns(count: Int = 50): [ValidationRun!]!
+#}
+#
+#type ValidationDataTypeConfig {
+#    descriptor: ValidationDataTypeDescriptor
+#    config: JSON
+#}
+#
+#type ValidationDataTypeDescriptor {
+#    feature: ExtensionFeatureDescription
+#    id: String
+#    displayName: String
+#}
+#
+#type ValidationRun implements ProjectEntity {
+#    id: Int!
+#    name: String
+#    description: String
+#    creation: Signature
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+#    decorations(type: String): [Decoration!]!
+    # TODO    messageProperty: Property
+    # TODO    linkProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsBuildProperty: Property
+#    properties(
+#        type: String
+#        hasValue: Boolean = false
+#    ): [Property!]!
+#    build: Build!
+#    validationStamp: ValidationStamp!
+#    runOrder: Int
+#    validationRunStatuses: [ValidationRunStatus!]!
+#    runInfo: RunInfo
+#    data: ValidationRunData
+#}
+#
+#type ValidationRunData {
+#    descriptor: ValidationDataTypeDescriptor
+#    data: JSON
+#}
+#
+#type ValidationRunPaginated {
+#    pageInfo: PageInfo
+#    pageItems: [ValidationRun!]!
+#}
+#
+#type ValidationRunStatus {
+#    id: Int!
+#    creation: Signature
+#    statusID: ValidationRunStatusID
+#    description: String
+#    annotatedDescription: String
+#    links: ValidationRunStatusLinks
+#}
+#
+#type ValidationRunStatusID {
+#    id: String
+#    name: String
+#    root: Boolean
+#    passed: Boolean
+#    followingStatuses: [String!]!
+#}
+#
+#type ValidationRunStatusLinks {
+#    _comment: String
+#}
+#
+#type ValidationStamp implements ProjectEntity {
+#    id: Int!
+#    name: String
+#    description: String
+#    creation: Signature
+#    _image: String
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+#    decorations(type: String): [Decoration!]!
+    # TODO    messageProperty: Property
+    # TODO    linkProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsJobProperty: Property
+#    properties(
+#        type: String
+#        hasValue: Boolean = false
+#    ): [Property!]!
+#    image: Boolean
+#    dataType: ValidationDataTypeConfig
+#    branch: Branch
+#    validationRunsPaginated(
+#        offset: Int = 0
+#        size: Int = 20
+#        buildId: Int
+#    ): ValidationRunPaginated
+#    validationRuns(count: Int = 50): [ValidationRun!]!
+#}
+
+schema {
+    query: Query
+}

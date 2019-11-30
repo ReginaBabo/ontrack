@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
-class ProjectGraphQLIT : AbstractQLKTITSupport() {
+class ProjectGraphQLIT : AbstractGraphQLITSupport() {
 
     @Autowired
     private lateinit var branchFavouriteService: BranchFavouriteService
@@ -47,10 +47,11 @@ class ProjectGraphQLIT : AbstractQLKTITSupport() {
 
     @Test
     fun `All projects`() {
-        val p = doCreateProject()
-        val data = run("{projects { id name }}")
-        assertNotNull(data["projects"].find { it["name"].asText() == p.name }) {
-            assertEquals(p.id(), it["id"].asInt())
+        project {
+            val data = run("{projects { id name }}")
+            assertNotNull(data["projects"].find { it["name"].asText() == name }) {
+                assertEquals(id(), it["id"].asInt())
+            }
         }
     }
 
