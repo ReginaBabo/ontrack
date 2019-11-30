@@ -1,11 +1,10 @@
 package net.nemerosa.ontrack.ui.graphql
 
-import graphql.schema.DataFetchingEnvironment
 import net.nemerosa.ontrack.model.structure.ID
 import net.nemerosa.ontrack.model.structure.Project
 import net.nemerosa.ontrack.model.structure.StructureService
 import net.nemerosa.ontrack.ui.graphql.dsl.root.RootQueryDelegates.rootQuery
-import net.nemerosa.ontrack.ui.graphql.dsl.support.get
+import net.nemerosa.ontrack.ui.graphql.dsl.support.jsonParser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -14,7 +13,7 @@ class CoreQueries(
         private val structureService: StructureService
 ) {
     @get:Bean
-    val projects by rootQuery<ProjectsInput, List<Project>>(ProjectsInput.Companion::parse) { (id, name, favourites) ->
+    val projects by rootQuery<ProjectsInput, List<Project>>(jsonParser()) { (id, name, favourites) ->
         // By ID
         if (id != null) {
             listOf(
@@ -56,12 +55,4 @@ data class ProjectsInput(
         val name: String?,
         val favourites: Boolean?
         // TODO Property filter
-) {
-    companion object {
-        fun parse(env: DataFetchingEnvironment) = ProjectsInput(
-                env.get(ProjectsInput::id),
-                env.get(ProjectsInput::name),
-                env.get(ProjectsInput::favourites)
-        )
-    }
-}
+)
