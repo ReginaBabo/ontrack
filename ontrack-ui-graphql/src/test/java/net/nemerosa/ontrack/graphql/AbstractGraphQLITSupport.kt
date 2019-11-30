@@ -5,6 +5,7 @@ import graphql.GraphQL
 import net.nemerosa.ontrack.graphql.support.exception
 import net.nemerosa.ontrack.it.AbstractDSLTestSupport
 import net.nemerosa.ontrack.json.JsonUtils
+import net.nemerosa.ontrack.model.structure.ProjectEntity
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.fail
 
@@ -15,6 +16,11 @@ abstract class AbstractGraphQLITSupport : AbstractDSLTestSupport() {
 
     @Autowired
     private lateinit var graphQL: GraphQL
+
+    fun ProjectEntity.runWithView(query: String, variables: Map<String, *> = emptyMap<String, Any>()) =
+            asUserWithView {
+                run(query, variables)
+            }
 
     fun run(query: String, variables: Map<String, *> = emptyMap<String, Any>()): JsonNode {
         val result = graphQL.execute {

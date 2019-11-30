@@ -15,23 +15,9 @@ class ProjectQLIT extends AbstractQLITSupport {
     @Autowired
     private StructureRepository structureRepository
 
-    @Test
-    void 'Project by ID'() {
-        def p = doCreateProject()
-        def data = run("{projects(id: ${p.id}) { name }}")
-        assert data.projects.first().name == p.name
-    }
-
     @Test(expected = IllegalStateException)
     void 'Project by ID and name is not authorised'() {
         run("""{projects(id: 1, name: "test") { name }}""")
-    }
-
-    @Test
-    void 'Project by name'() {
-        def p = doCreateProject()
-        def data = run("""{projects(name: "${p.name}") { id }}""")
-        assert data.projects.first().id == p.id()
     }
 
     @Test

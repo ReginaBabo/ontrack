@@ -128,4 +128,35 @@ class BranchGraphQLIT : AbstractQLKTITSupport() {
         assertEquals("COPPER", promotionRun.path("promotionLevel").path("name").asText())
     }
 
+    @Test
+    fun `Favourite branches for project`() {
+        // TODO Move to other test class
+        val account = doCreateAccount()
+        project {
+            branch {}
+            val fav = branch {
+                asAccount(account).withView(this).execute {
+                    branchFavouriteService.setBranchFavourite(this, true)
+                }
+            }
+            // Gets the favourite branches in project
+            val data = asAccount(account).withView(this).call {
+                run("""
+                    {
+                        projects(id: ${this.id}) {
+                            branches(favourite: true) {
+                                id
+                            }
+                        }
+                    }
+                """)
+            }
+            val branchIds: Set<Int> = data["projects"][0]["branches"].map { it["id"].asInt() }.toSet()
+            assertEquals(
+                    setOf(fav.id()),
+                    branchIds
+            )
+        }
+    }
+
 }
