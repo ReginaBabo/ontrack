@@ -569,31 +569,31 @@ type Query {
 #    displayName: String
 #}
 #
-#type ValidationRun implements ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
-#    creation: Signature
-# TODO    gitChangeLog(
-#        from: String!
-#        to: String!
-#    ): GitChangeLog
-#    decorations(type: String): [Decoration!]!
-# TODO    linkProperty: Property
-# TODO    metaInfoProperty: Property
-# TODO    jenkinsBuildProperty: Property
-#    properties(
-#        type: String
-#        hasValue: Boolean = false
-#    ): [Property!]!
-#    build: Build!
-#    validationStamp: ValidationStamp!
-#    runOrder: Int
-#    validationRunStatuses: [ValidationRunStatus!]!
-#    runInfo: RunInfo
-#    data: ValidationRunData
-#}
-#
+type ValidationRun implements ProjectEntity {
+    id: Int!
+    name: String
+    description: String
+    #    creation: Signature
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+    #    decorations(type: String): [Decoration!]!
+    # TODO    linkProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsBuildProperty: Property
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
+    build: Build!
+    validationStamp: ValidationStamp!
+    #    runOrder: Int
+    #    validationRunStatuses: [ValidationRunStatus!]!
+    #    runInfo: RunInfo
+    #    data: ValidationRunData
+}
+
 #type ValidationRunData {
 #    descriptor: ValidationDataTypeDescriptor
 #    data: JSON
@@ -625,34 +625,34 @@ type Query {
 #    _comment: String
 #}
 #
-#type ValidationStamp implements ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
-#    creation: Signature
-#    _image: String
-# TODO    gitChangeLog(
-#        from: String!
-#        to: String!
-#    ): GitChangeLog
-#    decorations(type: String): [Decoration!]!
-# TODO    linkProperty: Property
-# TODO    metaInfoProperty: Property
-# TODO    jenkinsJobProperty: Property
-#    properties(
-#        type: String
-#        hasValue: Boolean = false
-#    ): [Property!]!
-#    image: Boolean
-#    dataType: ValidationDataTypeConfig
-#    branch: Branch
-#    validationRunsPaginated(
-#        offset: Int = 0
-#        size: Int = 20
-#        buildId: Int
-#    ): ValidationRunPaginated
-#    validationRuns(count: Int = 50): [ValidationRun!]!
-#}
+type ValidationStamp implements ProjectEntity {
+    id: Int!
+    name: String
+    description: String
+    #    creation: Signature
+    #    _image: String
+    # TODO    gitChangeLog(
+    #        from: String!
+    #        to: String!
+    #    ): GitChangeLog
+    #    decorations(type: String): [Decoration!]!
+    # TODO    linkProperty: Property
+    # TODO    metaInfoProperty: Property
+    # TODO    jenkinsJobProperty: Property
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
+    #    image: Boolean
+    #    dataType: ValidationDataTypeConfig
+    branch: Branch
+    #    validationRunsPaginated(
+    #        offset: Int = 0
+    #        size: Int = 20
+    #        buildId: Int
+    #    ): ValidationRunPaginated
+    #    validationRuns(count: Int = 50): [ValidationRun!]!
+}
 
 type Mutation {
     createProject(project: CreateProjectInput): Project

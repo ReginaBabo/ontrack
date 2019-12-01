@@ -9,6 +9,8 @@ enum MessageType {
     INFO
 }
 
+## Extensions for project entities
+
 extend interface ProjectEntity {
     messageProperty: MessageProperty
 }
@@ -25,7 +27,9 @@ extend type PromotionLevel {
     messageProperty: MessageProperty
 }
 
-# TODO Validation stamp
+extend type ValidationStamp {
+    messageProperty: MessageProperty
+}
 
 extend type Build {
     messageProperty: MessageProperty
@@ -35,4 +39,6 @@ extend type PromotionRun {
     messageProperty: MessageProperty
 }
 
-# TODO Validation run
+extend type ValidationRun {
+    messageProperty: MessageProperty
+}
