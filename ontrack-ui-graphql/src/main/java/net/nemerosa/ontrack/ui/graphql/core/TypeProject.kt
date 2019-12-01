@@ -6,7 +6,7 @@ import net.nemerosa.ontrack.ui.graphql.GraphQLContributor
 import org.springframework.stereotype.Component
 
 @Component
-class ProjectGraphQL : GraphQLContributor {
+class TypeProject : GraphQLContributor {
     override fun wire(wiring: RuntimeWiring.Builder) {
         wiring.type("Project") {
             it.dataFetcher("id") { environment ->

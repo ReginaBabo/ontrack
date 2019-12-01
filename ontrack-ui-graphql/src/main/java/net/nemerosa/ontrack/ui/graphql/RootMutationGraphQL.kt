@@ -2,39 +2,18 @@ package net.nemerosa.ontrack.ui.graphql
 
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.TypeRuntimeWiring
-import net.nemerosa.ontrack.model.security.SecurityService
-import net.nemerosa.ontrack.model.structure.ID
-import net.nemerosa.ontrack.model.structure.Project
-import net.nemerosa.ontrack.model.structure.StructureService
-import net.nemerosa.ontrack.ui.graphql.dsl.support.get
+import net.nemerosa.ontrack.ui.graphql.dsl.root.mutation.RootMutationGraphQLContributor
 import org.springframework.stereotype.Component
 
 @Component
 class RootMutationGraphQL(
-        private val structureService: StructureService,
-        private val securityService: SecurityService
+        private val rootMutationGraphQLContributors: List<RootMutationGraphQLContributor>
 ) : AbstractGraphQLContributor() {
     override fun wire(wiring: RuntimeWiring.Builder) {
         val mutationType = TypeRuntimeWiring.newTypeWiring("Mutation")
-                .dataFetcher("createProject") { env ->
-                    val input: CreateProjectInput = env["project"]
-                    structureService.newProject(
-                            Project(
-                                    ID.NONE,
-                                    input.name,
-                                    input.description,
-                                    input.disabled ?: false,
-                                    securityService.currentSignature
-                            )
-                    )
-                }
-
-        wiring.type(mutationType)
+        val finalType = rootMutationGraphQLContributors.fold(mutationType) { r, t ->
+            t.contribute(r)
+        }
+        wiring.type(finalType)
     }
 }
-
-data class CreateProjectInput(
-        val name: String,
-        val description: String?,
-        val disabled: Boolean?
-)
