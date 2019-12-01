@@ -4,7 +4,7 @@ import graphql.schema.idl.TypeRuntimeWiring
 
 fun <S, O> TypeRuntimeWiring.Builder.typedDataFetcher(
         name: String,
-        valueFn: (S) -> O
+        valueFn: (S) -> O?
 ) {
     dataFetcher(name) { env ->
         val source: S = env.getSource()

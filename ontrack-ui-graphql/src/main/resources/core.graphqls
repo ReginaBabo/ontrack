@@ -39,7 +39,7 @@ type AccountGroupMapping {
 #    project: Project!
 #}
 
-type Branch {
+type Branch implements ProjectEntity{
     id: Int!
     name: String
     description: String
@@ -94,7 +94,7 @@ type Branch {
 #    TEMPLATE_INSTANCE
 #}
 #
-type Build {
+type Build implements ProjectEntity {
     id: Int!
     name: String
     description: String
@@ -292,7 +292,7 @@ scalar JSON
 #}
 #
 # TODO type Project implements ProjectEntity {
-type Project {
+type Project  implements ProjectEntity {
     id: Int!
     name: String!
     description: String
@@ -355,21 +355,25 @@ type Project {
 #    groups: [AccountGroup!]!
 #    accounts: [Account!]!
 #}
-#
-#interface ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
-#    creation: Signature
-#}
-#
+
+interface ProjectEntity {
+    id: Int!
+    name: String
+    description: String
+    # TODO creation: Signature
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
+}
+
 #type ProjectRole {
 #    id: String
 #    name: String
 #    description: String
 #}
 
-type PromotionLevel {
+type PromotionLevel implements ProjectEntity {
     id: Int!
     name: String
     description: String
@@ -398,7 +402,7 @@ type PromotionLevel {
     ): [PromotionRun!]!
 }
 
-type PromotionRun {
+type PromotionRun implements ProjectEntity {
     id: Int!
     name: String
     description: String
