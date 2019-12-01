@@ -24,7 +24,7 @@ public final class ID implements Serializable {
      * <p>
      * Its integer value is <code>0</code> and a call to {@link #isSet()} returns <code>false</code>.
      */
-    public static ID NONE = new ID(0);
+    public static final ID NONE = new ID(0);
 
     /**
      * Builds a <i>defined</i> ID. The given <code>value</code> must be an integer greater than 0.
