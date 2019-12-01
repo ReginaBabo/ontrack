@@ -10,9 +10,10 @@ class TypeBranch(
         private val structureService: StructureService
 ) : AbstractTypeProjectEntity<Branch>(Branch::class) {
     override fun dataFetchers(builder: TypeRuntimeWiring.Builder) {
-        builder.dataFetcher("promotionLevels") { environment ->
-            val branch: Branch = environment.getSource()
+
+        builder.field("promotionLevels") { branch ->
             structureService.getPromotionLevelListForBranch(branch.id)
         }
+
     }
 }

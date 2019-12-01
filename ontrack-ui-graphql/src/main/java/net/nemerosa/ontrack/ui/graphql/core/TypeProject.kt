@@ -1,11 +1,8 @@
 package net.nemerosa.ontrack.ui.graphql.core
 
-import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.TypeRuntimeWiring
 import net.nemerosa.ontrack.common.and
 import net.nemerosa.ontrack.model.structure.*
-import net.nemerosa.ontrack.ui.graphql.GraphQLContributor
-import net.nemerosa.ontrack.ui.graphql.dsl.support.parse
 import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 
@@ -16,9 +13,8 @@ class TypeProject(
         private val branchModelMatcherService: BranchModelMatcherService
 ) : AbstractTypeProjectEntity<Project>(Project::class) {
     override fun dataFetchers(builder: TypeRuntimeWiring.Builder) {
-        builder.dataFetcher("branches") { environment ->
-            val project: Project = environment.getSource()
-            val (name, favourite, useModel) = environment.parse<BranchListInput>()
+
+        builder.field<BranchListInput, List<Branch>>("branches") { project, (name, favourite, useModel) ->
             // Combined filter
             var filter: (Branch) -> Boolean = { true }
             // Name criteria
@@ -42,5 +38,6 @@ class TypeProject(
                     .getBranchesForProject(project.id)
                     .filter(filter)
         }
+
     }
 }
