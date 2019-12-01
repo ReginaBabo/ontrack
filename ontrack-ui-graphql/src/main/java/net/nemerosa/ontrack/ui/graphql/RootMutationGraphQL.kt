@@ -7,7 +7,6 @@ import net.nemerosa.ontrack.model.structure.ID
 import net.nemerosa.ontrack.model.structure.Project
 import net.nemerosa.ontrack.model.structure.StructureService
 import net.nemerosa.ontrack.ui.graphql.dsl.support.get
-import net.nemerosa.ontrack.ui.graphql.dsl.support.input
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,13 +17,7 @@ class RootMutationGraphQL(
     override fun wire(wiring: RuntimeWiring.Builder) {
         val mutationType = TypeRuntimeWiring.newTypeWiring("Mutation")
                 .dataFetcher("createProject") { env ->
-                    val input = env.input("project").let {
-                        CreateProjectInput(
-                                it[CreateProjectInput::name],
-                                it[CreateProjectInput::description],
-                                it[CreateProjectInput::disabled]
-                        )
-                    }
+                    val input: CreateProjectInput = env["project"]
                     structureService.newProject(
                             Project(
                                     ID.NONE,
