@@ -53,16 +53,15 @@ type Branch {
     # TODO    sVNRevisionChangeLogIssueValidator: Property
     # TODO    sVNSyncProperty: Property
     # TODO    gitBranchConfigurationProperty: Property
-    # TODO    messageProperty: Property
     # TODO    linkProperty: Property
     # TODO    previousPromotionConditionProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsJobProperty: Property
     # TODO    artifactoryPromotionSyncProperty: Property
-    #    properties(
-    #        type: String
-    #        hasValue: Boolean = false
-    #    ): [Property!]!
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
     #    buildDiffActions: [Action!]!
     #    otherBranches: [Branch!]!
     disabled: Boolean!
@@ -107,7 +106,6 @@ type Build {
     #    decorations(type: String): [Decoration!]!
     # TODO    gitCommitProperty: Property
     # TODO    releaseProperty: Property
-    # TODO    messageProperty: Property
     # TODO    linkProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsBuildProperty: Property
@@ -318,7 +316,6 @@ type Project {
     # TODO    stashProjectConfigurationProperty: Property
     # TODO    gitProjectConfigurationProperty: Property
     # TODO    branchingModelProperty: Property
-    # TODO    messageProperty: Property
     # TODO    autoValidationStampProperty: Property
     # TODO    autoPromotionLevelProperty: Property
     # TODO    linkProperty: Property
@@ -330,10 +327,10 @@ type Project {
     # TODO    staleProperty: Property
     # TODO    sonarQubeProperty: Property
     # TODO    jIRAFollowLinksProperty: Property
-    #    properties(
-    #        type: String
-    #        hasValue: Boolean = false
-    #    ): [Property!]!
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
     #    projectRoles(role: String): [ProjectAuthorization!]!
     disabled: Boolean!
     branches(
@@ -383,17 +380,16 @@ type PromotionLevel {
     #        to: String!
     #    ): GitChangeLog
     #    decorations(type: String): [Decoration!]!
-    # TODO    messageProperty: Property
     # TODO    autoPromotionProperty: Property
     # TODO    linkProperty: Property
     # TODO    previousPromotionConditionProperty: Property
     # TODO    promotionDependenciesProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsJobProperty: Property
-    #    properties(
-    #        type: String
-    #        hasValue: Boolean = false
-    #    ): [Property!]!
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
     #    image: Boolean
     branch: Branch
     promotionRuns(
@@ -412,14 +408,13 @@ type PromotionRun {
     #        to: String!
     #    ): GitChangeLog
     #    decorations(type: String): [Decoration!]!
-    # TODO    messageProperty: Property
     # TODO    linkProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsBuildProperty: Property
-    #    properties(
-    #        type: String
-    #        hasValue: Boolean = false
-    #    ): [Property!]!
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
     build: Build!
     promotionLevel: PromotionLevel!
 }
@@ -580,7 +575,6 @@ type Query {
 #        to: String!
 #    ): GitChangeLog
 #    decorations(type: String): [Decoration!]!
-# TODO    messageProperty: Property
 # TODO    linkProperty: Property
 # TODO    metaInfoProperty: Property
 # TODO    jenkinsBuildProperty: Property
@@ -638,7 +632,6 @@ type Query {
 #        to: String!
 #    ): GitChangeLog
 #    decorations(type: String): [Decoration!]!
-# TODO    messageProperty: Property
 # TODO    linkProperty: Property
 # TODO    metaInfoProperty: Property
 # TODO    jenkinsJobProperty: Property
