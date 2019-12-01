@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.ui.graphql.dsl.root
+package net.nemerosa.ontrack.ui.graphql.dsl.root.query
 
 import graphql.schema.DataFetchingEnvironment
 import kotlin.properties.ReadOnlyProperty

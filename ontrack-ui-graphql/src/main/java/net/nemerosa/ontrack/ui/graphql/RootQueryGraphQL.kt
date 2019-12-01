@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.ui.graphql
 
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.TypeRuntimeWiring
+import net.nemerosa.ontrack.ui.graphql.dsl.root.query.RootQueryGraphQLContributor
 import org.springframework.stereotype.Component
 
 @Component

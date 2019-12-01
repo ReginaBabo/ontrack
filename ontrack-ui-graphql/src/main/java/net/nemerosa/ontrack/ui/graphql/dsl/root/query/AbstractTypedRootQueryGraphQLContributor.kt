@@ -1,8 +1,7 @@
-package net.nemerosa.ontrack.ui.graphql.dsl.root
+package net.nemerosa.ontrack.ui.graphql.dsl.root.query
 
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.idl.TypeRuntimeWiring
-import net.nemerosa.ontrack.ui.graphql.RootQueryGraphQLContributor
 
 /**
  * Contributes fields to the root [`Query`][RootQueryGraphQL] using a typed input and output.

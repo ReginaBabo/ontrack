@@ -1,10 +1,10 @@
-package net.nemerosa.ontrack.ui.graphql
+package net.nemerosa.ontrack.ui.graphql.core
 
 import graphql.schema.DataFetchingEnvironment
 import net.nemerosa.ontrack.model.structure.ID
 import net.nemerosa.ontrack.model.structure.Project
 import net.nemerosa.ontrack.model.structure.StructureService
-import net.nemerosa.ontrack.ui.graphql.dsl.root.AbstractTypedRootQueryGraphQLContributor
+import net.nemerosa.ontrack.ui.graphql.dsl.root.query.AbstractTypedRootQueryGraphQLContributor
 import net.nemerosa.ontrack.ui.graphql.dsl.support.get
 import org.springframework.stereotype.Component
 
