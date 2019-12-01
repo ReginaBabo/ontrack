@@ -15,8 +15,8 @@ type AccountGroup {
     name: String!
     description: String
     # TODO accounts: [Account!]!
-#    globalRole: GlobalRole
-#    authorizedProjects: [AuthorizedProject!]!
+    #    globalRole: GlobalRole
+    #    authorizedProjects: [AuthorizedProject!]!
     mappings: [AccountGroupMapping!]!
 }
 
@@ -43,12 +43,12 @@ type Branch {
     id: Int!
     name: String
     description: String
-#    creation: Signature
+    #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
     #        to: String!
     #    ): GitChangeLog
-#    decorations(type: String): [Decoration!]!
+    #    decorations(type: String): [Decoration!]!
     # TODO    sVNBranchConfigurationProperty: Property
     # TODO    sVNRevisionChangeLogIssueValidator: Property
     # TODO    sVNSyncProperty: Property
@@ -59,23 +59,23 @@ type Branch {
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsJobProperty: Property
     # TODO    artifactoryPromotionSyncProperty: Property
-#    properties(
-#        type: String
-#        hasValue: Boolean = false
-#    ): [Property!]!
-#    buildDiffActions: [Action!]!
-#    otherBranches: [Branch!]!
+    #    properties(
+    #        type: String
+    #        hasValue: Boolean = false
+    #    ): [Property!]!
+    #    buildDiffActions: [Action!]!
+    #    otherBranches: [Branch!]!
     disabled: Boolean!
-#    type: BranchType
+    #    type: BranchType
     project: Project
     promotionLevels: [PromotionLevel!]!
-#    validationStamps(name: String): [ValidationStamp!]!
-#    builds(
-#        count: Int
-#        lastPromotions: Boolean
-#        filter: StandardBuildFilter
-#        generic: GenericBuildFilter
-#    ): [Build!]!
+    #    validationStamps(name: String): [ValidationStamp!]!
+    builds(
+        count: Int
+        lastPromotions: Boolean
+        # TODO filter: StandardBuildFilter
+        # TODO generic: GenericBuildFilter
+    ): [Build!]!
 }
 
 #type BranchInfo {
@@ -99,49 +99,49 @@ type Build {
     id: Int!
     name: String
     description: String
-#    creation: Signature
+    #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
     #        to: String!
     #    ): GitChangeLog
-#    decorations(type: String): [Decoration!]!
+    #    decorations(type: String): [Decoration!]!
     # TODO    gitCommitProperty: Property
     # TODO    releaseProperty: Property
     # TODO    messageProperty: Property
     # TODO    linkProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsBuildProperty: Property
-#    properties(
-#        type: String
-#        hasValue: Boolean = false
-#    ): [Property!]!
+    #    properties(
+    #        type: String
+    #        hasValue: Boolean = false
+    #    ): [Property!]!
     branch: Branch
-#    promotionRuns(
-#        promotion: String
-#        lastPerLevel: Boolean
-#    ): [PromotionRun!]!
-#    validationRuns(
-#        validationStamp: String
-#        count: Int = 50
-#    ): [ValidationRun!]!
-#    validationRunsPaginated(
-#        offset: Int = 0
-#        size: Int = 20
-#    ): ValidationRunPaginated
-#    validations(validationStamp: String): [Validation!]!
-#    using(
-#        offset: Int = 0
-#        size: Int = 20
-#        project: String
-#        branch: String
-#    ): BuildPaginated
-#    usedBy(
-#        offset: Int = 0
-#        size: Int = 20
-#        project: String
-#        branch: String
-#    ): BuildPaginated
-#    runInfo: RunInfo
+    promotionRuns(
+        promotion: String
+        lastPerLevel: Boolean
+    ): [PromotionRun!]!
+    #    validationRuns(
+    #        validationStamp: String
+    #        count: Int = 50
+    #    ): [ValidationRun!]!
+    #    validationRunsPaginated(
+    #        offset: Int = 0
+    #        size: Int = 20
+    #    ): ValidationRunPaginated
+    #    validations(validationStamp: String): [Validation!]!
+    #    using(
+    #        offset: Int = 0
+    #        size: Int = 20
+    #        project: String
+    #        branch: String
+    #    ): BuildPaginated
+    #    usedBy(
+    #        offset: Int = 0
+    #        size: Int = 20
+    #        project: String
+    #        branch: String
+    #    ): BuildPaginated
+    #    runInfo: RunInfo
 }
 
 #type BuildFilterValidation {
@@ -298,7 +298,7 @@ type Project {
     id: Int!
     name: String!
     description: String
-#    creation: Signature
+    #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
     #        to: String!
@@ -311,7 +311,7 @@ type Project {
     #        commit: String!
     #        first: Boolean
     #    ): OntrackGitCommitInfo
-#    decorations(type: String): [Decoration!]!
+    #    decorations(type: String): [Decoration!]!
     # TODO    sVNProjectConfigurationProperty: Property
     # TODO    gitHubProjectConfigurationProperty: Property
     # TODO    gitLabProjectConfigurationProperty: Property
@@ -330,25 +330,25 @@ type Project {
     # TODO    staleProperty: Property
     # TODO    sonarQubeProperty: Property
     # TODO    jIRAFollowLinksProperty: Property
-#    properties(
-#        type: String
-#        hasValue: Boolean = false
-#    ): [Property!]!
-#    projectRoles(role: String): [ProjectAuthorization!]!
+    #    properties(
+    #        type: String
+    #        hasValue: Boolean = false
+    #    ): [Property!]!
+    #    projectRoles(role: String): [ProjectAuthorization!]!
     disabled: Boolean!
     branches(
         name: String
         favourite: Boolean
         useModel: Boolean
     ): [Branch!]!
-#    labels: [Label!]!
-#    validationRuns(
-#        offset: Int = 0
-#        size: Int = 20
-#        branch: String
-#        validationStamp: String
-#        statuses: String
-#    ): ValidationRunPaginated
+    #    labels: [Label!]!
+    #    validationRuns(
+    #        offset: Int = 0
+    #        size: Int = 20
+    #        branch: String
+    #        validationStamp: String
+    #        statuses: String
+    #    ): ValidationRunPaginated
 }
 
 #type ProjectAuthorization {
@@ -376,13 +376,13 @@ type PromotionLevel {
     id: Int!
     name: String
     description: String
-#    creation: Signature
-#    _image: String
+    #    creation: Signature
+    #    _image: String
     # TODO    gitChangeLog(
     #        from: String!
     #        to: String!
     #    ): GitChangeLog
-#    decorations(type: String): [Decoration!]!
+    #    decorations(type: String): [Decoration!]!
     # TODO    messageProperty: Property
     # TODO    autoPromotionProperty: Property
     # TODO    linkProperty: Property
@@ -390,11 +390,11 @@ type PromotionLevel {
     # TODO    promotionDependenciesProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsJobProperty: Property
-#    properties(
-#        type: String
-#        hasValue: Boolean = false
-#    ): [Property!]!
-#    image: Boolean
+    #    properties(
+    #        type: String
+    #        hasValue: Boolean = false
+    #    ): [Property!]!
+    #    image: Boolean
     branch: Branch
     promotionRuns(
         first: Int
@@ -406,20 +406,20 @@ type PromotionRun {
     id: Int!
     name: String
     description: String
-#    creation: Signature
+    #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
     #        to: String!
     #    ): GitChangeLog
-#    decorations(type: String): [Decoration!]!
+    #    decorations(type: String): [Decoration!]!
     # TODO    messageProperty: Property
     # TODO    linkProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsBuildProperty: Property
-#    properties(
-#        type: String
-#        hasValue: Boolean = false
-#    ): [Property!]!
+    #    properties(
+    #        type: String
+    #        hasValue: Boolean = false
+    #    ): [Property!]!
     build: Build!
     promotionLevel: PromotionLevel!
 }
@@ -447,42 +447,42 @@ type Query {
     #        from: Int!
     #        to: Int!
     #    ): GitChangeLog
-#    builds(
-#        id: Int
-#        project: String
-#        branch: String
-#        buildBranchFilter: StandardBuildFilter
-#        buildProjectFilter: BuildSearchForm
-#    ): [Build!]!
-#    promotionRuns(id: Int!): [PromotionRun!]!
-#    accountGroupMappings(
-#        type: String!
-#        name: String
-#        group: String
-#    ): [AccountGroupMapping!]!
+    #    builds(
+    #        id: Int
+    #        project: String
+    #        branch: String
+    #        buildBranchFilter: StandardBuildFilter
+    #        buildProjectFilter: BuildSearchForm
+    #    ): [Build!]!
+    #    promotionRuns(id: Int!): [PromotionRun!]!
+    #    accountGroupMappings(
+    #        type: String!
+    #        name: String
+    #        group: String
+    #    ): [AccountGroupMapping!]!
     accountGroups(
         id: Int
         name: String
         mapping: String
     ): [AccountGroup!]!
-#    accounts(
-#        id: Int
-#        name: String
-#        group: String
-#    ): [Account!]!
-#    globalRoles(role: String): [GlobalRole!]!
-#    validationRuns(id: Int!): [ValidationRun!]!
+    #    accounts(
+    #        id: Int
+    #        name: String
+    #        group: String
+    #    ): [Account!]!
+    #    globalRoles(role: String): [GlobalRole!]!
+    #    validationRuns(id: Int!): [ValidationRun!]!
     projects(
         id: Int
         name: String
         favourites: Boolean
         # TODO withProperty: PropertyFilter
     ): [Project!]!
-#    userRootActions: UserRootActions
-#    labels(
-#        category: String
-#        name: String
-#    ): [Label!]!
+    #    userRootActions: UserRootActions
+    #    labels(
+    #        category: String
+    #        name: String
+    #    ): [Label!]!
     branches(
         id: Int
         project: String
@@ -490,11 +490,11 @@ type Query {
         favourite: Boolean
         # TODO withProperty: PropertyFilter
     ): [Branch!]!
-#    validationStamp(id: Int!): ValidationStamp
-#    buildFilterValidation(
-#        branchId: Int!
-#        filter: GenericBuildFilter!
-#    ): BuildFilterValidation
+    #    validationStamp(id: Int!): ValidationStamp
+    #    buildFilterValidation(
+    #        branchId: Int!
+    #        filter: GenericBuildFilter!
+    #    ): BuildFilterValidation
 }
 
 #type RunInfo {
@@ -575,15 +575,15 @@ type Query {
 #    name: String
 #    description: String
 #    creation: Signature
-    # TODO    gitChangeLog(
-    #        from: String!
-    #        to: String!
-    #    ): GitChangeLog
+# TODO    gitChangeLog(
+#        from: String!
+#        to: String!
+#    ): GitChangeLog
 #    decorations(type: String): [Decoration!]!
-    # TODO    messageProperty: Property
-    # TODO    linkProperty: Property
-    # TODO    metaInfoProperty: Property
-    # TODO    jenkinsBuildProperty: Property
+# TODO    messageProperty: Property
+# TODO    linkProperty: Property
+# TODO    metaInfoProperty: Property
+# TODO    jenkinsBuildProperty: Property
 #    properties(
 #        type: String
 #        hasValue: Boolean = false
@@ -633,15 +633,15 @@ type Query {
 #    description: String
 #    creation: Signature
 #    _image: String
-    # TODO    gitChangeLog(
-    #        from: String!
-    #        to: String!
-    #    ): GitChangeLog
+# TODO    gitChangeLog(
+#        from: String!
+#        to: String!
+#    ): GitChangeLog
 #    decorations(type: String): [Decoration!]!
-    # TODO    messageProperty: Property
-    # TODO    linkProperty: Property
-    # TODO    metaInfoProperty: Property
-    # TODO    jenkinsJobProperty: Property
+# TODO    messageProperty: Property
+# TODO    linkProperty: Property
+# TODO    metaInfoProperty: Property
+# TODO    jenkinsJobProperty: Property
 #    properties(
 #        type: String
 #        hasValue: Boolean = false

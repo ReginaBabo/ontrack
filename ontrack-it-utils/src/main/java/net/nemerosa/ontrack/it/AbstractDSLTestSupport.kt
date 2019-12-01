@@ -169,8 +169,8 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
         )
     }
 
-    fun Build.promote(promotionLevel: PromotionLevel) {
-        doPromote(this, promotionLevel, "")
+    fun Build.promote(promotionLevel: PromotionLevel, description: String? = "") {
+        doPromote(this, promotionLevel, description)
     }
 
     /**
