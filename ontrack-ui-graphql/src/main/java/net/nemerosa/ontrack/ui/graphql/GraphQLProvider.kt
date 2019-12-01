@@ -7,6 +7,8 @@ import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import net.nemerosa.ontrack.graphql.support.GQLScalarJSON
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
@@ -14,8 +16,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class GraphQLProvider(
-        private val contributors: List<GraphQLContributor>
+        private val contributors: List<GraphQLContributor>,
+        private val schemaContributors: List<GraphQLSchemaContributor>
 ) {
+
+    private val logger: Logger = LoggerFactory.getLogger(GraphQLProvider::class.java)
 
     @Bean
     @Lazy
@@ -30,11 +35,19 @@ class GraphQLProvider(
         val schemaParser = SchemaParser()
         val schemaGenerator = SchemaGenerator()
 
-        val coreSchemaSource = javaClass.getResourceAsStream("/core.graphqls").reader().readText()
+        val resourcePaths = schemaContributors.map {
+            it.schemaResourcePath
+        }
+
+        val schemaSources = resourcePaths.map { path ->
+            logger.info("[graphql] schema = $path")
+            javaClass.getResourceAsStream(path).reader().readText()
+        }
 
         val typeRegistry = TypeDefinitionRegistry()
-        typeRegistry.merge(schemaParser.parse(coreSchemaSource))
-        // TODO Merge schemas provided by extensions
+        schemaSources.forEach {
+            typeRegistry.merge(schemaParser.parse(it))
+        }
 
         return schemaGenerator.makeExecutableSchema(typeRegistry, buildRuntimeWiring())
     }

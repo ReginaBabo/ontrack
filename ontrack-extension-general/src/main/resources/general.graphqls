@@ -12,3 +12,27 @@ enum MessageType {
 extend interface ProjectEntity {
     messageProperty: MessageProperty
 }
+
+extend type Project {
+    messageProperty: MessageProperty
+}
+
+extend type Branch {
+    messageProperty: MessageProperty
+}
+
+extend type PromotionLevel {
+    messageProperty: MessageProperty
+}
+
+# TODO Validation stamp
+
+extend type Build {
+    messageProperty: MessageProperty
+}
+
+extend type PromotionRun {
+    messageProperty: MessageProperty
+}
+
+# TODO Validation run
