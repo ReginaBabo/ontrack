@@ -1,36 +1,26 @@
-package net.nemerosa.ontrack.extension.general;
+package net.nemerosa.ontrack.extension.general
 
-import net.nemerosa.ontrack.model.structure.Describable;
+import net.nemerosa.ontrack.model.structure.Describable
 
-public enum MessageType implements Describable {
+enum class MessageType(
+        private val displayName: String,
+        private val description: String
+) : Describable {
 
     ERROR("Error", "Error message"),
-
     WARNING("Warning", "Warning message"),
-
     INFO("Info", "Information message");
 
-    private final String name;
-    private final String description;
-
-    MessageType(String name, String description) {
-        this.name = name;
-        this.description = description;
+    override fun getId(): String {
+        return name
     }
 
-    @Override
-    public String getId() {
-        return name();
+    override fun getName(): String {
+        return displayName
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
+    override fun getDescription(): String {
+        return description
     }
 
 }

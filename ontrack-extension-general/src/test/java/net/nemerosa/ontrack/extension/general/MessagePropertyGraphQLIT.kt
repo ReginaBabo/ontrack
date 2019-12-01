@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.extension.general
 
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class MessagePropertyGraphQLIT : AbstractGeneralExtensionTestSupport() {
 
@@ -47,6 +48,55 @@ class MessagePropertyGraphQLIT : AbstractGeneralExtensionTestSupport() {
         }
     }
 
-    // TODO Setting the message property using a mutation
+    @Test
+    fun `Setting the message property using a mutation`() {
+        project {
+            branch {
+                // Sets the property using a mutation
+                run("""
+                    mutation SetMessage {
+                        messageProperty(
+                            entity: {type: "BRANCH", id: $id},
+                            type: WARNING,
+                            text: "This is my new message"
+                        ) {
+                            id
+                        }
+                    }
+                """)
+                // Checks the result
+                val message = getProperty(this, MessagePropertyType::class.java)
+                assertNotNull(message) {
+                    assertEquals(MessageType.WARNING, it.type)
+                    assertEquals("This is my new message", it.text)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `Setting the message property using a mutation and default message type`() {
+        project {
+            branch {
+                // Sets the property using a mutation
+                run("""
+                    mutation SetMessage {
+                        messageProperty(
+                            entity: {type: "BRANCH", id: $id},
+                            text: "This is my new message"
+                        ) {
+                            id
+                        }
+                    }
+                """)
+                // Checks the result
+                val message = getProperty(this, MessagePropertyType::class.java)
+                assertNotNull(message) {
+                    assertEquals(MessageType.INFO, it.type)
+                    assertEquals("This is my new message", it.text)
+                }
+            }
+        }
+    }
 
 }
