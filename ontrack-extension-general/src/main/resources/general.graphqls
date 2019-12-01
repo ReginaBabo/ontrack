@@ -12,7 +12,12 @@ enum MessageType {
 ## Mutations
 
 extend type Mutation {
-    messageProperty(entity: ProjectEntityInput, text: String!, type: MessageType = INFO): ProjectEntity
+    messageProperty(entity: ProjectEntityInput!, value: MessagePropertyInput!): ProjectEntity!
+}
+
+input MessagePropertyInput {
+    text: String!
+    type: MessageType = INFO
 }
 
 ## Extensions for project entities

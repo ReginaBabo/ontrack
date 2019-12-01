@@ -57,8 +57,7 @@ class MessagePropertyGraphQLIT : AbstractGeneralExtensionTestSupport() {
                     mutation SetMessage {
                         messageProperty(
                             entity: {type: "BRANCH", id: $id},
-                            type: WARNING,
-                            text: "This is my new message"
+                            value: {type: WARNING, text: "This is my new message"}
                         ) {
                             id
                         }
@@ -83,7 +82,7 @@ class MessagePropertyGraphQLIT : AbstractGeneralExtensionTestSupport() {
                     mutation SetMessage {
                         messageProperty(
                             entity: {type: "BRANCH", id: $id},
-                            text: "This is my new message"
+                            value: {text: "This is my new message"}
                         ) {
                             id
                         }
