@@ -22,6 +22,8 @@ inline operator fun <reified T> DataFetchingEnvironment.get(name: String): T {
     return environmentMapper.convertValue(map, T::class.java)
 }
 
+inline fun <reified T> DataFetchingEnvironment.parse(): T = environmentMapper.convertValue(arguments, T::class.java)
+
 fun <T : Any> DataFetchingEnvironment.get(name: String, type: KClass<T>): T {
     val map: Map<String, Any> = getArgument(name)
     return environmentMapper.convertValue(map, type.java)

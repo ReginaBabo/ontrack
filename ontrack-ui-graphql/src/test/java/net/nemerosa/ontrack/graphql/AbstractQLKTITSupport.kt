@@ -9,6 +9,7 @@ import net.nemerosa.ontrack.json.JsonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.fail
 
+@Deprecated("Use [AbstractGraphQLITSupport] instead.")
 abstract class AbstractQLKTITSupport : AbstractDSLTestSupport() {
 
     @Autowired

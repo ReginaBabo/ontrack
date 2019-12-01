@@ -30,16 +30,6 @@ class ProjectQLIT extends AbstractQLITSupport {
     }
 
     @Test
-    void 'Branch by name'() {
-        def p = doCreateProject()
-        doCreateBranch(p, NameDescription.nd("B1", ""))
-        doCreateBranch(p, NameDescription.nd("B2", ""))
-
-        def data = run("""{projects(id: ${p.id}) { name branches(name: "B2") { name } } }""")
-        assert data.projects.branches.name.flatten() == ["B2"]
-    }
-
-    @Test
     void 'Branch by regular expression'() {
         def p = doCreateProject()
         doCreateBranch(p, NameDescription.nd("11.8.3", ""))

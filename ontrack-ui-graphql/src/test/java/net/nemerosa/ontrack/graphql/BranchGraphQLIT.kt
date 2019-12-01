@@ -8,10 +8,21 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class BranchGraphQLIT : AbstractQLKTITSupport() {
+class BranchGraphQLIT : AbstractGraphQLITSupport() {
 
     @Autowired
     private lateinit var branchFavouriteService: BranchFavouriteService
+
+    @Test
+    fun `Branch by name`() {
+        project {
+            branch("B1")
+            branch("B2")
+            val data = run("""{projects(id: $id) { name branches(name: "B2") { name } } }""")
+            val names = data["projects"][0]["branches"].map { it["name"].asText() }
+            assertEquals(listOf("B2"), names)
+        }
+    }
 
     @Test
     fun `All favourite branches`() {

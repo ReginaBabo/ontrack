@@ -39,10 +39,10 @@ type AccountGroupMapping {
 #    project: Project!
 #}
 
-#type Branch implements ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
+type Branch {
+    id: Int!
+    name: String
+    description: String
 #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
@@ -65,7 +65,7 @@ type AccountGroupMapping {
 #    ): [Property!]!
 #    buildDiffActions: [Action!]!
 #    otherBranches: [Branch!]!
-#    disabled: Boolean!
+    disabled: Boolean!
 #    type: BranchType
 #    project: Project
 #    promotionLevels: [PromotionLevel!]!
@@ -76,8 +76,8 @@ type AccountGroupMapping {
 #        filter: StandardBuildFilter
 #        generic: GenericBuildFilter
 #    ): [Build!]!
-#}
-#
+}
+
 #type BranchInfo {
 #    branch: Branch
 #    firstBuild: Build
@@ -336,11 +336,11 @@ type Project {
 #    ): [Property!]!
 #    projectRoles(role: String): [ProjectAuthorization!]!
     disabled: Boolean!
-#    branches(
-#        name: String
-#        favourite: Boolean
-#        useModel: Boolean
-#    ): [Branch!]!
+    branches(
+        name: String
+        favourite: Boolean
+        useModel: Boolean
+    ): [Branch!]!
 #    labels: [Label!]!
 #    validationRuns(
 #        offset: Int = 0
