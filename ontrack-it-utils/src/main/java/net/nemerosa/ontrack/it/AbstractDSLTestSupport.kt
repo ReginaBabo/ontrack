@@ -161,10 +161,18 @@ abstract class AbstractDSLTestSupport : AbstractServiceTestSupport() {
         return build.init()
     }
 
-    protected fun <T, P : PropertyType<T>> Build.property(type: KClass<P>, value: T) {
+    protected fun <T, P : PropertyType<T>> ProjectEntity.property(type: KClass<P>, value: T) {
         propertyService.editProperty<T>(
                 this,
                 type.java,
+                value
+        )
+    }
+
+    protected final inline fun <T, reified P : PropertyType<T>> ProjectEntity.property(value: T) {
+        propertyService.editProperty<T>(
+                this,
+                P::class.java,
                 value
         )
     }

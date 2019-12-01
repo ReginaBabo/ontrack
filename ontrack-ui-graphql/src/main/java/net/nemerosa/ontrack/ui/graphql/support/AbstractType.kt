@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.ui.graphql.core
+package net.nemerosa.ontrack.ui.graphql.support
 
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.TypeRuntimeWiring
@@ -7,7 +7,8 @@ import net.nemerosa.ontrack.ui.graphql.dsl.support.typedDataFetcher
 import kotlin.reflect.KClass
 
 abstract class AbstractType<T : Any>(
-        private val type: KClass<T>
+        private val type: KClass<T>,
+        private val typeFieldContributors: List<TypeFieldContributor>
 ) : GraphQLContributor {
     override fun wire(wiring: RuntimeWiring.Builder) {
         wiring.type(type.java.simpleName) {
@@ -16,7 +17,13 @@ abstract class AbstractType<T : Any>(
         }
     }
 
-    abstract fun dataFetchers(builder: TypeRuntimeWiring.Builder)
+    open fun dataFetchers(builder: TypeRuntimeWiring.Builder) {
+        typeFieldContributors.forEach { typeFieldContributor ->
+            if (typeFieldContributor.isClassSupported(type)) {
+                typeFieldContributor.addFields(builder)
+            }
+        }
+    }
 
     protected fun <O> TypeRuntimeWiring.Builder.field(
             name: String,

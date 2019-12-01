@@ -111,10 +111,10 @@ type Build {
     # TODO    linkProperty: Property
     # TODO    metaInfoProperty: Property
     # TODO    jenkinsBuildProperty: Property
-    #    properties(
-    #        type: String
-    #        hasValue: Boolean = false
-    #    ): [Property!]!
+    properties(
+        type: String
+        hasValue: Boolean = false
+    ): [Property!]!
     branch: Branch
     promotionRuns(
         promotion: String
@@ -424,22 +424,22 @@ type PromotionRun {
     promotionLevel: PromotionLevel!
 }
 
-#type Property {
-#    type: PropertyType
-#    value: JSON
-#    editable: Boolean
-#}
-#
+type Property {
+    type: PropertyType
+    value: JSON
+    editable: Boolean
+}
+
 #input PropertyFilter {
 #    type: String
 #    value: String
 #}
-#
-#type PropertyType {
-#    typeName: String
-#    name: String
-#    description: String
-#}
+
+type PropertyType {
+    typeName: String
+    name: String
+    description: String
+}
 
 type Query {
     # TODO    svnConfigurations(name: String): [SVNConfiguration!]!
@@ -447,13 +447,13 @@ type Query {
     #        from: Int!
     #        to: Int!
     #    ): GitChangeLog
-    #    builds(
-    #        id: Int
-    #        project: String
-    #        branch: String
-    #        buildBranchFilter: StandardBuildFilter
-    #        buildProjectFilter: BuildSearchForm
-    #    ): [Build!]!
+    builds(
+        id: Int
+        project: String
+        branch: String
+        #           TODO buildBranchFilter: StandardBuildFilter
+        #           TODO buildProjectFilter: BuildSearchForm
+    ): [Build!]!
     #    promotionRuns(id: Int!): [PromotionRun!]!
     #    accountGroupMappings(
     #        type: String!

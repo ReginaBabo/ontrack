@@ -3,15 +3,17 @@ package net.nemerosa.ontrack.ui.graphql.core
 import graphql.schema.idl.TypeRuntimeWiring
 import net.nemerosa.ontrack.common.and
 import net.nemerosa.ontrack.model.structure.*
+import net.nemerosa.ontrack.ui.graphql.support.TypeFieldContributor
 import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 
 @Component
 class TypeProject(
+        typeFieldContributors: List<TypeFieldContributor>,
         private val structureService: StructureService,
         private val branchFavouriteService: BranchFavouriteService,
         private val branchModelMatcherService: BranchModelMatcherService
-) : AbstractTypeProjectEntity<Project>(Project::class) {
+) : AbstractTypeProjectEntity<Project>(Project::class, typeFieldContributors) {
     override fun dataFetchers(builder: TypeRuntimeWiring.Builder) {
         super.dataFetchers(builder)
 

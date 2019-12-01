@@ -1,5 +1,7 @@
 package net.nemerosa.ontrack.graphql
 
+import net.nemerosa.ontrack.extension.api.support.TestSimpleProperty
+import net.nemerosa.ontrack.extension.api.support.TestSimplePropertyType
 import net.nemerosa.ontrack.model.structure.Build
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -9,7 +11,44 @@ import kotlin.test.assertTrue
 /**
  * Integration tests around the `builds` root query.
  */
-class BuildGraphQLIT : AbstractQLKTITSupport() {
+class BuildGraphQLIT : AbstractGraphQLITSupport() {
+
+    @Test
+    fun `Build property by list`() {
+        project {
+            branch {
+                val build = build {
+                    property<TestSimpleProperty, TestSimplePropertyType>(TestSimpleProperty("value 2"))
+                }
+                val data = run("""{
+                    builds(id: ${build.id}) {
+                        properties { 
+                            type { 
+                                typeName 
+                                name
+                                description
+                            }
+                            value
+                            editable
+                        }
+                    }
+                }""")
+                val p = data["builds"][0]["properties"].first { it["type"]["name"].asText() == "Simple value" }
+                assertEquals("net.nemerosa.ontrack.extension.api.support.TestSimplePropertyType", p["type"]["typeName"].asText())
+                assertEquals("Simple value", p["type"]["name"].asText())
+                assertEquals("Value.", p["type"]["description"].asText())
+                assertEquals("value 2", p["value"]["value"].asText())
+                assertEquals(true, p["editable"].asBoolean())
+
+                val c = data["builds"][0]["properties"].first { it["type"]["name"].asText() == "Configuration value" }
+                assertEquals("net.nemerosa.ontrack.extension.api.support.TestPropertyType", c["type"]["typeName"].asText())
+                assertEquals("Configuration value", c["type"]["name"].asText())
+                assertEquals("Value.", c["type"]["description"].asText())
+                assertTrue(c["value"].isNull)
+                assertEquals(true, c["editable"].asBoolean())
+            }
+        }
+    }
 
     @Test
     fun `Filtered build links`() {

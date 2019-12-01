@@ -12,3 +12,14 @@ data class RootBranchListInput(
         val name: String?,
         val favourite: Boolean?
 )
+
+data class RootBuildListInput(
+        val id: Int?,
+        val project: String?,
+        val branch: String?
+)
+
+data class PropertyListInput(
+        val type: String?,
+        val hasValue: Boolean = false
+)

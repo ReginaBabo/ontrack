@@ -6,13 +6,16 @@ import net.nemerosa.ontrack.model.buildfilter.BuildFilterService
 import net.nemerosa.ontrack.model.structure.Branch
 import net.nemerosa.ontrack.model.structure.Build
 import net.nemerosa.ontrack.model.structure.StructureService
+import net.nemerosa.ontrack.ui.graphql.support.TypeFieldContributor
 import org.springframework.stereotype.Component
+import kotlin.reflect.KClass
 
 @Component
 class TypeBranch(
         private val structureService: StructureService,
-        private val buildFilterService: BuildFilterService
-) : AbstractTypeProjectEntity<Branch>(Branch::class) {
+        private val buildFilterService: BuildFilterService,
+        typeFieldContributors: List<TypeFieldContributor>
+) : AbstractTypeProjectEntity<Branch>(Branch::class, typeFieldContributors) {
     override fun dataFetchers(builder: TypeRuntimeWiring.Builder) {
         super.dataFetchers(builder)
 
