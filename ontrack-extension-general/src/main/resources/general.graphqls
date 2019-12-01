@@ -1,0 +1,14 @@
+type MessageProperty {
+    type: MessageType
+    text: String
+}
+
+enum MessageType {
+    ERROR,
+    WARNING,
+    INFO
+}
+
+extend interface ProjectEntity {
+    messageProperty: MessageProperty
+}
