@@ -1,18 +1,10 @@
 package net.nemerosa.ontrack.ui.graphql.core
 
-import graphql.schema.idl.RuntimeWiring
-import net.nemerosa.ontrack.model.structure.PromotionLevel
-import net.nemerosa.ontrack.ui.graphql.GraphQLContributor
+import graphql.schema.idl.TypeRuntimeWiring
+import net.nemerosa.ontrack.model.structure.Build
 import org.springframework.stereotype.Component
 
 @Component
-class TypeBuild : GraphQLContributor {
-    override fun wire(wiring: RuntimeWiring.Builder) {
-        wiring.type("Build") {
-            it.dataFetcher("id") { environment ->
-                val promotionLevel: PromotionLevel = environment.getSource()
-                promotionLevel.id.value
-            }
-        }
-    }
+class TypeBuild : AbstractTypeProjectEntity<Build>(Build::class) {
+    override fun dataFetchers(builder: TypeRuntimeWiring.Builder) {}
 }
