@@ -67,8 +67,8 @@ type Branch {
 #    otherBranches: [Branch!]!
     disabled: Boolean!
 #    type: BranchType
-#    project: Project
-#    promotionLevels: [PromotionLevel!]!
+    project: Project
+    promotionLevels: [PromotionLevel!]!
 #    validationStamps(name: String): [ValidationStamp!]!
 #    builds(
 #        count: Int
@@ -95,10 +95,10 @@ type Branch {
 #    TEMPLATE_INSTANCE
 #}
 #
-#type Build implements ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
+type Build {
+    id: Int!
+    name: String
+    description: String
 #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
@@ -115,7 +115,7 @@ type Branch {
 #        type: String
 #        hasValue: Boolean = false
 #    ): [Property!]!
-#    branch: Branch
+    branch: Branch
 #    promotionRuns(
 #        promotion: String
 #        lastPerLevel: Boolean
@@ -142,8 +142,8 @@ type Branch {
 #        branch: String
 #    ): BuildPaginated
 #    runInfo: RunInfo
-#}
-#
+}
+
 #type BuildFilterValidation {
 #    error: String
 #}
@@ -371,11 +371,11 @@ type Project {
 #    name: String
 #    description: String
 #}
-#
-#type PromotionLevel implements ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
+
+type PromotionLevel {
+    id: Int!
+    name: String
+    description: String
 #    creation: Signature
 #    _image: String
     # TODO    gitChangeLog(
@@ -395,17 +395,17 @@ type Project {
 #        hasValue: Boolean = false
 #    ): [Property!]!
 #    image: Boolean
-#    branch: Branch
-#    promotionRuns(
-#        first: Int
-#        last: Int
-#    ): [PromotionRun!]!
-#}
-#
-#type PromotionRun implements ProjectEntity {
-#    id: Int!
-#    name: String
-#    description: String
+    branch: Branch
+    promotionRuns(
+        first: Int
+        last: Int
+    ): [PromotionRun!]!
+}
+
+type PromotionRun {
+    id: Int!
+    name: String
+    description: String
 #    creation: Signature
     # TODO    gitChangeLog(
     #        from: String!
@@ -420,10 +420,10 @@ type Project {
 #        type: String
 #        hasValue: Boolean = false
 #    ): [Property!]!
-#    build: Build!
-#    promotionLevel: PromotionLevel!
-#}
-#
+    build: Build!
+    promotionLevel: PromotionLevel!
+}
+
 #type Property {
 #    type: PropertyType
 #    value: JSON

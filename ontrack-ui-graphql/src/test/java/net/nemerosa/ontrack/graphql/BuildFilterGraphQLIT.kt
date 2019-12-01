@@ -1,6 +1,5 @@
 package net.nemerosa.ontrack.graphql
 
-import net.nemerosa.ontrack.model.structure.NameDescription
 import org.junit.Test
 import kotlin.test.assertEquals
 
