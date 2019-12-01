@@ -13,6 +13,7 @@ class TypeProject(
         private val branchModelMatcherService: BranchModelMatcherService
 ) : AbstractTypeProjectEntity<Project>(Project::class) {
     override fun dataFetchers(builder: TypeRuntimeWiring.Builder) {
+        super.dataFetchers(builder)
 
         builder.field<BranchListInput, List<Branch>>("branches") { project, (name, favourite, useModel) ->
             // Combined filter

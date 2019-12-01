@@ -12,6 +12,8 @@ class TypePromotionLevel(
         private val structureService: StructureService
 ) : AbstractTypeProjectEntity<PromotionLevel>(PromotionLevel::class) {
     override fun dataFetchers(builder: TypeRuntimeWiring.Builder) {
+        super.dataFetchers(builder)
+
         builder.dataFetcher("promotionRuns") { environment ->
             val promotionLevel: PromotionLevel = environment.getSource()
             // Gets all the promotion runs

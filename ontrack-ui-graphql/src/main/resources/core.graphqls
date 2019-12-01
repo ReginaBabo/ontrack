@@ -483,13 +483,13 @@ type Query {
 #        category: String
 #        name: String
 #    ): [Label!]!
-#    branches(
-#        id: Int
-#        project: String
-#        name: String
-#        favourite: Boolean
-#        withProperty: PropertyFilter
-#    ): [Branch!]!
+    branches(
+        id: Int
+        project: String
+        name: String
+        favourite: Boolean
+        # TODO withProperty: PropertyFilter
+    ): [Branch!]!
 #    validationStamp(id: Int!): ValidationStamp
 #    buildFilterValidation(
 #        branchId: Int!
