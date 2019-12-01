@@ -1,16 +1,14 @@
 package net.nemerosa.ontrack.graphql
 
+import net.nemerosa.ontrack.model.security.ProjectCreation
 import net.nemerosa.ontrack.model.structure.BranchFavouriteService
-import net.nemerosa.ontrack.model.structure.NameDescription
+import net.nemerosa.ontrack.model.structure.ID
 import net.nemerosa.ontrack.model.structure.ProjectFavouriteService
-import net.nemerosa.ontrack.model.structure.ValidationRunStatusID
+import net.nemerosa.ontrack.test.TestUtils.uid
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.*
 
 class ProjectGraphQLIT : AbstractGraphQLITSupport() {
 
@@ -19,6 +17,30 @@ class ProjectGraphQLIT : AbstractGraphQLITSupport() {
 
     @Autowired
     private lateinit var projectFavouriteService: ProjectFavouriteService
+
+    @Test
+    fun `Creating a project`() {
+        asUserWith<ProjectCreation> {
+            val name = uid("P")
+            val data = run("""
+               mutation CreateProject {
+                 createProject(project: {name: "$name", description: "My project"}) {
+                   id
+                   name
+                   description
+                 }
+               }
+            """)
+            val id = data["id"].asInt()
+            assertTrue(id > 0)
+            assertEquals(name, data["name"].asText())
+            assertEquals("My project", data["description"].asText())
+            // Checks the project can be found
+            val project = structureService.getProject(ID.of(id))
+            assertEquals(name, project.name)
+            assertEquals("My project", project.description)
+        }
+    }
 
     @Test
     fun `All projects`() {

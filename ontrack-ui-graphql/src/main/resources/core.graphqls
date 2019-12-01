@@ -657,6 +657,18 @@ type Query {
 #    validationRuns(count: Int = 50): [ValidationRun!]!
 #}
 
+type Mutation {
+    createProject(project: CreateProjectInput): Project
+}
+
+input CreateProjectInput {
+    name: String!
+    description: String
+    disabled: Boolean
+    # TODO Properties
+}
+
 schema {
     query: Query
+    mutation: Mutation
 }
