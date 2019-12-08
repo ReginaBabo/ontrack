@@ -1,9 +1,7 @@
 package net.nemerosa.ontrack.acceptance
 
-import net.nemerosa.ontrack.acceptance.browser.pages.APIPage
+
 import net.nemerosa.ontrack.acceptance.browser.pages.BuildPage
-import net.nemerosa.ontrack.acceptance.browser.pages.HomePage
-import net.nemerosa.ontrack.acceptance.browser.pages.ProjectPage
 import net.nemerosa.ontrack.acceptance.support.AcceptanceTest
 import net.nemerosa.ontrack.acceptance.support.AcceptanceTestSuite
 import org.junit.Test
@@ -18,24 +16,6 @@ import static org.junit.Assert.assertEquals
 @AcceptanceTestSuite
 @AcceptanceTest([AcceptanceTestContext.PRODUCTION, AcceptanceTestContext.SMOKE, AcceptanceTestContext.BROWSER_TEST])
 class ACCBrowserBasic extends AcceptanceTestClient {
-
-    @Test
-    void 'Project API page must be accessible'() {
-        browser { browser ->
-            withProject { id, name ->
-                // Goes to the home page and logs in browser ->
-                HomePage home = loginAsAdmin(browser)
-                // Goes to the project
-                ProjectPage projectPage = home.goToProject(name)
-                // Goes to the API page
-                APIPage apiPage = projectPage.goToAPI()
-                // Gets the link of the page
-                def link = apiPage.apiLink
-                // Checks the link
-                assert link == "/structure/projects/${id}"
-            }
-        }
-    }
 
     @Test
     void 'Build page'() {

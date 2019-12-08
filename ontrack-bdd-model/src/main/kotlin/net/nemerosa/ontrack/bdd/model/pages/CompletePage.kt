@@ -23,4 +23,8 @@ open class CompletePage(driver: WebDriver) : AbstractPage(driver) {
         "#header-user-menu".waitUntilVisible()
     }
 
+    fun goToAPI() {
+        "ot-command-api".byClass.click()
+    }
+
 }

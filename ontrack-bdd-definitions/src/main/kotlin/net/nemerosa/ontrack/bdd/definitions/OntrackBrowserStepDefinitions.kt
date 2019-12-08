@@ -49,6 +49,11 @@ class OntrackBrowserStepDefinitions {
         ontrackBrowserSteps.goToProjectPage(projectRef)
     }
 
+    @When("""I navigate to API page""")
+    fun navigateToAPIPage() {
+        ontrackBrowserSteps.navigateToAPIPage()
+    }
+
     @After
     fun closing_browser() {
         ontrackBrowserSteps.closeBrowser()

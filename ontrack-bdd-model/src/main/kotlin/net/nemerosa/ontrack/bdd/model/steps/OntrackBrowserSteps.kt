@@ -76,6 +76,13 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     }
 
     @Step
+    fun navigateToAPIPage() {
+        currentPageAt<CompletePage> {
+            goToAPI()
+        }
+    }
+
+    @Step
     fun closeBrowser() {
         ontrackDSLWorld.clear()
         ontrackUtilityWorld.clear()

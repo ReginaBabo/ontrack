@@ -13,6 +13,13 @@ class OntrackUtilityWorld {
     private val uniqueNames = ConcurrentHashMap<Pair<String, String>, String>()
 
     /**
+     * ID
+     */
+    fun id(name: String, value: Int) {
+        uniqueNames["id" to name] = value.toString()
+    }
+
+    /**
      * Management of unique names
      */
     fun uniqueName(group: String, key: String): String =
@@ -23,7 +30,7 @@ class OntrackUtilityWorld {
     /**
      * Unique name with a given length
      */
-    fun uniqueLongName(length: Int, group: String, key: String) =
+    fun uniqueLongName(length: Int, group: String, key: String): String =
             uniqueNames.getOrPut(group to key) {
                 val prefix = uid(key)
                 prefix + "b".repeat(length - prefix.length)
@@ -32,7 +39,7 @@ class OntrackUtilityWorld {
     /**
      * Getting existing unique name
      */
-    private fun getUniqueName(group: String, key: String) = uniqueNames.get(group to key)
+    private fun getUniqueName(group: String, key: String) = uniqueNames[group to key]
 
     /**
      * Replacing generic unique names in a string
