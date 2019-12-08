@@ -14,4 +14,9 @@ class OntrackUtilityStepDefinitions {
         ontrackUtilitySteps.uniqueName(group, key)
     }
 
+    @Given("""a (.*) characters long name for (.*) "(.*)"""")
+    fun uniqueLongName(length: Int, group: String, key: String) {
+        ontrackUtilitySteps.uniqueLongName(length, group, key)
+    }
+
 }

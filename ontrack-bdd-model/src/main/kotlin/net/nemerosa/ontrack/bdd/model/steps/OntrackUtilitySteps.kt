@@ -19,4 +19,9 @@ class OntrackUtilitySteps() {
         ontrackUtilityWorld.uniqueName(group, key)
     }
 
+    @Step
+    fun uniqueLongName(length: Int, group: String, key: String) {
+        ontrackUtilityWorld.uniqueLongName(length, group, key)
+    }
+
 }

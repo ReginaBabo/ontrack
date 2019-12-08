@@ -21,6 +21,15 @@ class OntrackUtilityWorld {
             }
 
     /**
+     * Unique name with a given length
+     */
+    fun uniqueLongName(length: Int, group: String, key: String) =
+            uniqueNames.getOrPut(group to key) {
+                val prefix = uid(key)
+                prefix + "b".repeat(length - prefix.length)
+            }
+
+    /**
      * Getting existing unique name
      */
     private fun getUniqueName(group: String, key: String) = uniqueNames.get(group to key)
