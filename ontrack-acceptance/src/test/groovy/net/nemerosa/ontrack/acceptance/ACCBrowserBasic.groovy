@@ -21,16 +21,6 @@ import static org.junit.Assert.assertEquals
 class ACCBrowserBasic extends AcceptanceTestClient {
 
     @Test
-    void 'Account with special characters in password'() {
-        def name = uid('A')
-        doCreateAccount(name, "test§")
-        // Login with this account
-        browser { browser ->
-            login(browser, name, "test§", name)
-        }
-    }
-
-    @Test
     void 'Branch creation with a 120 characters long name'() {
         browser { browser ->
             withProject { id, name ->

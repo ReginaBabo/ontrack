@@ -64,6 +64,7 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
         group.setGlobalPermission(role)
     }
 
+    @Step
     fun createAndRegisterAccountInGroup(accountRegisterName: String, accountGroupRegisterName: String) {
         // Gets the group
         val group = ontrackDSLWorld.accountGroups[accountGroupRegisterName]
@@ -76,6 +77,20 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
                 "$accountRegisterName@test.com",
                 password,
                 listOf(group.name)
+        ).apply {
+            ontrackDSLWorld.accounts[accountRegisterName] = this withPassword password
+        }
+    }
+
+    @Step
+    fun createAndRegisterAccountWithPassword(accountRegisterName: String, password: String) {
+        // Creates the account
+        ontrack.accounts.createAccount(
+                ontrackUtilityWorld.uniqueName("account", "A"),
+                "$accountRegisterName Test",
+                "$accountRegisterName@test.com",
+                password,
+                emptyList()
         ).apply {
             ontrackDSLWorld.accounts[accountRegisterName] = this withPassword password
         }

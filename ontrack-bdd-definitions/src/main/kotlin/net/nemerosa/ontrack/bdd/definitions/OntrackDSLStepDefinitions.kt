@@ -29,6 +29,11 @@ class OntrackDSLStepDefinitions {
         ontrackDSLSteps.createAndRegisterAccountInGroup(accountRegisterName, accountGroupRegisterName)
     }
 
+    @Given("""an account "(.*)" having "(.*)" as password""")
+    fun account_with_password(accountRegisterName: String, password: String) {
+        ontrackDSLSteps.createAndRegisterAccountWithPassword(accountRegisterName, password)
+    }
+
     @Given("""a "(.*)" account group""")
     fun account_group_available(accountGroupRegisterName: String) {
         ontrackDSLSteps.createAndRegisterAccountGroup(accountGroupRegisterName)
