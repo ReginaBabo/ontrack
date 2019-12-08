@@ -32,6 +32,47 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     }
 
     @Step
+    fun createAndRegisterBigBranch(ref: String) {
+        val projectName = ontrackUtilityWorld.uniqueName("project", ref)
+        val branchName = ontrackUtilityWorld.uniqueName("branch", ref)
+        ontrack.project(projectName) {
+            branch(branchName) {
+                ontrackDSLWorld.branches[ref] = this
+                ontrackUtilityWorld.id(ref, id)
+
+                val validationStampCount = 45
+                val validationStampNames = (1..validationStampCount).map { "VS$it" }
+                validationStampNames.forEach {
+                    validationStamp(it)
+                }
+
+                val buildCount = 10
+                val buildNames = (1..buildCount).map { "$it" }
+                buildNames.forEach {
+                    build(it)
+                }
+
+                // Creation of validation runs
+                val statuses = listOf("FAILED", "INTERRUPTED", "PASSED")
+                var index = 0
+                buildNames.forEach { buildName ->
+                    val build = build(buildName)
+                    // For each validation stamp
+                    validationStampNames.forEach { validationStampName ->
+                        // Gets the number of runs to create, according to the index
+                        val runs = (index % 7) + 1
+                        (1..runs).forEach {
+                            val status = statuses[index % statuses.size]
+                            build.validate(validationStampName, status)
+                            index++
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Step
     fun createAndRegisterBuild(buildRef: String) {
         val projectName = ontrackUtilityWorld.uniqueName("project", buildRef)
         val branchName = ontrackUtilityWorld.uniqueName("branch", buildRef)

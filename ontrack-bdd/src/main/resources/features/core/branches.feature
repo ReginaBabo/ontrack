@@ -24,3 +24,10 @@ Feature: Management of branches
     And I go to project page for "P"
     And I create a branch "<branch:b>"
     Then branch "<branch:b>" is present in project page
+
+# TODO Increase waiting time
+#  Scenario: Big branch
+#    Given a big branch "b"
+#    And login as admin
+#    When I go to branch page for "b"
+#    Then branch page validation runs are loaded

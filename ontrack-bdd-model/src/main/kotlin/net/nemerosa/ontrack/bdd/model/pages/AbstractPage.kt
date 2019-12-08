@@ -35,6 +35,13 @@ abstract class AbstractPage(driver: WebDriver) : PageObject(driver) {
                 ?: fail("Cannot find element with class = $this")
 
     /**
+     * Given a CSS selector, returns the required associated element
+     */
+    val String.byCss: WebElementFacade
+        get() = find<WebElementFacade>(By.cssSelector(this))?.waitUntilVisible()
+                ?: fail("Cannot find element with CSS = $this")
+
+    /**
      * Given an ID, returns the required associated element
      */
     val String.byId: WebElementFacade

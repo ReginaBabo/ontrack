@@ -14,6 +14,11 @@ class OntrackDSLStepDefinitions {
         ontrackDSLSteps.createAndRegisterProject(name)
     }
 
+    @Given("""^a big branch "(.*)"$""")
+    fun big_branch_available(ref: String) {
+        ontrackDSLSteps.createAndRegisterBigBranch(ref)
+    }
+
     @Given("""a branch "(.*)" in project "(.*)"""")
     fun branch_available(branchName: String, projectRegisterName: String) {
         ontrackDSLSteps.createBranchInProject(branchName, projectRegisterName)

@@ -49,6 +49,11 @@ class OntrackBrowserStepDefinitions {
         ontrackBrowserSteps.goToProjectPage(projectRef)
     }
 
+    @When("""I go to branch page for "(.*)"""")
+    fun goToBranchPage(branchRef: String) {
+        ontrackBrowserSteps.goToBranchPage(branchRef)
+    }
+
     @When("""I go to build page for "(.*)"""")
     fun goToBuildPage(buildRef: String) {
         ontrackBrowserSteps.goToBuildPage(buildRef)

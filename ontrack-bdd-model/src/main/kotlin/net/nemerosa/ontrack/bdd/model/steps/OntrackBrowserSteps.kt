@@ -1,10 +1,7 @@
 package net.nemerosa.ontrack.bdd.model.steps
 
 import net.nemerosa.ontrack.bdd.model.BDDConfig
-import net.nemerosa.ontrack.bdd.model.pages.BuildPage
-import net.nemerosa.ontrack.bdd.model.pages.CompletePage
-import net.nemerosa.ontrack.bdd.model.pages.ProjectPage
-import net.nemerosa.ontrack.bdd.model.pages.ValidationStampPage
+import net.nemerosa.ontrack.bdd.model.pages.*
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
 import net.nemerosa.ontrack.kdsl.model.branch
@@ -73,6 +70,14 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
                 ?: throw IllegalStateException("Cannot find project $projectName referenced by $projectRef")
         page<ProjectPage> {
             open(project.id)
+        }
+    }
+
+    @Step
+    fun goToBranchPage(branchRef: String) {
+        val branch = ontrackDSLWorld.branches[branchRef]
+        page<BranchPage> {
+            open(branch.id)
         }
     }
 
