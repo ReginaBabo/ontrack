@@ -10,6 +10,16 @@ class OntrackBrowserHomeStepDefinitions {
     @Steps
     lateinit var ontrackBrowserHomeSteps: OntrackBrowserHomeSteps
 
+    @When("""I navigate to the home page""")
+    fun navigateToHomePage() {
+        ontrackBrowserHomeSteps.goToHomePage()
+    }
+
+    @Then("""I am on the home page""")
+    fun checkOnHomePage() {
+        ontrackBrowserHomeSteps.checkOnHomePage()
+    }
+
     @When("""I create a project "(.*)"""")
     fun createProject(projectRef: String) {
         ontrackBrowserHomeSteps.createProject(projectRef)

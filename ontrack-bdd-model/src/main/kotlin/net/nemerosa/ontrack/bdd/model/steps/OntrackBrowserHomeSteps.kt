@@ -57,4 +57,9 @@ class OntrackBrowserHomeSteps : AbstractOntrackBrowserSteps() {
         }
     }
 
+    @Step
+    fun checkOnHomePage() {
+        currentPageAt<HomePage> { }
+    }
+
 }

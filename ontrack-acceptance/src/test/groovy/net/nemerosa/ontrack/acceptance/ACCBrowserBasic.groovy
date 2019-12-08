@@ -21,20 +21,6 @@ import static org.junit.Assert.assertEquals
 class ACCBrowserBasic extends AcceptanceTestClient {
 
     @Test
-    @AcceptanceTest([AcceptanceTestContext.PRODUCTION, AcceptanceTestContext.SMOKE, AcceptanceTestContext.BROWSER_TEST])
-    void 'Home page is accessible'() {
-        browser {
-            goTo HomePage, [:]
-        }
-    }
-
-    @Test
-    @AcceptanceTest(AcceptanceTestContext.SMOKE)
-    void 'Admin login'() {
-        browser { browser -> loginAsAdmin(browser) }
-    }
-
-    @Test
     void 'Account with special characters in password'() {
         def name = uid('A')
         doCreateAccount(name, "test§")
