@@ -21,13 +21,28 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     private lateinit var ontrackUtilityWorld: OntrackUtilityWorld
 
     @Step
-    fun createAndRegisterProject(name: String) {
+    fun createAndRegisterProject(projectRef: String) {
         // Actual name of the project
-        val projectName = ontrackUtilityWorld.uniqueName("project", "P")
+        val projectName = ontrackUtilityWorld.uniqueName("project", projectRef)
         // Gets or creates the project, registers it and returns it
         ontrack.project(projectName).apply {
-            ontrackDSLWorld.projects[name] = this
-            ontrackUtilityWorld.id(name, id)
+            ontrackDSLWorld.projects[projectRef] = this
+            ontrackUtilityWorld.id(projectRef, id)
+        }
+    }
+
+    @Step
+    fun createAndRegisterBuild(buildRef: String) {
+        val projectName = ontrackUtilityWorld.uniqueName("project", buildRef)
+        val branchName = ontrackUtilityWorld.uniqueName("branch", buildRef)
+        val buildName = ontrackUtilityWorld.uniqueName("build", buildRef)
+        ontrack.project(projectName) {
+            branch(branchName) {
+                build(buildName) {
+                    ontrackDSLWorld.builds[buildRef] = this
+                    ontrackUtilityWorld.id(buildRef, id)
+                }
+            }
         }
     }
 

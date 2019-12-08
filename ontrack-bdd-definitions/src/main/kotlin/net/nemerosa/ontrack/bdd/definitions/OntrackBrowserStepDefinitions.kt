@@ -49,6 +49,11 @@ class OntrackBrowserStepDefinitions {
         ontrackBrowserSteps.goToProjectPage(projectRef)
     }
 
+    @When("""I go to build page for "(.*)"""")
+    fun goToBuildPage(buildRef: String) {
+        ontrackBrowserSteps.goToBuildPage(buildRef)
+    }
+
     @When("""I navigate to API page""")
     fun navigateToAPIPage() {
         ontrackBrowserSteps.navigateToAPIPage()

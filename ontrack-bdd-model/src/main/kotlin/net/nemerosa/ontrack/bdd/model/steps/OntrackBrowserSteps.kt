@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.bdd.model.steps
 
 import net.nemerosa.ontrack.bdd.model.BDDConfig
+import net.nemerosa.ontrack.bdd.model.pages.BuildPage
 import net.nemerosa.ontrack.bdd.model.pages.CompletePage
 import net.nemerosa.ontrack.bdd.model.pages.ProjectPage
 import net.nemerosa.ontrack.bdd.model.pages.ValidationStampPage
@@ -72,6 +73,14 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
                 ?: throw IllegalStateException("Cannot find project $projectName referenced by $projectRef")
         page<ProjectPage> {
             open(project.id)
+        }
+    }
+
+    @Step
+    fun goToBuildPage(buildRef: String) {
+        val build = ontrackDSLWorld.builds[buildRef]
+        page<BuildPage> {
+            open(build.id)
         }
     }
 
