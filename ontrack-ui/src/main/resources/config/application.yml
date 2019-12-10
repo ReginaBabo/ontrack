@@ -2,6 +2,8 @@
 
 # Spring configuration
 spring:
+  flyway:
+    table: schema_version
   # Default database connection
   datasource:
     url: "jdbc:postgresql://localhost/ontrack"
