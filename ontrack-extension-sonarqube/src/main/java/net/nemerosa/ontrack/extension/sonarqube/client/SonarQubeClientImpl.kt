@@ -12,10 +12,10 @@ class SonarQubeClientImpl(
 ) : SonarQubeClient {
 
     override val serverVersion: String
-        get() = restTemplate.getForObject("/api/server/version", String::class.java)
+        get() = restTemplate.getForObject("/api/server/version", String::class.java)!!
 
     override val systemHealth: String
-        get() = restTemplate.getForObject("/api/system/health", SystemHealth::class.java).health
+        get() = restTemplate.getForObject("/api/system/health", SystemHealth::class.java)!!.health
 
     override fun getMeasuresForVersion(key: String, branch: String, version: String, metrics: List<String>): Map<String, Double?>? {
 
@@ -48,7 +48,7 @@ class SonarQubeClientImpl(
                             "metrics" to metrics.joinToString(","),
                             "timestamp" to timestamp
                     )
-            )
+            )!!
             // Converts to measures
             return measures.measures.associate { measure ->
                 val name = measure.metric
