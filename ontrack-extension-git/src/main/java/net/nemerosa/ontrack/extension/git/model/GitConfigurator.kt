@@ -1,23 +1,21 @@
-package net.nemerosa.ontrack.extension.git.model;
+package net.nemerosa.ontrack.extension.git.model
 
-import net.nemerosa.ontrack.model.structure.Project;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
+import net.nemerosa.ontrack.model.structure.Project
 
 /**
  * Extracting the Git configuration from a project.
  */
-public interface GitConfigurator {
+interface GitConfigurator {
 
-    Optional<GitConfiguration> getConfiguration(Project project);
+    /**
+     * Gets the Git configuration for a project
+     */
+    fun getConfiguration(project: Project): GitConfiguration?
 
     /**
      * Converts a PR key to an ID when possible
      */
-    @Nullable
-    Integer toPullRequestID(@NotNull String key);
+    fun toPullRequestID(key: String): Int?
 
     /**
      * Loads a pull request
@@ -26,6 +24,5 @@ public interface GitConfigurator {
      * @param id            ID of the pull request
      * @return Pull request or null if not existing
      */
-    @Nullable
-    GitPullRequest getPullRequest(@NotNull GitConfiguration configuration, int id);
+    fun getPullRequest(configuration: GitConfiguration, id: Int): GitPullRequest?
 }
