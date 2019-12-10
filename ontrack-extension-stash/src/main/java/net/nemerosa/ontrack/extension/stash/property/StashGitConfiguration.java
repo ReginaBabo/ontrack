@@ -18,6 +18,10 @@ public class StashGitConfiguration implements GitConfiguration {
         this.configuredIssueService = configuredIssueService;
     }
 
+    public StashProjectConfigurationProperty getProperty() {
+        return property;
+    }
+
     @Override
     public String getType() {
         return "stash";

@@ -10,6 +10,11 @@ class GitBranchConfigurationProperty(
         val branch: String,
 
         /**
+         * Git pull request key
+         */
+        val pullRequest: String?,
+
+        /**
          * Build link
          */
         val buildCommitLink: ServiceConfiguration?,

@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.extension.git.service
 
 import net.nemerosa.ontrack.common.FutureUtils
 import net.nemerosa.ontrack.common.asOptional
+import net.nemerosa.ontrack.common.getOrNull
 import net.nemerosa.ontrack.extension.api.model.BuildDiffRequest
 import net.nemerosa.ontrack.extension.api.model.BuildDiffRequestDifferenceProjectException
 import net.nemerosa.ontrack.extension.git.branching.BranchingModelService
@@ -609,6 +610,16 @@ class GitServiceImpl(
         return SCMBuildView(getBuildView(buildId), GitBuildInfo())
     }
 
+    private fun getGitConfiguratorAndConfiguration(project: Project): Pair<GitConfigurator, GitConfiguration>? =
+            gitConfigurators.mapNotNull {
+                val configuration = it.getConfiguration(project).getOrNull()
+                if (configuration != null) {
+                    it to configuration
+                } else {
+                    null
+                }
+            }.firstOrNull()
+
     override fun getProjectConfiguration(project: Project): GitConfiguration? {
         return gitConfigurators
                 .map { c -> c.getConfiguration(project) }
@@ -631,14 +642,24 @@ class GitServiceImpl(
             val buildCommitLink: ConfiguredBuildGitCommitLink<*>?
             val override: Boolean
             val buildTagInterval: Int
+            var gitPullRequest: GitPullRequest? = null
             val branchConfig = propertyService.getProperty(branch, GitBranchConfigurationPropertyType::class.java)
             if (!branchConfig.isEmpty) {
-                gitBranch = branchConfig.value.branch
-                buildCommitLink = branchConfig.value.buildCommitLink?.let {
+                val branchConfigurationProperty = branchConfig.value
+                gitBranch = branchConfigurationProperty.branch
+                buildCommitLink = branchConfigurationProperty.buildCommitLink?.let {
                     toConfiguredBuildGitCommitLink<Any>(it)
                 }
-                override = branchConfig.value.isOverride
-                buildTagInterval = branchConfig.value.buildTagInterval
+                override = branchConfigurationProperty.isOverride
+                buildTagInterval = branchConfigurationProperty.buildTagInterval
+                // Pull request info
+                if (!branchConfigurationProperty.pullRequest.isNullOrBlank()) {
+                    gitPullRequest = getGitConfiguratorAndConfiguration(branch.project)?.let { (configurator, configuration) ->
+                        configurator.toPullRequestID(branchConfigurationProperty.pullRequest)?.run {
+                            configurator.getPullRequest(configuration, this)
+                        }
+                    }
+                }
             } else {
                 return null
             }
@@ -646,6 +667,7 @@ class GitServiceImpl(
             return GitBranchConfiguration(
                     configuration,
                     gitBranch,
+                    gitPullRequest,
                     buildCommitLink,
                     override,
                     buildTagInterval
@@ -841,10 +863,10 @@ class GitServiceImpl(
 
     override fun getCommitForBuild(build: Build): IndexableGitCommit? =
             entityDataService.retrieve(
-            build,
-            "git-commit",
-            IndexableGitCommit::class.java
-    )
+                    build,
+                    "git-commit",
+                    IndexableGitCommit::class.java
+            )
 
     override fun setCommitForBuild(build: Build, commit: IndexableGitCommit) {
         entityDataService.store(
