@@ -71,7 +71,7 @@ class SonarQubeClientImpl(
 
     private val restTemplate: RestTemplate = RestTemplateBuilder()
             .rootUri(configuration.url)
-            .basicAuthorization(configuration.password, "") // See https://docs.sonarqube.org/latest/extend/web-api/
+            .basicAuthentication(configuration.password, "") // See https://docs.sonarqube.org/latest/extend/web-api/
             .build()
 
     private fun <T, R : PagedResult> paginateUntil(
