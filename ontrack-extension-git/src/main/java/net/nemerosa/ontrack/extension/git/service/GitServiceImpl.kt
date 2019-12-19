@@ -2,7 +2,6 @@ package net.nemerosa.ontrack.extension.git.service
 
 import net.nemerosa.ontrack.common.FutureUtils
 import net.nemerosa.ontrack.common.asOptional
-import net.nemerosa.ontrack.common.getOrNull
 import net.nemerosa.ontrack.extension.api.model.BuildDiffRequest
 import net.nemerosa.ontrack.extension.api.model.BuildDiffRequestDifferenceProjectException
 import net.nemerosa.ontrack.extension.git.branching.BranchingModelService
@@ -41,7 +40,6 @@ import java.lang.String.format
 import java.util.*
 import java.util.concurrent.Future
 import java.util.function.BiConsumer
-import java.util.function.Predicate
 import java.util.stream.Stream
 
 @Service
@@ -247,7 +245,7 @@ class GitServiceImpl(
             getChangeLogCommits(it)
         }
         // In a transaction
-        transactionService.start().use { _ ->
+        transactionService.start().use {
             // Configuration
             val configuration = getRequiredProjectConfiguration(changeLog.project)
             // Issue service
@@ -271,7 +269,7 @@ class GitServiceImpl(
             getChangeLogCommits(it)
         }
         // In a transaction
-        transactionService.start().use { _ ->
+        transactionService.start().use {
             // Configuration
             val configuration = getRequiredProjectConfiguration(changeLog.project)
             // Issue service
@@ -386,11 +384,11 @@ class GitServiceImpl(
     override fun projectSync(project: Project, request: GitSynchronisationRequest): Ack {
         securityService.checkProjectFunction(project, ProjectConfig::class.java)
         val projectConfiguration = getProjectConfiguration(project)
-        if (projectConfiguration != null) {
+        return if (projectConfiguration != null) {
             val sync = sync(projectConfiguration, request)
-            return Ack.validate(sync != null)
+            Ack.validate(sync != null)
         } else {
-            return Ack.NOK
+            Ack.NOK
         }
     }
 
@@ -503,11 +501,11 @@ class GitServiceImpl(
                     .mapValues { (_, gitBranches) ->
                         gitBranches.mapNotNull { findBranchWithGitBranch(project, it) }
                     }
-                    .filterValues { !it.isEmpty() }
+                    .filterValues { it.isNotEmpty() }
         }
 
         // Logging of the index
-        indexedBranches.forEach { type, branches: List<Branch> ->
+        indexedBranches.forEach { (type, branches: List<Branch>) ->
             logger.debug("git-search-branch-index,type=$type,branches=${branches.joinToString { it.name }}")
         }
 
@@ -539,7 +537,7 @@ class GitServiceImpl(
         }.mapValues { (_, infos) ->
             infos.filter { !it.isEmpty }
         }.filterValues {
-            !it.isEmpty()
+            it.isNotEmpty()
         }
         // Result
         return OntrackGitCommitInfo(
@@ -612,7 +610,7 @@ class GitServiceImpl(
 
     private fun getGitConfiguratorAndConfiguration(project: Project): Pair<GitConfigurator, GitConfiguration>? =
             gitConfigurators.mapNotNull {
-                val configuration = it.getConfiguration(project).getOrNull()
+                val configuration = it.getConfiguration(project)
                 if (configuration != null) {
                     it to configuration
                 } else {
@@ -620,13 +618,10 @@ class GitServiceImpl(
                 }
             }.firstOrNull()
 
-    override fun getProjectConfiguration(project: Project): GitConfiguration? {
-        return gitConfigurators
-                .map { c -> c.getConfiguration(project) }
-                .filter { it.isPresent }
-                .map { it.get() }
-                .firstOrNull()
-    }
+    override fun getProjectConfiguration(project: Project): GitConfiguration? =
+            gitConfigurators
+                    .mapNotNull { c -> c.getConfiguration(project) }
+                    .firstOrNull()
 
     protected fun getRequiredBranchConfiguration(branch: Branch): GitBranchConfiguration {
         return getBranchConfiguration(branch)
@@ -905,9 +900,8 @@ class GitServiceImpl(
         if (buildCommitLink != null) {
             structureService.findBuild(
                     branch.id,
-                    Predicate { build -> collectIndexableGitCommitForBuild(build, client, buildCommitLink, overrides, listener) },
                     BuildSortDirection.FROM_NEWEST
-            )
+            ) { build -> collectIndexableGitCommitForBuild(build, client, buildCommitLink, overrides, listener) }
         }
     }
 
@@ -956,7 +950,7 @@ class GitServiceImpl(
         }
         // Going on
         false
-    }
+    } ?: false
 
     private fun <T> logTime(key: String, tags: List<Pair<String, *>> = emptyList(), code: () -> T): T {
         val start = System.currentTimeMillis()
