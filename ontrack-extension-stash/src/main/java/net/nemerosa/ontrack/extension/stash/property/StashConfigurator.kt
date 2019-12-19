@@ -10,7 +10,6 @@ import net.nemerosa.ontrack.extension.support.client.ClientFactory
 import net.nemerosa.ontrack.model.structure.Project
 import net.nemerosa.ontrack.model.structure.PropertyService
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class StashConfigurator(
@@ -19,11 +18,10 @@ class StashConfigurator(
         private val clientFactory: ClientFactory
 ) : GitConfigurator {
 
-    override fun getConfiguration(project: Project): Optional<GitConfiguration> {
-        return propertyService.getProperty(project, StashProjectConfigurationPropertyType::class.java)
-                .option()
-                .map { property: StashProjectConfigurationProperty -> getGitConfiguration(property) }
-    }
+    override fun getConfiguration(project: Project): GitConfiguration? =
+            propertyService.getProperty(project, StashProjectConfigurationPropertyType::class.java)
+                    .value
+                    ?.let { getGitConfiguration(it) }
 
     override fun toPullRequestID(key: String): Int? {
         if (key.isNotBlank()) {

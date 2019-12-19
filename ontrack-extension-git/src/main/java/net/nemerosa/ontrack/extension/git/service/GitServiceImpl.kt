@@ -648,11 +648,13 @@ class GitServiceImpl(
                 override = branchConfigurationProperty.isOverride
                 buildTagInterval = branchConfigurationProperty.buildTagInterval
                 // Pull request info
-                if (!branchConfigurationProperty.pullRequest.isNullOrBlank()) {
-                    gitPullRequest = getGitConfiguratorAndConfiguration(branch.project)?.let { (configurator, configuration) ->
-                        configurator.toPullRequestID(branchConfigurationProperty.pullRequest)?.run {
-                            configurator.getPullRequest(configuration, this)
-                        }
+                val gitConfiguratorAndConfiguration = getGitConfiguratorAndConfiguration(branch.project)
+                if (gitConfiguratorAndConfiguration != null) {
+                    val (configurator, gitConfiguration) = gitConfiguratorAndConfiguration
+                    // Tries to get the Git branch as a PR key
+                    val prId = configurator.toPullRequestID(branchConfigurationProperty.branch)
+                    if (prId != null) {
+                        gitPullRequest = configurator.getPullRequest(gitConfiguration, prId)
                     }
                 }
             } else {

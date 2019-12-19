@@ -71,4 +71,8 @@ public class GitLabGitConfiguration implements GitConfiguration {
     public Optional<ConfiguredIssueService> getConfiguredIssueService() {
         return Optional.ofNullable(configuredIssueService);
     }
+
+    public GitLabProjectConfigurationProperty getProperty() {
+        return property;
+    }
 }

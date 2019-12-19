@@ -30,10 +30,12 @@ public class BasicGitConfigurator implements GitConfigurator {
     }
 
     @Override
-    public Optional<GitConfiguration> getConfiguration(Project project) {
+    @Nullable
+    public GitConfiguration getConfiguration(@NotNull Project project) {
         return propertyService.getProperty(project, GitProjectConfigurationPropertyType.class)
                 .option()
-                .map(this::getGitConfiguration);
+                .map(this::getGitConfiguration)
+                .orElse(null);
     }
 
     /**
@@ -45,7 +47,19 @@ public class BasicGitConfigurator implements GitConfigurator {
      */
     @Nullable
     @Override
-    public GitPullRequest getPullRequest(@NotNull GitConfiguration configuration, @NotNull String id) {
+    public GitPullRequest getPullRequest(@NotNull GitConfiguration configuration, int id) {
+        return null;
+    }
+
+    /**
+     * Pull requests are not supported by basic Git.
+     *
+     * @param key Key for the PR
+     * @return Always null
+     */
+    @Nullable
+    @Override
+    public Integer toPullRequestID(@NotNull String key) {
         return null;
     }
 
