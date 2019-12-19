@@ -1,13 +1,17 @@
 package net.nemerosa.ontrack.extension.github.client;
 
 import net.nemerosa.ontrack.common.Time;
+import net.nemerosa.ontrack.extension.git.model.GitPullRequest;
 import net.nemerosa.ontrack.extension.github.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.egit.github.core.*;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.client.RequestException;
 import org.eclipse.egit.github.core.service.IssueService;
+import org.eclipse.egit.github.core.service.PullRequestService;
 import org.eclipse.egit.github.core.service.RepositoryService;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +48,36 @@ public class DefaultOntrackGitHubClient implements OntrackGitHubClient {
         } catch (IOException e) {
             throw new OntrackGitHubClientException(e);
         }
+    }
+
+    @Nullable
+    @Override
+    public GitPullRequest getPullRequest(@NotNull String repository, int id) {
+        // Getting a client
+        GitHubClient client = createGitHubClient();
+        // PR service using this client
+        PullRequestService service = new PullRequestService(client);
+        // Getting the PR
+        PullRequest pr;
+        try {
+            pr = service.getPullRequest(RepositoryId.createFromId(repository), id);
+        } catch (RequestException ex) {
+            if (ex.getStatus() == 404) {
+                return null;
+            } else {
+                throw new OntrackGitHubClientException(ex);
+            }
+        } catch (IOException e) {
+            throw new OntrackGitHubClientException(e);
+        }
+        // Conversion
+        return new GitPullRequest(
+                id,
+                "#" + id,
+                pr.getBase().getRef(),
+                pr.getHead().getRef(),
+                pr.getTitle()
+        );
     }
 
     @Override

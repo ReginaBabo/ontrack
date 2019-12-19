@@ -1,6 +1,9 @@
 package net.nemerosa.ontrack.extension.github.client;
 
+import net.nemerosa.ontrack.extension.git.model.GitPullRequest;
 import net.nemerosa.ontrack.extension.github.model.GitHubIssue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,4 +26,13 @@ public interface OntrackGitHubClient {
      */
     List<String> getRepositories();
 
+    /**
+     * Gets a pull request using its ID
+     *
+     * @param repository Repository name, like <code>nemerosa/ontrack</code>
+     * @param id         ID of the pull request
+     * @return Details of the pull request
+     */
+    @Nullable
+    GitPullRequest getPullRequest(@NotNull String repository, int id);
 }

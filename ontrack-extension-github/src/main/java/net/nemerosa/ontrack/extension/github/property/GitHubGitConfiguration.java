@@ -19,6 +19,10 @@ public class GitHubGitConfiguration implements GitConfiguration {
         this.configuredIssueService = configuredIssueService;
     }
 
+    public GitHubProjectConfigurationProperty getProperty() {
+        return property;
+    }
+
     @Override
     public String getType() {
         return "github";
