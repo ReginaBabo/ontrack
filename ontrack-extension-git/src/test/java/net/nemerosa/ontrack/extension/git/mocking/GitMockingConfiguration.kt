@@ -15,17 +15,11 @@ class GitMockingConfiguration: GitConfiguration {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getName(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getName(): String = "Mocking"
 
-    override fun getCredentials(): Optional<UserPassword> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getCredentials(): Optional<UserPassword> = Optional.empty()
 
-    override fun getType(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getType(): String = "mocking"
 
     override fun getFileAtCommitLink(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -35,7 +29,5 @@ class GitMockingConfiguration: GitConfiguration {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getIndexationInterval(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getIndexationInterval(): Int = 0
 }
