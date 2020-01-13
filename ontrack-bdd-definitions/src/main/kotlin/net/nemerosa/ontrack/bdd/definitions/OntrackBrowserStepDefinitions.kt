@@ -3,7 +3,6 @@ package net.nemerosa.ontrack.bdd.definitions
 import cucumber.api.java.After
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import net.nemerosa.ontrack.bdd.model.pages.ProjectPage
 import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserHomeSteps
 import net.nemerosa.ontrack.bdd.model.steps.OntrackBrowserSteps
 import net.thucydides.core.annotations.Steps
@@ -28,6 +27,11 @@ class OntrackBrowserStepDefinitions {
         ontrackBrowserHomeSteps.goToHomePage()
         ontrackBrowserSteps.loginAsAdmin()
         ontrackBrowserHomeSteps.goToHomePage()
+    }
+
+    @When("""I log as admin""")
+    fun logAsAdmin() {
+        ontrackBrowserSteps.enterAdminLogin()
     }
 
     @When("""going to the page of the validation stamp "(.*)" in branch "(.*)" of project "(.*)"""")
@@ -62,6 +66,11 @@ class OntrackBrowserStepDefinitions {
     @When("""I navigate to API page""")
     fun navigateToAPIPage() {
         ontrackBrowserSteps.navigateToAPIPage()
+    }
+
+    @Then("""login screen is displayed""")
+    fun loginScreenIsDisplayed() {
+        ontrackBrowserSteps.checkLoginIsDisplayed()
     }
 
     @After

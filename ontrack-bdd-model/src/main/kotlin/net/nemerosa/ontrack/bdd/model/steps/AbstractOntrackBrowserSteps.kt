@@ -21,4 +21,13 @@ abstract class AbstractOntrackBrowserSteps : AbstractOntrackDSL() {
         page.code()
     }
 
+    /**
+     * Navigates to and opens the given page designated by the [P] class and runs the provided [code] inside it.
+     */
+    inline fun <reified P : PageObject> openPage(noinline code: P.() -> Unit = {}) {
+        val page = pages.getPage(P::class.java)
+        page.open()
+        page.code()
+    }
+
 }

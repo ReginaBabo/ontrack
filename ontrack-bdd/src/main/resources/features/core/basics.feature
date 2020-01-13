@@ -11,3 +11,10 @@ Feature: Basic access
     Given I navigate to the home page
     And login as admin
     Then I am on the home page
+
+  Scenario: Redirection when page is not authorised
+    When I go to account management page
+    Then I am on the home page
+    And login screen is displayed
+    When I log as admin
+    Then I am on the account management page

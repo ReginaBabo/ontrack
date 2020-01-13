@@ -23,6 +23,25 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     private lateinit var ontrackUtilityWorld: OntrackUtilityWorld
 
     @Step
+    fun checkLoginIsDisplayed() {
+        currentPageAt<CompletePage> {
+            checkLoginIsVisible()
+        }
+    }
+
+    @Step
+    fun enterLogin(username: String, password: String) {
+        currentPageAt<CompletePage> {
+            login(username, password)
+        }
+    }
+
+    @Step
+    fun enterAdminLogin() {
+        enterLogin(bddProperties.ontrack.username, bddProperties.ontrack.password)
+    }
+
+    @Step
     fun loginWith(username: String, password: String) {
         currentPageAt<CompletePage> {
             userMenuLogin(username, password)
