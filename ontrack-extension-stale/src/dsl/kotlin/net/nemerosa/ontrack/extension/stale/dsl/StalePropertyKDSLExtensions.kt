@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.extension.stale.dsl
 
-import net.nemerosa.ontrack.kdsl.model.Project
+import net.nemerosa.ontrack.dsl.Project
+import net.nemerosa.ontrack.dsl.property
 
 /**
  * Representation of the stale property
@@ -32,4 +33,4 @@ fun Project.staleProperty(value: StaleProperty) {
  * Gets the stale property
  */
 val Project.staleProperty: StaleProperty?
-    get() = getProperty<StaleProperty>("net.nemerosa.ontrack.extension.stale.StalePropertyType")
+    get() = property("net.nemerosa.ontrack.extension.stale.StalePropertyType")

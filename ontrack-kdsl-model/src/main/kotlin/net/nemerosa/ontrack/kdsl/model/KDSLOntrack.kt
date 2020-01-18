@@ -1,0 +1,95 @@
+package net.nemerosa.ontrack.kdsl.model
+
+import net.nemerosa.ontrack.dsl.EntityNotFoundException
+import net.nemerosa.ontrack.dsl.Ontrack
+import net.nemerosa.ontrack.dsl.Project
+import net.nemerosa.ontrack.dsl.Settings
+import net.nemerosa.ontrack.kdsl.client.OntrackConnector
+import net.nemerosa.ontrack.kdsl.client.OntrackConnectorProperties
+import net.nemerosa.ontrack.kdsl.client.support.OntrackConnectorBuilder
+import net.nemerosa.ontrack.kdsl.core.GraphQLParamImpl
+import net.nemerosa.ontrack.kdsl.core.OntrackRoot
+import net.nemerosa.ontrack.kdsl.core.type
+import net.nemerosa.ontrack.kdsl.core.value
+import net.nemerosa.ontrack.kdsl.model.support.resources
+
+class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConnector), Ontrack {
+
+    override fun asAnonymous(): Ontrack = KDSLOntrack(
+            ontrackConnector.asAnonymous()
+    )
+
+    override val settings: Settings = KDSLSettings(ontrackConnector)
+
+    override val projects: List<Project>
+        get() = ontrackConnector.get("structure/projects")?.resources?.map {
+            KDSLProject(it, ontrackConnector)
+        } ?: emptyList()
+
+    override fun getProjects(name: String?, favoritesOnly: Boolean, propertyType: String?, propertyValue: String?): List<Project> {
+        val decl: String
+        val params = mutableListOf<GraphQLParamImpl>()
+        when {
+            name != null -> {
+                decl = "(name: ${'$'}name)"
+                params += "name" type "String!" value name
+            }
+            propertyType != null -> {
+                decl = """withProperty: {type: ${'$'}propertyType, value: ${'$'}propertyValue}"""
+                params += "propertyType" type "String" value propertyType
+                params += "propertyValue" type "String" value propertyValue
+            }
+            favoritesOnly -> {
+                decl = "(favourites: true)"
+            }
+            else -> {
+                decl = ""
+            }
+        }
+        val query = """
+            projects$decl {
+                json
+            }
+        """
+        // Query
+        return graphQLQuery(
+                queryName = "ProjectList",
+                query = query,
+                params = params
+        ).data["projects"].map { KDSLProject(it["json"], ontrackConnector) }
+    }
+
+    override fun getProjectByID(id: Int): Project =
+            ontrackConnector.get("structure/projects/$id")?.let {
+                KDSLProject(it, ontrackConnector)
+            } ?: throw EntityNotFoundException("project", id)
+
+    override fun findProjectByName(name: String): Project? =
+            getProjects(name).firstOrNull()
+
+    override fun createProject(
+            name: String,
+            description: String,
+            disabled: Boolean
+    ): Project =
+            ontrackConnector.post(
+                    "structure/projects/create",
+                    mapOf(
+                            "name" to name,
+                            "description" to description,
+                            "disabled" to disabled
+                    )
+            )?.let { KDSLProject(it, ontrackConnector) } ?: throw MissingResponseException()
+
+    companion object {
+
+        /**
+         * Utility method to get a [KDSLOntrack] instance.
+         */
+        @JvmStatic
+        fun connect(properties: OntrackConnectorProperties? = null): Ontrack {
+            val ontrackConnector = OntrackConnectorBuilder.getOrCreateFromEnv(properties)
+            return KDSLOntrack(ontrackConnector)
+        }
+    }
+}

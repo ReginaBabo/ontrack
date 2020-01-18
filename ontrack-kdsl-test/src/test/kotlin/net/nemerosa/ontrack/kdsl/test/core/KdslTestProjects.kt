@@ -1,8 +1,5 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
-import net.nemerosa.ontrack.kdsl.model.findProjectByName
-import net.nemerosa.ontrack.kdsl.model.getProjectByID
-import net.nemerosa.ontrack.kdsl.model.getProjects
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest
 import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import net.nemerosa.ontrack.test.support.uid

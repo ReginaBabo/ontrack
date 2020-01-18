@@ -1,44 +1,49 @@
 package net.nemerosa.ontrack.kdsl.core
 
-import com.fasterxml.jackson.databind.JsonNode
+import net.nemerosa.ontrack.kdsl.client.GraphQLResponse
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 
 /**
  * Object which gets an internal link to Ontrack through an [OntrackConnector].
  */
-abstract class Connector {
+abstract class Connector(
+        protected val ontrackConnector: OntrackConnector
+) {
 
     /**
-     * Internal link to Ontrack
+     * GraphQL query
+     *
+     * @param queryName Name to give to the query
      */
-    lateinit var ontrackConnector: OntrackConnector
+    fun graphQLQuery(
+            queryName: String,
+            query: String,
+            vararg params: GraphQLParamImpl) = graphQLQuery(queryName, query, params.toList())
 
     /**
-     * Initialisation of the link
+     * GraphQL query
+     *
+     * @param queryName Name to give to the query
      */
-    fun init(connector: Connector) {
-        ontrackConnector = connector.ontrackConnector
-        init()
+    fun graphQLQuery(
+            queryName: String,
+            query: String,
+            params: List<GraphQLParamImpl>
+    ): GraphQLResponse {
+        // Filter
+        val filterDecl = if (params.isNotEmpty()) {
+            "(${params.joinToString(",") { "${'$'}${it.name}: ${it.type}" }})"
+        } else {
+            ""
+        }
+        val filterVariables = params.associate { it.name to it.value }
+        // GraphQL query
+        val fullQuery = """
+            query $queryName$filterDecl{
+                $query
+            }
+        """
+        // Runs and parses the GraphQL query
+        return ontrackConnector.graphQL(fullQuery, filterVariables)
     }
-
-    /**
-     * Function to call to initialise the rest of the object
-     */
-    open fun init() {}
-
-    /**
-     * Access to the Ontrack root
-     */
-    val ontrack: Ontrack get() = Ontrack(ontrackConnector)
-
-    inline fun <reified T> JsonNode?.toObject(): T =
-            this?.parse<T>() ?: throw IllegalStateException("Cannot convert a null JSON object")
-
-    inline fun <reified T : Resource> JsonNode?.toConnector(): T {
-        val t = toObject<T>()
-        t.ontrackConnector = this@Connector.ontrackConnector
-        t.init()
-        return t
-    }
-
 }

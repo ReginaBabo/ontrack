@@ -1,12 +1,12 @@
 package net.nemerosa.ontrack.kdsl.test.support
 
-import net.nemerosa.ontrack.kdsl.core.Ontrack
-import net.nemerosa.ontrack.kdsl.model.*
+import net.nemerosa.ontrack.dsl.*
+import net.nemerosa.ontrack.kdsl.model.KDSLOntrack
 import net.nemerosa.ontrack.test.support.uid
 
 abstract class AbstractKdslTest {
 
-    protected val ontrack: Ontrack = Ontrack.connect()
+    protected val ontrack: Ontrack = KDSLOntrack.connect()
 
     /**
      * Shortcut for a project with a unique name

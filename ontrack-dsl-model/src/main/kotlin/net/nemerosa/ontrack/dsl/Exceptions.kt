@@ -1,6 +1,9 @@
-package net.nemerosa.ontrack.kdsl.model
+package net.nemerosa.ontrack.dsl
 
-import net.nemerosa.ontrack.kdsl.core.support.DSLException
+/**
+ * Base exception
+ */
+abstract class DSLException(message: String) : RuntimeException(message)
 
 /**
  * Thrown when an entity cannot be found using its ID.

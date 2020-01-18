@@ -1,10 +1,10 @@
 package net.nemerosa.ontrack.bdd.model.steps
 
-import net.nemerosa.ontrack.kdsl.core.Ontrack
+import net.nemerosa.ontrack.kdsl.core.OntrackRoot
 
 abstract class AbstractOntrackDSL : AbstractSteps() {
 
     protected val ontrack
-        get() = Ontrack.connect(bddProperties.ontrack)
+        get() = OntrackRoot.connect(bddProperties.ontrack)
 
 }

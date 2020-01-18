@@ -4,9 +4,9 @@ import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.pages.*
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
-import net.nemerosa.ontrack.kdsl.model.branch
-import net.nemerosa.ontrack.kdsl.model.findProjectByName
-import net.nemerosa.ontrack.kdsl.model.validationStamp
+import net.nemerosa.ontrack.kdsl.model.deprecated.branch
+import net.nemerosa.ontrack.kdsl.model.deprecated.findProjectByName
+import net.nemerosa.ontrack.kdsl.model.deprecated.validationStamp
 import net.thucydides.core.annotations.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component

@@ -4,7 +4,7 @@ import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
 import net.nemerosa.ontrack.bdd.model.worlds.withPassword
-import net.nemerosa.ontrack.kdsl.model.*
+import net.nemerosa.ontrack.kdsl.model.deprecated.*
 import net.thucydides.core.annotations.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
