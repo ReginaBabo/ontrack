@@ -21,7 +21,7 @@ class KDSLProject(
     override val description: String = json.description
 
     override val branches: List<Branch>
-        get() = ontrackConnector.get("structure/projects/{projectId}/branches")?.resources?.map {
+        get() = ontrackConnector.get("structure/projects/$id/branches")?.resources?.map {
             KDSLBranch(it, ontrackConnector)
         } ?: emptyList()
 
