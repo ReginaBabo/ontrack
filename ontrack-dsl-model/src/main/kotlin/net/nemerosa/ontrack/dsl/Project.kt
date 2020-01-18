@@ -28,4 +28,21 @@ interface Project : ProjectEntity {
             disabled: Boolean = false
     ): Branch
 
+
+    /**
+     * Searching a build on a project
+     */
+    fun searchBuilds(
+            maximumCount: Int = 10,
+            branchName: String? = null,
+            buildName: String? = null,
+            buildExactMatch: Boolean = false,
+            promotionName: String? = null,
+            validationStampName: String? = null,
+            property: String? = null,
+            propertyValue: String? = null,
+            linkedFrom: String? = null,
+            linkedTo: String? = null
+    ): List<Build>
+
 }

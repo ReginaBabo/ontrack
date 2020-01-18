@@ -2,12 +2,14 @@ package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.Branch
+import net.nemerosa.ontrack.dsl.Build
 import net.nemerosa.ontrack.dsl.Project
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
 import net.nemerosa.ontrack.kdsl.model.support.description
 import net.nemerosa.ontrack.kdsl.model.support.name
+import net.nemerosa.ontrack.kdsl.model.support.query
 import net.nemerosa.ontrack.kdsl.model.support.resources
 
 class KDSLProject(
@@ -52,4 +54,35 @@ class KDSLProject(
         KDSLBranch(it["json"], ontrackConnector)
     }
 
+    override fun searchBuilds(
+            maximumCount: Int,
+            branchName: String?,
+            buildName: String?,
+            buildExactMatch: Boolean,
+            promotionName: String?,
+            validationStampName: String?,
+            property: String?,
+            propertyValue: String?,
+            linkedFrom: String?,
+            linkedTo: String?
+    ): List<Build> {
+        val url = "structure/project/$id/builds/search"
+        // Form
+        val query = query(
+                "maximumCount" to maximumCount,
+                "branchName" to branchName,
+                "buildName" to buildName,
+                "buildExactMatch" to buildExactMatch,
+                "promotionName" to promotionName,
+                "validationStampName" to validationStampName,
+                "property" to property,
+                "propertyValue" to propertyValue,
+                "linkedFrom" to linkedFrom,
+                "linkedTo" to linkedTo
+        )
+        // Query
+        return ontrackConnector.get(url, query)?.resources?.map { buildView ->
+            buildView["build"].let { KDSLBuild(it, ontrackConnector) }
+        } ?: emptyList()
+    }
 }
