@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 /**
@@ -12,11 +13,12 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Build(
+        json: JsonNode,
         id: Int,
         creation: Signature,
         val name: String,
         val description: String
-) : ProjectEntityResource(id, creation) {
+) : ProjectEntityResource(json, id, creation) {
 
     override val entityType: String = "BUILD"
 

@@ -9,10 +9,11 @@ import com.fasterxml.jackson.databind.JsonNode
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class PromotionRun(
+        json: JsonNode,
         id: Int,
         creation: Signature,
         val promotionLevelId: Int
-) : ProjectEntityResource(id, creation) {
+) : ProjectEntityResource(json, id, creation) {
 
     override val entityType: String = "PROMOTION_RUN"
 

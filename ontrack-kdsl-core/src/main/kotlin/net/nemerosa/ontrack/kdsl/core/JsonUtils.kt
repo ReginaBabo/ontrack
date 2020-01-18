@@ -48,3 +48,7 @@ fun ObjectNode.removeDeepPath(path: String) {
         remove(path)
     }
 }
+
+val JsonNode.id: Int get() = getInt("id")
+
+fun JsonNode.getInt(name: String): Int = get("id").intValue()

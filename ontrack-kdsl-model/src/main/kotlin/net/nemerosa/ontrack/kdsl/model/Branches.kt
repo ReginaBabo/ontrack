@@ -1,7 +1,9 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.kdsl.core.Ontrack
+import net.nemerosa.ontrack.kdsl.core.id
 
 /**
  * Branch entity
@@ -12,13 +14,13 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Branch(
+        json: JsonNode,
         id: Int,
-        creation: Signature,
-        private val projectId: Int,
+        signature: Signature,
         val name: String,
         val description: String,
         val disabled: Boolean
-) : ProjectEntityResource(id, creation) {
+) : ProjectEntityResource(json, id, signature) {
 
     override val entityType: String = "BRANCH"
 
@@ -26,7 +28,7 @@ class Branch(
      * Gets the project associated with this branch
      */
     val project: Project by lazy {
-        ontrack.getProjectByID(projectId)
+        ontrack.getProjectByID(json["project"].id)
     }
 
 }
@@ -37,7 +39,7 @@ class Branch(
 fun Project.branches(): List<Branch> =
         ontrackConnector.get("structure/projects/$id/branches")
                 ?.get("resources")
-                ?.map { it.adaptSignature().toConnector<Branch>() }
+                ?.map { it.toConnector<Branch>() }
                 ?: emptyList()
 
 /**
@@ -50,24 +52,14 @@ fun Project.branches(
 ): List<Branch> =
         """
             branches(name: ${'$'}name, project: ${'$'}project) {
-                id
-                project {
-                    id
-                }
-                name
-                description
-                disabled
-                creation {
-                    user
-                    time
-                }
+                json
             }
         """.trimIndent().graphQLQuery(
                 "Branches",
                 "name" type "String" value name,
                 "project" type "String!" value this.name
         ).data["branches"].map {
-            it.adaptProjectId().toConnector<Branch>()
+            it["json"].toConnector<Branch>()
         }
 
 /**
@@ -90,7 +82,7 @@ fun Project.createBranch(
                         "description" to description,
                         "disabled" to disabled
                 )
-        ).adaptSignature().adaptProjectId().toConnector()
+        ).toConnector()
 
 /**
  * Creates or returns a branch and runs some code for it.
@@ -131,7 +123,4 @@ fun Project.branch(
  * Looking for a branch by name
  */
 fun Ontrack.branch(project: String, branch: String): Branch? =
-        ontrackConnector.get("structure/entity/branch/$project/$branch")
-                ?.adaptProjectId()
-                ?.adaptSignature()
-                ?.toConnector()
+        ontrackConnector.get("structure/entity/branch/$project/$branch")?.toConnector()

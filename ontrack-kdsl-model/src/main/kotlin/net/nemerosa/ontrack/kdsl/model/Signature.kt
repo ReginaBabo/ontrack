@@ -7,9 +7,9 @@ import java.time.LocalDateTime
  * a timestamp.
  *
  * @property time Timestamp of the signature (always UTC)
- * @property user User name
+ * @property user User
  */
 data class Signature(
         val time: LocalDateTime,
-        val user: String
+        val user: User
 )

@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
 import net.nemerosa.ontrack.kdsl.model.findProjectByName
+import net.nemerosa.ontrack.kdsl.model.getProjectByID
 import net.nemerosa.ontrack.kdsl.model.getProjects
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest
 import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
@@ -38,6 +39,14 @@ class KdslTestProjects : AbstractKdslTest() {
         project {
             assertNotNull(ontrack.findProjectByName(this.name))
             assertNull(ontrack.findProjectByName(uid("P")))
+        }
+    }
+
+    @Test
+    fun `Getting a project by ID`() {
+        project {
+            val p = ontrack.getProjectByID(id)
+            assertEquals(name, p.name)
         }
     }
 

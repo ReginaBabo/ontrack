@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.kdsl.model
 
-import net.nemerosa.ontrack.kdsl.core.Resource
+import com.fasterxml.jackson.databind.JsonNode
+import net.nemerosa.ontrack.kdsl.core.JsonResource
 
 /**
  * Resource with an ID
@@ -8,5 +9,6 @@ import net.nemerosa.ontrack.kdsl.core.Resource
  * @property id Unique ID in the scope of this entity type
  */
 abstract class EntityResource(
+        json: JsonNode,
         val id: Int
-) : Resource()
+) : JsonResource(json)

@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 import net.nemerosa.ontrack.kdsl.core.Resource
 
@@ -20,10 +21,11 @@ class Account(
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class AccountGroup(
+        json: JsonNode,
         id: Int,
         val name: String,
         val description: String
-) : EntityResource(id)
+) : EntityResource(json, id)
 
 /**
  * Account DSL extension

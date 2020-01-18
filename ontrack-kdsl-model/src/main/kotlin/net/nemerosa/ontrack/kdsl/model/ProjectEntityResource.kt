@@ -12,12 +12,13 @@ import kotlin.reflect.KClass
 /**
  * Entity resource linked to a project
  *
- * @property creation Creation time and author
+ * @property signature Creation time and author
  */
 abstract class ProjectEntityResource(
+        json: JsonNode,
         id: Int,
-        val creation: Signature
-) : EntityResource(id) {
+        val signature: Signature
+) : EntityResource(json, id) {
 
     /**
      * Entity type
@@ -51,11 +52,13 @@ abstract class ProjectEntityResource(
 
 }
 
+@Deprecated("Don't use it.")
 fun JsonNode?.adaptProjectId(projectPath: String = "project"): JsonNode? = adapt(
         "projectId",
         "${projectPath}.id"
 )
 
+@Deprecated("Don't use it.")
 fun JsonNode?.adapt(newField: String, oldField: String): JsonNode? {
     return if (this is ObjectNode) {
         val oldNode = deepPath(oldField)
@@ -71,6 +74,7 @@ fun JsonNode?.adapt(newField: String, oldField: String): JsonNode? {
     }
 }
 
+@Deprecated("Don't use it.")
 fun JsonNode?.adaptSignature(): JsonNode? {
     return when (this) {
         is ObjectNode -> {

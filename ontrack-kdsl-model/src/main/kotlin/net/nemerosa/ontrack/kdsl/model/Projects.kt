@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 import net.nemerosa.ontrack.kdsl.core.Resource
 
@@ -13,12 +14,13 @@ import net.nemerosa.ontrack.kdsl.core.Resource
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Project(
+        json: JsonNode,
         id: Int,
-        creation: Signature,
+        signature: Signature,
         val name: String,
         val description: String?,
         val disabled: Boolean
-) : ProjectEntityResource(id, creation) {
+) : ProjectEntityResource(json, id, signature) {
 
     override val entityType: String = "PROJECT"
 
@@ -59,12 +61,12 @@ fun Ontrack.getProjects(
     }
     val query = """
         projects$decl {
-            $GRAPHQL_PROJECT
+            json
         }
     """.trimIndent()
     // Query
     return query.graphQLQuery("Projects", *params.toTypedArray()).data["projects"].map {
-        it.toConnector<Project>()
+        it["json"].toConnector<Project>()
     }
 }
 
@@ -78,12 +80,12 @@ fun Ontrack.getProjects(
 fun Ontrack.getProjectByID(id: Int): Project =
         """
             projects(id: ${"$"}id) {
-                $GRAPHQL_PROJECT
+                json
             }
         """.trimIndent().graphQLQuery(
                 "ProjectById",
                 "id" type "Int!" value id
-        ).data["projects"][0].toConnector()
+        ).data["projects"][0]["json"].toConnector()
 
 /**
  * Gets a project by its name.
@@ -114,7 +116,7 @@ fun Ontrack.createProject(
                         "description" to description,
                         "disabled" to disabled
                 )
-        ).adaptSignature().toConnector()
+        ).toConnector()
 
 /**
  * Creates a project or returns it based on name, and runs some code for it.
@@ -171,17 +173,3 @@ fun Project.update(
 fun Project.delete() {
     TODO("Deletes this project")
 }
-
-/**
- * GraphQL fragment for project
- */
-private const val GRAPHQL_PROJECT = """
-    id
-    name
-    description
-    disabled
-    creation {
-        user
-        time
-    } 
-"""
