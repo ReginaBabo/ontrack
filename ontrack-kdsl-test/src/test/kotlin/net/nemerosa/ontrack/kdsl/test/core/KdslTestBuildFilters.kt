@@ -1,6 +1,7 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
 import net.nemerosa.ontrack.dsl.lastPromotedBuilds
+import net.nemerosa.ontrack.dsl.standardFilter
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest
 import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import net.nemerosa.ontrack.kdsl.test.support.withTestBranch
@@ -75,21 +76,21 @@ class KdslTestBuildFilters : AbstractKdslTest() {
 //            )
 //        }
 //    }
-//
-//
-//    @Test
-//    fun `Filtering build on promotion`() {
-//        withTestBranch { branch ->
-//            val results = branch.standardFilter(
-//                    withPromotionLevel = "BRONZE"
-//            )
-//            assertEquals(
-//                    listOf("2"),
-//                    results.map { it.name }
-//            )
-//        }
-//    }
-//
+
+
+    @Test
+    fun `Filtering build on promotion`() {
+        withTestBranch { branch ->
+            val results = branch.standardFilter(
+                    withPromotionLevel = "BRONZE"
+            )
+            assertEquals(
+                    listOf("2"),
+                    results.map { it.name }
+            )
+        }
+    }
+
 //    @Test
 //    fun `Filtering build - with validation (any)`() {
 //        withTestBranch { branch ->
