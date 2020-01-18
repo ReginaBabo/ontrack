@@ -62,7 +62,7 @@ class OntrackBrowserSteps : AbstractOntrackBrowserSteps() {
     @Step
     fun goToValidationStampPage(validationStampName: String, branchName: String, projectRegisterName: String) {
         val project = ontrackDSLWorld.projects[projectRegisterName]
-        val vs = project {
+        val vs = project.apply {
             branch(branchName) {
                 validationStamp(validationStampName)
             }

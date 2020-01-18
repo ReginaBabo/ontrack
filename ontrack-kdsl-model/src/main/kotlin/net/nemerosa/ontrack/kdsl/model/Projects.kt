@@ -22,11 +22,6 @@ class Project(
 
     override val entityType: String = "PROJECT"
 
-    /**
-     * Calling some code on the project
-     */
-    operator fun <T> invoke(code: Project.() -> T): T = run(code)
-
 }
 
 /**
