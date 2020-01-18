@@ -82,7 +82,7 @@ class KDSLProject(
         )
         // Query
         return ontrackConnector.get(url, query)?.resources?.map { buildView ->
-            buildView["build"].let { KDSLBuild(it, ontrackConnector) }
+            KDSLBuild(buildView["build"], ontrackConnector)
         } ?: emptyList()
     }
 }
