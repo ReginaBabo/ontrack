@@ -13,8 +13,6 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Build(
         id: Int,
-        @JsonProperty
-        override val projectId: Int,
         creation: Signature,
         val name: String,
         val description: String

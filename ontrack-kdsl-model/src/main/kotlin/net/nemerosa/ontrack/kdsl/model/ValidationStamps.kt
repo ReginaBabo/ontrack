@@ -12,8 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 class ValidationStamp(
         id: Int,
-        @JsonProperty
-        override val projectId: Int,
         creation: Signature,
         val name: String,
         val description: String

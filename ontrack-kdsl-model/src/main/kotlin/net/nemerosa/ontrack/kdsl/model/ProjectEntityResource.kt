@@ -1,7 +1,6 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import net.nemerosa.ontrack.kdsl.core.deepPath
 import net.nemerosa.ontrack.kdsl.core.parseInto
@@ -24,18 +23,6 @@ abstract class ProjectEntityResource(
      * Entity type
      */
     abstract val entityType: String
-
-    /**
-     * Project ID
-     */
-    abstract val projectId: Int
-
-    /**
-     * Gets the project associated with this entity
-     */
-    val project: Project by lazy {
-        ontrack.getProjectByID(projectId)
-    }
 
     /**
      * Sets a property on this entity

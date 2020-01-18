@@ -1,7 +1,6 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
 import net.nemerosa.ontrack.kdsl.core.Ontrack
 
 /**
@@ -15,14 +14,20 @@ import net.nemerosa.ontrack.kdsl.core.Ontrack
 class Branch(
         id: Int,
         creation: Signature,
-        @JsonProperty
-        override val projectId: Int,
+        private val projectId: Int,
         val name: String,
         val description: String,
         val disabled: Boolean
 ) : ProjectEntityResource(id, creation) {
 
     override val entityType: String = "BRANCH"
+
+    /**
+     * Gets the project associated with this branch
+     */
+    val project: Project by lazy {
+        ontrack.getProjectByID(projectId)
+    }
 
 }
 
