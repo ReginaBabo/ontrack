@@ -1,0 +1,22 @@
+@startuml
+
+cloud Ontrack {
+    package OntrackAPI
+}
+
+cloud Client {
+    node JVM {
+        component ClientCode
+        package KDSL {
+            component "kdsl-model" as KDSLModel
+            component "extension-kdsl" as ExtensionKDSL
+        }
+    }
+}
+
+ExtensionKDSL --> KDSLModel
+ClientCode -right-> KDSL
+
+KDSLModel -right-> OntrackAPI: http
+
+@enduml
