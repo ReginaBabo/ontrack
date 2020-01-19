@@ -61,9 +61,12 @@ class KDSLBranch(
                     )
             )?.let { KDSLValidationStamp(it, ontrackConnector) } ?: throw MissingResponseException()
 
-    override fun findBuildByName(name: String): Build? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun findBuildByName(name: String): Build? =
+            ontrack.findBuildByName(
+                    project.name,
+                    this.name,
+                    name
+            )
 
     override fun createBuild(name: String, description: String): Build =
             ontrackConnector.post(
