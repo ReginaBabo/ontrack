@@ -37,16 +37,16 @@ class LabelCannotChangeCategoryException(category: String?, name: String, newCat
 /**
  * Label
  */
-data class Label(
-        val id: Int,
-        val category: String?,
-        val name: String,
-        val description: String?,
-        val color: String,
-        val computedBy: LabelProviderDescription?,
-        val foregroundColor: String,
-        val display: String
-)
+interface Label {
+    val id: Int
+    val category: String?
+    val name: String
+    val description: String?
+    val color: String
+    val computedBy: LabelProviderDescription?
+    val foregroundColor: String
+    val display: String
+}
 
 /**
  * Descriptor

@@ -49,6 +49,14 @@ fun ObjectNode.removeDeepPath(path: String) {
     }
 }
 
+fun JsonNode.getOptionalText(name: String): String? = if (hasNonNull(name)) {
+    get(name).textValue()
+} else {
+    null
+}
+
+fun JsonNode.getText(name: String): String = get(name).textValue()
+
 fun JsonNode.getInt(name: String): Int = get("id").intValue()
 
 val JsonNode.id: Int get() = getInt("id")

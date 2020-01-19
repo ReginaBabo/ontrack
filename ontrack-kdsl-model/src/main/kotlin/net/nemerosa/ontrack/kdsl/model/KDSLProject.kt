@@ -3,13 +3,8 @@ package net.nemerosa.ontrack.kdsl.model
 import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
-import net.nemerosa.ontrack.kdsl.core.parse
-import net.nemerosa.ontrack.kdsl.core.type
-import net.nemerosa.ontrack.kdsl.core.value
+import net.nemerosa.ontrack.kdsl.core.*
 import net.nemerosa.ontrack.kdsl.model.KDSLLabels.Companion.GRAPHQL_LABEL
-import net.nemerosa.ontrack.kdsl.core.description
-import net.nemerosa.ontrack.kdsl.core.name
-import net.nemerosa.ontrack.kdsl.core.resources
 import net.nemerosa.ontrack.kdsl.model.support.query
 
 class KDSLProject(
@@ -57,7 +52,7 @@ class KDSLProject(
                         }
                     """,
                     "id" type "Int" value id
-            ).data["projects"][0]["labels"].map { it.parse<Label>() }
+            ).data["projects"][0]["labels"].map { KDSLLabel(it, ontrackConnector) }
 
     override val branches: List<Branch>
         get() = getResources("structure/projects/$id/branches") {
@@ -69,14 +64,14 @@ class KDSLProject(
             description: String,
             disabled: Boolean
     ): Branch =
-            postAndParseAsObject(
+            postAndConvert(
                     "structure/projects/$id/branches/create",
                     mapOf(
                             "name" to name,
                             "description" to description,
                             "disabled" to disabled
                     )
-            )
+            ) { KDSLBranch(it, ontrackConnector) }
 
     override fun branches(
             name: String

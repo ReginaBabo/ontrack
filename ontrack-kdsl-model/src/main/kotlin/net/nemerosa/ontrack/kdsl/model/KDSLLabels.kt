@@ -6,19 +6,18 @@ import net.nemerosa.ontrack.dsl.LabelNotFoundException
 import net.nemerosa.ontrack.dsl.Labels
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Connector
-import net.nemerosa.ontrack.kdsl.core.parse
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
 
 class KDSLLabels(ontrackConnector: OntrackConnector) : Connector(ontrackConnector), Labels {
 
     override fun createLabel(category: String?, name: String, description: String, color: String): Label =
-            postAndParseAsObject("rest/labels/create", mapOf(
+            postAndConvert("rest/labels/create", mapOf(
                     "category" to category,
                     "name" to name,
                     "description" to description,
                     "color" to color
-            ))
+            )) { KDSLLabel(it, ontrackConnector) }
 
     override val list: List<Label>
         get() =
@@ -29,7 +28,7 @@ class KDSLLabels(ontrackConnector: OntrackConnector) : Connector(ontrackConnecto
                             $GRAPHQL_LABEL
                         }
                     """
-            ).data["labels"].map { it.parse<Label>() }
+            ).data["labels"].map { KDSLLabel(it, ontrackConnector) }
 
     override fun label(category: String?, name: String, description: String, color: String): Label {
         val label = findLabel(category, name)
@@ -46,12 +45,12 @@ class KDSLLabels(ontrackConnector: OntrackConnector) : Connector(ontrackConnecto
                 findLabel(category, name) ?: throw LabelNotFoundException(category, name)
             }
         } else {
-            postAndParseAsObject("rest/labels/create", mapOf(
+            postAndConvert("rest/labels/create", mapOf(
                     "category" to category,
                     "name" to name,
                     "description" to description,
                     "color" to color
-            ))
+            )) { KDSLLabel(it, ontrackConnector) }
         }
     }
 
@@ -65,7 +64,7 @@ class KDSLLabels(ontrackConnector: OntrackConnector) : Connector(ontrackConnecto
                     """,
                     "category" type "String" value category,
                     "name" type "String!" value name
-            ).data["labels"].firstOrNull()?.parse()
+            ).data["labels"].firstOrNull()?.let { KDSLLabel(it, ontrackConnector) }
 
     companion object {
         /**

@@ -11,11 +11,6 @@ abstract class Connector(
         protected val ontrackConnector: OntrackConnector
 ) {
 
-    protected inline fun <reified T> postAndParseAsObject(path: String, payload: Any?): T =
-            ontrackConnector.post(path, payload)
-                    ?.parse()
-                    ?: throw MissingResponseException()
-
     protected inline fun <reified T> postAndConvert(path: String, payload: Any?, mapper: (JsonNode) -> T): T =
             ontrackConnector.post(path, payload)
                     ?.let { mapper(it) }
