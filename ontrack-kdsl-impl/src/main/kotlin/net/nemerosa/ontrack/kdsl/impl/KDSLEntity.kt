@@ -1,7 +1,7 @@
 package net.nemerosa.ontrack.kdsl.impl
 
 import com.fasterxml.jackson.databind.JsonNode
-import net.nemerosa.ontrack.dsl.Entity
+import net.nemerosa.ontrack.kdsl.model.Entity
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.support.id
 

@@ -1,4 +1,9 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
+
+import net.nemerosa.ontrack.kdsl.model.Branch
+import net.nemerosa.ontrack.kdsl.model.Build
+import net.nemerosa.ontrack.kdsl.model.Label
+import net.nemerosa.ontrack.kdsl.model.ProjectEntity
 
 interface Project : ProjectEntity {
     val name: String

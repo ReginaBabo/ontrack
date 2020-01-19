@@ -1,6 +1,6 @@
 package net.nemerosa.ontrack.kdsl.test.extension.stale
 
-import net.nemerosa.ontrack.dsl.project
+import net.nemerosa.ontrack.kdsl.model.project
 import net.nemerosa.ontrack.extension.stale.dsl.StaleProperty
 import net.nemerosa.ontrack.extension.stale.dsl.staleProperty
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest

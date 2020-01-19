@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
 
 /**
  * Gets the last promoted builds for a branch

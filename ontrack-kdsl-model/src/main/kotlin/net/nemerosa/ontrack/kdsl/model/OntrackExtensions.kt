@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
 
 /**
  * Creates a project or returns it based on name, and runs some code for it.

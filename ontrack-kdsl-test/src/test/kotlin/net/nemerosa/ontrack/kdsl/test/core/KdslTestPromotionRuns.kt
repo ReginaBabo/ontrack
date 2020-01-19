@@ -1,6 +1,6 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
-import net.nemerosa.ontrack.dsl.build
+import net.nemerosa.ontrack.kdsl.model.build
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest
 import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import net.nemerosa.ontrack.kdsl.test.support.withTestBranch

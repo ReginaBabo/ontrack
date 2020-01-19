@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
 
 interface Branch : ProjectEntity {
     val name: String

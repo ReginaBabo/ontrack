@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.dsl.admin
+package net.nemerosa.ontrack.kdsl.model.admin
 
 interface Settings {
 

@@ -1,7 +1,7 @@
 package net.nemerosa.ontrack.kdsl.impl.admin
 
 import com.fasterxml.jackson.databind.JsonNode
-import net.nemerosa.ontrack.dsl.admin.AccountGroup
+import net.nemerosa.ontrack.kdsl.model.admin.AccountGroup
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.support.jsonText
 import net.nemerosa.ontrack.kdsl.impl.KDSLEntity

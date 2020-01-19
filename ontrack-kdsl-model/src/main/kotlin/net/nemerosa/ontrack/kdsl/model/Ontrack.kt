@@ -1,6 +1,6 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
 
-import net.nemerosa.ontrack.dsl.admin.OntrackAdmin
+import net.nemerosa.ontrack.kdsl.model.admin.OntrackAdmin
 
 interface Ontrack {
 

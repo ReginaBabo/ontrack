@@ -1,4 +1,6 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
+
+import net.nemerosa.ontrack.kdsl.model.ProjectEntity
 
 interface ValidationStamp : ProjectEntity {
     val name: String

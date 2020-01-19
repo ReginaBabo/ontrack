@@ -1,9 +1,9 @@
 package net.nemerosa.ontrack.kdsl.impl
 
 import com.fasterxml.jackson.databind.JsonNode
-import net.nemerosa.ontrack.dsl.Build
-import net.nemerosa.ontrack.dsl.PromotionRun
-import net.nemerosa.ontrack.dsl.ValidationRun
+import net.nemerosa.ontrack.kdsl.model.Build
+import net.nemerosa.ontrack.kdsl.model.PromotionRun
+import net.nemerosa.ontrack.kdsl.model.ValidationRun
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.support.description
 import net.nemerosa.ontrack.kdsl.core.support.name

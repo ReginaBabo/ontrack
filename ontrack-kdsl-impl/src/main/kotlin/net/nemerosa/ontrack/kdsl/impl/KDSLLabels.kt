@@ -1,9 +1,9 @@
 package net.nemerosa.ontrack.kdsl.impl
 
-import net.nemerosa.ontrack.dsl.Label
-import net.nemerosa.ontrack.dsl.LabelCannotChangeCategoryException
-import net.nemerosa.ontrack.dsl.LabelNotFoundException
-import net.nemerosa.ontrack.dsl.Labels
+import net.nemerosa.ontrack.kdsl.model.Label
+import net.nemerosa.ontrack.kdsl.model.LabelCannotChangeCategoryException
+import net.nemerosa.ontrack.kdsl.model.LabelNotFoundException
+import net.nemerosa.ontrack.kdsl.model.Labels
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Connector
 import net.nemerosa.ontrack.kdsl.core.type

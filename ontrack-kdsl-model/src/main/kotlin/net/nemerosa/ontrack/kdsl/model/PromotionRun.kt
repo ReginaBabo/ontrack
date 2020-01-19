@@ -1,4 +1,7 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
+
+import net.nemerosa.ontrack.kdsl.model.ProjectEntity
+import net.nemerosa.ontrack.kdsl.model.PromotionLevel
 
 interface PromotionRun : ProjectEntity {
 

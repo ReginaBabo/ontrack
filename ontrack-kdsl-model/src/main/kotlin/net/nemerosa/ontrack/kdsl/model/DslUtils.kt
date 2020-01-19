@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.dsl
+package net.nemerosa.ontrack.kdsl.model
 
 fun toMapNotNull(vararg pairs: Pair<String, Any?>): Map<String, Any> {
     val map = mutableMapOf<String, Any>()

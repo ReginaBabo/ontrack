@@ -1,8 +1,8 @@
 package net.nemerosa.ontrack.kdsl.impl.admin
 
-import net.nemerosa.ontrack.dsl.admin.Account
-import net.nemerosa.ontrack.dsl.admin.AccountGroup
-import net.nemerosa.ontrack.dsl.admin.AccountManagement
+import net.nemerosa.ontrack.kdsl.model.admin.Account
+import net.nemerosa.ontrack.kdsl.model.admin.AccountGroup
+import net.nemerosa.ontrack.kdsl.model.admin.AccountManagement
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Connector
 

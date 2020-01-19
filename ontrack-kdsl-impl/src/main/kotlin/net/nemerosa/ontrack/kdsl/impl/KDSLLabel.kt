@@ -1,8 +1,8 @@
 package net.nemerosa.ontrack.kdsl.impl
 
 import com.fasterxml.jackson.databind.JsonNode
-import net.nemerosa.ontrack.dsl.Label
-import net.nemerosa.ontrack.dsl.LabelProviderDescription
+import net.nemerosa.ontrack.kdsl.model.Label
+import net.nemerosa.ontrack.kdsl.model.LabelProviderDescription
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.support.jsonObject
 import net.nemerosa.ontrack.kdsl.core.support.jsonOptionalText

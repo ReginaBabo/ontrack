@@ -4,8 +4,6 @@ import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.pages.*
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
-import net.nemerosa.ontrack.dsl.branch
-import net.nemerosa.ontrack.dsl.validationStamp
 import net.thucydides.core.annotations.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component

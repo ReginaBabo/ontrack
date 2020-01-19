@@ -1,9 +1,8 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
-import net.nemerosa.ontrack.dsl.build
-import net.nemerosa.ontrack.dsl.intervalFilter
-import net.nemerosa.ontrack.dsl.lastPromotedBuilds
-import net.nemerosa.ontrack.dsl.standardFilter
+import net.nemerosa.ontrack.kdsl.model.intervalFilter
+import net.nemerosa.ontrack.kdsl.model.lastPromotedBuilds
+import net.nemerosa.ontrack.kdsl.model.standardFilter
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest
 import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import net.nemerosa.ontrack.kdsl.test.support.withTestBranch

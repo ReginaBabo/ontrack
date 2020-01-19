@@ -1,6 +1,6 @@
-package net.nemerosa.ontrack.dsl.admin
+package net.nemerosa.ontrack.kdsl.model.admin
 
-import net.nemerosa.ontrack.dsl.Entity
+import net.nemerosa.ontrack.kdsl.model.Entity
 
 interface AccountGroup : Entity {
     val name: String
