@@ -43,13 +43,14 @@ abstract class AbstractKdslTest {
      * Switches to a mode when the "Grant view to all" is forcibly disabled
      */
     fun <T> withNotGrantProjectViewToAll(code: () -> T): T {
-        val oldGrant = ontrack.settings.grantProjectViewToAll
+        val settings = ontrack.admin.settings
+        val oldGrant = settings.grantProjectViewToAll
         return try {
-            ontrack.settings.grantProjectViewToAll = false
+            settings.grantProjectViewToAll = false
             // Action
             code()
         } finally {
-            ontrack.settings.grantProjectViewToAll = oldGrant
+            settings.grantProjectViewToAll = oldGrant
         }
     }
 

@@ -1,6 +1,6 @@
-package net.nemerosa.ontrack.kdsl.model
+package net.nemerosa.ontrack.kdsl.model.admin
 
-import net.nemerosa.ontrack.dsl.Settings
+import net.nemerosa.ontrack.dsl.admin.Settings
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Connector
 import net.nemerosa.ontrack.kdsl.core.MissingResponseException

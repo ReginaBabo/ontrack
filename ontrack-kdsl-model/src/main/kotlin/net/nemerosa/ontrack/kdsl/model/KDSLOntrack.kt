@@ -2,6 +2,7 @@ package net.nemerosa.ontrack.kdsl.model
 
 import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.dsl.admin.OntrackAdmin
+import net.nemerosa.ontrack.dsl.admin.Settings
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.client.OntrackConnectorProperties
 import net.nemerosa.ontrack.kdsl.client.support.OntrackConnectorBuilder
@@ -10,6 +11,7 @@ import net.nemerosa.ontrack.kdsl.core.OntrackRoot
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
 import net.nemerosa.ontrack.kdsl.model.admin.KDSLOntrackAdmin
+import net.nemerosa.ontrack.kdsl.model.admin.KDSLSettings
 
 class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConnector), Ontrack {
 
@@ -18,8 +20,6 @@ class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConne
     )
 
     override val admin: OntrackAdmin = KDSLOntrackAdmin(ontrackConnector)
-
-    override val settings: Settings = KDSLSettings(ontrackConnector)
 
     override val labels: Labels = KDSLLabels(ontrackConnector)
 

@@ -12,12 +12,6 @@ interface Ontrack {
     val admin: OntrackAdmin
 
     /**
-     * Access to the settings DSL
-     */
-    // FIXME Move to `admin`
-    val settings: Settings
-
-    /**
      * Management of labels
      */
     val labels: Labels

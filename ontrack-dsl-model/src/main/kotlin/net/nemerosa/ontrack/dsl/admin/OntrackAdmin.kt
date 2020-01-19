@@ -1,8 +1,11 @@
 package net.nemerosa.ontrack.dsl.admin
 
-import net.nemerosa.ontrack.dsl.admin.AccountManagement
-
 interface OntrackAdmin {
+
+    /**
+     * Access to the settings DSL
+     */
+    val settings: Settings
 
     /**
      * Account management
