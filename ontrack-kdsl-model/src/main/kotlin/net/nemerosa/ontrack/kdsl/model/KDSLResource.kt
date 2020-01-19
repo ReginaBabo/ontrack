@@ -20,7 +20,7 @@ abstract class KDSLResource(
     protected fun optionalLink(name: String): String? {
         val linkName = if (name.startsWith('_')) name else "_$name"
         return if (json.has(linkName)) {
-            json[linkName].textValue()
+            json[linkName].textValue().removePrefix("/")
         } else {
             null
         }

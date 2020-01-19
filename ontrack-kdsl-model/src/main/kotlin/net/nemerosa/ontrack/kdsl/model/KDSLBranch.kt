@@ -23,13 +23,13 @@ class KDSLBranch(
     }
 
     override val promotionLevels: List<PromotionLevel>
-        get() = ontrackConnector.get("structure/branches/$id/promotionLevels")
+        get() = ontrackConnector.get(link("promotionLevels"))
                 ?.resources
                 ?.map { KDSLPromotionLevel(it, ontrackConnector) } ?: throw MissingResponseException()
 
     override fun createPromotionLevel(name: String, description: String): PromotionLevel =
             ontrackConnector.post(
-                    "structure/branches/$id/promotionLevels/create",
+                    link("createPromotionLevel"),
                     mapOf(
                             "name" to name,
                             "description" to description
@@ -54,7 +54,7 @@ class KDSLBranch(
 
     override fun createValidationStamp(name: String, description: String): ValidationStamp =
             ontrackConnector.post(
-                    "structure/branches/$id/validationStamps/create",
+                    link("createValidationStamp"),
                     mapOf(
                             "name" to name,
                             "description" to description
@@ -67,7 +67,7 @@ class KDSLBranch(
 
     override fun createBuild(name: String, description: String): Build =
             ontrackConnector.post(
-                    "structure/branches/${id}/builds/create",
+                    link("createBuild"),
                     mapOf(
                             "name" to name,
                             "description" to description

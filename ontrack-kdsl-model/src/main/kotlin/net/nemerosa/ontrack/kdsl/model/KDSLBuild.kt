@@ -16,7 +16,7 @@ class KDSLBuild(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjec
 
     override fun update(name: String, description: String) {
         ontrackConnector.put(
-                "structure/builds/$id/update",
+                link("update"),
                 mapOf(
                         "name" to name,
                         "description" to description
@@ -25,16 +25,16 @@ class KDSLBuild(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjec
     }
 
     override val previousBuild: Build? by lazy {
-        ontrackConnector.get("structure/builds/$id/previous")?.let { KDSLBuild(it, ontrackConnector) }
+        ontrackConnector.get(link("previous"))?.let { KDSLBuild(it, ontrackConnector) }
     }
 
     override val nextBuild: Build?
         // Cannot be stored because can change
-        get() = ontrackConnector.get("structure/builds/$id/next")?.let { KDSLBuild(it, ontrackConnector) }
+        get() = ontrackConnector.get(link("next"))?.let { KDSLBuild(it, ontrackConnector) }
 
     override fun promote(promotionLevel: String, description: String): PromotionRun =
             ontrackConnector.post(
-                    "structure/builds/$id/promotionRun/create",
+                    link("promote"),
                     mapOf(
                             "promotionLevelName" to promotionLevel,
                             "description" to description
@@ -43,7 +43,7 @@ class KDSLBuild(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjec
 
     override fun validate(validationStamp: String, status: String?, description: String): ValidationRun =
             ontrackConnector.post(
-                    "structure/builds/$id/validationRuns/create",
+                    link("validate"),
                     mapOf(
                             "validationStampName" to validationStamp,
                             "validationRunStatusId" to status,
