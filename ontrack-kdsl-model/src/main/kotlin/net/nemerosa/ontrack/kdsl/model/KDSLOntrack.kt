@@ -91,6 +91,11 @@ class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConne
                     ?.let { KDSLBuild(it, ontrackConnector) }
                     ?: throw EntityNotFoundException("build", id)
 
+    override fun getPromotionLevelByID(id: Int): PromotionLevel =
+            ontrackConnector.get("structure/promotionLevels/$id")
+                    ?.let { KDSLPromotionLevel(it, ontrackConnector) }
+                    ?: throw EntityNotFoundException("promotion level", id)
+
     companion object {
 
         /**

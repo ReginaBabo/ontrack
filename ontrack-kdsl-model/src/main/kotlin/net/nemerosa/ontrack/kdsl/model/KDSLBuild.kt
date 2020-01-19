@@ -7,6 +7,7 @@ import net.nemerosa.ontrack.dsl.ValidationRun
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.model.support.description
 import net.nemerosa.ontrack.kdsl.model.support.name
+import net.nemerosa.ontrack.kdsl.model.support.resources
 
 class KDSLBuild(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjectEntity(json, ontrackConnector), Build {
 
@@ -40,6 +41,12 @@ class KDSLBuild(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjec
                             "description" to description
                     )
             )?.let { KDSLPromotionRun(it, ontrackConnector) } ?: throw MissingResponseException()
+
+    override val promotionRuns: List<PromotionRun>
+        get() = ontrackConnector.get(link("promotionRuns"))
+                ?.resources
+                ?.map { KDSLPromotionRun(it, ontrackConnector) }
+                ?: emptyList()
 
     override fun validate(validationStamp: String, status: String?, description: String): ValidationRun =
             ontrackConnector.post(

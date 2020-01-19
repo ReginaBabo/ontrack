@@ -75,4 +75,9 @@ interface Ontrack {
      */
     fun getBuildByID(id: Int): Build
 
+    /**
+     * Gets a promotion level by its ID
+     */
+    fun getPromotionLevelByID(id: Int): PromotionLevel
+
 }

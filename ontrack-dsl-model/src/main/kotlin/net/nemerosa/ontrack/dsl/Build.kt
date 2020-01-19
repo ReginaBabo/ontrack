@@ -23,6 +23,11 @@ interface Build : ProjectEntity {
     fun promote(promotionLevel: String, description: String = ""): PromotionRun
 
     /**
+     * Gets the list of promotion runs for this build
+     */
+    val promotionRuns: List<PromotionRun>
+
+    /**
      * Validates a build.
      *
      * @receiver Build to validate
