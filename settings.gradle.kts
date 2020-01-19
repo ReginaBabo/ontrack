@@ -40,6 +40,10 @@ include(":ontrack-kdsl-core")
 include(":ontrack-kdsl-impl")
 include(":ontrack-kdsl-test")
 
+// Kotlin DSL app
+include(":ontrack-kdsl-runner")
+include(":ontrack-kdsl-app")
+
 // E2E testing
 include(":ontrack-bdd-engine")
 include(":ontrack-bdd-model")
