@@ -82,9 +82,8 @@ fun <T> Branch.build(
             buildExactMatch = true
     ).firstOrNull()
     val actualBuild = if (build != null) {
-        TODO()
-//        build.update(name, description)
-//        ontrack.getBuildByID(build.id)
+        build.update(name, description)
+        ontrack.getBuildByID(build.id)
     } else {
         createBuild(name, description)
     }

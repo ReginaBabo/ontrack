@@ -36,4 +36,9 @@ interface Build : ProjectEntity {
             description: String = ""
     ): ValidationRun
 
+    /**
+     * Updates the build
+     */
+    fun update(name: String, description: String)
+
 }

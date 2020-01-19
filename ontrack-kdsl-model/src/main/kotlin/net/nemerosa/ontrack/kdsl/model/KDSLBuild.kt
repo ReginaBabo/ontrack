@@ -14,6 +14,16 @@ class KDSLBuild(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjec
     override val name: String = json.name
     override val description: String = json.description
 
+    override fun update(name: String, description: String) {
+        ontrackConnector.put(
+                "structure/builds/$id/update",
+                mapOf(
+                        "name" to name,
+                        "description" to description
+                )
+        )
+    }
+
     override val previousBuild: Build? by lazy {
         ontrackConnector.get("structure/builds/$id/previous")?.let { KDSLBuild(it, ontrackConnector) }
     }

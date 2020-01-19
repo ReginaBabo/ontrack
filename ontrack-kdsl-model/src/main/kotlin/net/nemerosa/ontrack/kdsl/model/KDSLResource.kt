@@ -11,10 +11,9 @@ abstract class KDSLResource(
         ontrackConnector: OntrackConnector
 ) : Connector(ontrackConnector), Resource {
 
-    protected val ontrack: Ontrack by lazy {
+    override val ontrack: Ontrack by lazy {
         KDSLOntrack(ontrackConnector)
     }
-
 
     protected fun link(name: String): String = optionalLink(name) ?: throw ResourceMissingLinkException(name)
 
