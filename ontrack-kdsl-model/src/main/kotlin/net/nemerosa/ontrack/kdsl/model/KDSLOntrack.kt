@@ -1,9 +1,6 @@
 package net.nemerosa.ontrack.kdsl.model
 
-import net.nemerosa.ontrack.dsl.EntityNotFoundException
-import net.nemerosa.ontrack.dsl.Ontrack
-import net.nemerosa.ontrack.dsl.Project
-import net.nemerosa.ontrack.dsl.Settings
+import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.client.OntrackConnectorProperties
 import net.nemerosa.ontrack.kdsl.client.support.OntrackConnectorBuilder
@@ -80,6 +77,17 @@ class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConne
                             "disabled" to disabled
                     )
             )?.let { KDSLProject(it, ontrackConnector) } ?: throw MissingResponseException()
+
+    override fun build(project: String, branch: String, build: String): Build =
+            ontrackConnector.get("structure/entity/build/$project/$branch/$build")
+                    ?.let { KDSLBuild(it, ontrackConnector) }
+                    ?: throw BuildNotFoundException(project, branch, build)
+
+
+    override fun getBuildByID(id: Int): Build =
+            ontrackConnector.get("structure/builds/$id")
+                    ?.let { KDSLBuild(it, ontrackConnector) }
+                    ?: throw EntityNotFoundException("build", id)
 
     companion object {
 

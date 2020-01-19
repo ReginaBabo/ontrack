@@ -91,21 +91,21 @@ class KdslTestBuildFilters : AbstractKdslTest() {
         }
     }
 
-//    @Test
-//    fun `Filtering build - with validation (any)`() {
-//        withTestBranch { branch ->
-//            ontrack.build(branch.project.name, branch.name, "2").validate("SMOKE", "FAILED")
-//            ontrack.build(branch.project.name, branch.name, "3").validate("SMOKE", "PASSED")
-//            val results = branch.standardFilter(
-//                    withValidationStamp = "SMOKE"
-//            )
-//            assertEquals(
-//                    listOf("3", "2"),
-//                    results.map { it.name }
-//            )
-//        }
-//    }
-//
+    @Test
+    fun `Filtering build - with validation (any)`() {
+        withTestBranch { branch ->
+            ontrack.build(branch.project.name, branch.name, "2").validate("SMOKE", "FAILED")
+            ontrack.build(branch.project.name, branch.name, "3").validate("SMOKE", "PASSED")
+            val results = branch.standardFilter(
+                    withValidationStamp = "SMOKE"
+            )
+            assertEquals(
+                    listOf("3", "2"),
+                    results.map { it.name }
+            )
+        }
+    }
+
 //    @Test
 //    fun `Filtering build - with validation (passed)`() {
 //        withTestBranch { branch ->
