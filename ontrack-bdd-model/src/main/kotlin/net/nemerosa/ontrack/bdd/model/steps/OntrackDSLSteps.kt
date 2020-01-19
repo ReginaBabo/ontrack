@@ -4,7 +4,11 @@ import net.nemerosa.ontrack.bdd.model.BDDConfig
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackDSLWorld
 import net.nemerosa.ontrack.bdd.model.worlds.OntrackUtilityWorld
 import net.nemerosa.ontrack.bdd.model.worlds.withPassword
-import net.nemerosa.ontrack.kdsl.model.deprecated.*
+import net.nemerosa.ontrack.dsl.admin.accountGroup
+import net.nemerosa.ontrack.dsl.branch
+import net.nemerosa.ontrack.dsl.build
+import net.nemerosa.ontrack.dsl.project
+import net.nemerosa.ontrack.dsl.validationStamp
 import net.thucydides.core.annotations.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -110,7 +114,7 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
         // Actual name of the account group
         val accountGroupName = ontrackUtilityWorld.uniqueName("accountGroup", "AG")
         // Gets or creates the account group, registers it and returns it
-        ontrack.accounts.accountGroup(accountGroupName).apply {
+        ontrack.admin.accounts.accountGroup(accountGroupName).apply {
             ontrackDSLWorld.accountGroups[accountGroupRegisterName] = this
         }
     }
@@ -128,7 +132,7 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
         // Password
         val password = ontrackUtilityWorld.uniqueName("password", "P")
         // Creates the account
-        ontrack.accounts.createAccount(
+        ontrack.admin.accounts.createAccount(
                 ontrackUtilityWorld.uniqueName("account", "A"),
                 "$accountRegisterName Test",
                 "$accountRegisterName@test.com",
@@ -142,7 +146,7 @@ class OntrackDSLSteps : AbstractOntrackDSL() {
     @Step
     fun createAndRegisterAccountWithPassword(accountRegisterName: String, password: String) {
         // Creates the account
-        ontrack.accounts.createAccount(
+        ontrack.admin.accounts.createAccount(
                 ontrackUtilityWorld.uniqueName("account", "A"),
                 "$accountRegisterName Test",
                 "$accountRegisterName@test.com",

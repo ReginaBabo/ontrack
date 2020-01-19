@@ -1,12 +1,20 @@
 package net.nemerosa.ontrack.dsl
 
+import net.nemerosa.ontrack.dsl.admin.OntrackAdmin
+
 interface Ontrack {
 
     fun asAnonymous(): Ontrack
 
     /**
+     * Access to the admin DSL
+     */
+    val admin: OntrackAdmin
+
+    /**
      * Access to the settings DSL
      */
+    // FIXME Move to `admin`
     val settings: Settings
 
     /**

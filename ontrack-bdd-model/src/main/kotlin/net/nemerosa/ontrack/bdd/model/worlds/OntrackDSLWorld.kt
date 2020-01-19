@@ -1,10 +1,10 @@
 package net.nemerosa.ontrack.bdd.model.worlds
 
 import net.nemerosa.ontrack.bdd.model.support.indexOf
-import net.nemerosa.ontrack.kdsl.model.deprecated.AccountGroup
-import net.nemerosa.ontrack.kdsl.model.deprecated.Branch
-import net.nemerosa.ontrack.kdsl.model.deprecated.Build
-import net.nemerosa.ontrack.kdsl.model.deprecated.Project
+import net.nemerosa.ontrack.dsl.Branch
+import net.nemerosa.ontrack.dsl.Build
+import net.nemerosa.ontrack.dsl.Project
+import net.nemerosa.ontrack.dsl.admin.AccountGroup
 import org.springframework.stereotype.Component
 
 @Component

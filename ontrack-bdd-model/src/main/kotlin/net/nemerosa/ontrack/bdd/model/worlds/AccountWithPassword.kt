@@ -1,6 +1,6 @@
 package net.nemerosa.ontrack.bdd.model.worlds
 
-import net.nemerosa.ontrack.kdsl.model.deprecated.Account
+import net.nemerosa.ontrack.dsl.admin.Account
 
 class AccountWithPassword(
         val account: Account,
