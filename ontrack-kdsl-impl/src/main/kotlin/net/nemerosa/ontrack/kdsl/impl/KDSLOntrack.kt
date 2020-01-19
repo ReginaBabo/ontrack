@@ -1,8 +1,7 @@
-package net.nemerosa.ontrack.kdsl.model
+package net.nemerosa.ontrack.kdsl.impl
 
 import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.dsl.admin.OntrackAdmin
-import net.nemerosa.ontrack.dsl.admin.Settings
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.client.OntrackConnectorProperties
 import net.nemerosa.ontrack.kdsl.client.support.OntrackConnectorBuilder
@@ -10,8 +9,7 @@ import net.nemerosa.ontrack.kdsl.core.GraphQLParamImpl
 import net.nemerosa.ontrack.kdsl.core.OntrackRoot
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
-import net.nemerosa.ontrack.kdsl.model.admin.KDSLOntrackAdmin
-import net.nemerosa.ontrack.kdsl.model.admin.KDSLSettings
+import net.nemerosa.ontrack.kdsl.impl.admin.KDSLOntrackAdmin
 
 class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConnector), Ontrack {
 

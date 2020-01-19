@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.kdsl.model.support
+package net.nemerosa.ontrack.kdsl.impl.support
 
 fun query(vararg pairs: Pair<String, Any?>): Map<String, Any> {
     val map = mutableMapOf<String, Any>()

@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.kdsl.model.admin
+package net.nemerosa.ontrack.kdsl.impl.admin
 
 import net.nemerosa.ontrack.dsl.admin.AccountManagement
 import net.nemerosa.ontrack.dsl.admin.OntrackAdmin

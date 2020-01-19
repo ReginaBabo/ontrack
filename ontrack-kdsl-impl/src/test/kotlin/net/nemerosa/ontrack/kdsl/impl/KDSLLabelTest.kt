@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.kdsl.model
+package net.nemerosa.ontrack.kdsl.impl
 
 import com.nhaarman.mockitokotlin2.mock
 import net.nemerosa.ontrack.kdsl.core.support.toJson

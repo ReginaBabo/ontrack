@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.kdsl.model
+package net.nemerosa.ontrack.kdsl.impl
 
 import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.PromotionLevel

@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.kdsl.model
+package net.nemerosa.ontrack.kdsl.impl
 
 import net.nemerosa.ontrack.dsl.Label
 import net.nemerosa.ontrack.dsl.LabelCannotChangeCategoryException
