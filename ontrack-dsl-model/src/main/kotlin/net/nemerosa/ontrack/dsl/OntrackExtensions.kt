@@ -33,3 +33,16 @@ fun Ontrack.project(
         description: String = "",
         disabled: Boolean = false
 ): Project = project(name, description, disabled) { this }
+
+
+/**
+ * Looking for a branch by name. Fails if not found.
+ */
+fun Ontrack.branch(project: String, branch: String): Branch =
+        findBranchByName(project, branch) ?: throw BranchNotFoundException(project, branch)
+
+/**
+ * Looks for a build by name. Fails if not found.
+ */
+fun Ontrack.build(project: String, branch: String, build: String): Build =
+        findBuildByName(project, branch, build) ?: throw BuildNotFoundException(project, branch, build)

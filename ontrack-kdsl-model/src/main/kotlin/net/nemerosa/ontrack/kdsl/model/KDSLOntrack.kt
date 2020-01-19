@@ -78,11 +78,13 @@ class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConne
                     )
             )?.let { KDSLProject(it, ontrackConnector) } ?: throw MissingResponseException()
 
-    override fun build(project: String, branch: String, build: String): Build =
+    override fun findBranchByName(project: String, branch: String): Branch? =
+            ontrackConnector.get("structure/entity/branch/$project/$branch")
+                    ?.let { KDSLBranch(it, ontrackConnector) }
+
+    override fun findBuildByName(project: String, branch: String, build: String): Build? =
             ontrackConnector.get("structure/entity/build/$project/$branch/$build")
                     ?.let { KDSLBuild(it, ontrackConnector) }
-                    ?: throw BuildNotFoundException(project, branch, build)
-
 
     override fun getBuildByID(id: Int): Build =
             ontrackConnector.get("structure/builds/$id")

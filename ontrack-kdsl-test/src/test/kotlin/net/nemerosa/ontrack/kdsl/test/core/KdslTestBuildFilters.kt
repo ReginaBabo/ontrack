@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
+import net.nemerosa.ontrack.dsl.build
 import net.nemerosa.ontrack.dsl.intervalFilter
 import net.nemerosa.ontrack.dsl.lastPromotedBuilds
 import net.nemerosa.ontrack.dsl.standardFilter

@@ -13,6 +13,13 @@ class EntityNotFoundException(name: String, id: Int) : DSLException(
 )
 
 /**
+ * Thrown when a branch cannot be found by name
+ */
+class BranchNotFoundException(project: String, branch: String) : DSLException(
+        "Branch $project/$branch not found"
+)
+
+/**
  * Thrown when a build cannot be found by name
  */
 class BuildNotFoundException(project: String, branch: String, build: String) : DSLException(

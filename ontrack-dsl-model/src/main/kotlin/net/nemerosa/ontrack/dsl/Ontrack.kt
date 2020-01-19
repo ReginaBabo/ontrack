@@ -61,9 +61,14 @@ interface Ontrack {
     ): Project
 
     /**
-     * Looks for a build by name. Fails if not found.
+     * Looking for a branch by name
      */
-    fun build(project: String, branch: String, build: String): Build
+    fun findBranchByName(project: String, branch: String): Branch?
+
+    /**
+     * Looks for a build by name
+     */
+    fun findBuildByName(project: String, branch: String, build: String): Build?
 
     /**
      * Gets a build using its ID
