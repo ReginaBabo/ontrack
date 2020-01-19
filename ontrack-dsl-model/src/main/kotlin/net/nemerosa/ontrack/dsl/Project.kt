@@ -6,6 +6,21 @@ interface Project : ProjectEntity {
     val branches: List<Branch>
 
     /**
+     * Assigning a label to a project
+     */
+    fun assignLabel(category: String?, name: String, createIfMissing: Boolean = false)
+
+    /**
+     * Unassigning a label to a project
+     */
+    fun unassignLabel(category: String?, name: String, createIfMissing: Boolean = false)
+
+    /**
+     * Gets list of labels for a project
+     */
+    val labels: List<Label>
+
+    /**
      * List of branches for a project, filtered.
      *
      * @param name Filter on the branch name (regular expression)

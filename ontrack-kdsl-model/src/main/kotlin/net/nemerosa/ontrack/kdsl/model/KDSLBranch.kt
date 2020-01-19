@@ -3,11 +3,10 @@ package net.nemerosa.ontrack.kdsl.model
 import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
+import net.nemerosa.ontrack.kdsl.core.id
+import net.nemerosa.ontrack.kdsl.core.name
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
-import net.nemerosa.ontrack.kdsl.model.support.id
-import net.nemerosa.ontrack.kdsl.model.support.name
-import net.nemerosa.ontrack.kdsl.model.support.resources
 
 class KDSLBranch(
         json: JsonNode,
@@ -23,18 +22,18 @@ class KDSLBranch(
     }
 
     override val promotionLevels: List<PromotionLevel>
-        get() = ontrackConnector.get(link("promotionLevels"))
-                ?.resources
-                ?.map { KDSLPromotionLevel(it, ontrackConnector) } ?: throw MissingResponseException()
+        get() = getResources(link("promotionLevels")) {
+            KDSLPromotionLevel(it, ontrackConnector)
+        }
 
     override fun createPromotionLevel(name: String, description: String): PromotionLevel =
-            ontrackConnector.post(
+            postAndConvert(
                     link("createPromotionLevel"),
                     mapOf(
                             "name" to name,
                             "description" to description
                     )
-            )?.let { KDSLPromotionLevel(it, ontrackConnector) } ?: throw MissingResponseException()
+            ) { KDSLPromotionLevel(it, ontrackConnector) }
 
     override fun validationStamps(name: String?): List<ValidationStamp> =
             graphQLQuery(
@@ -53,13 +52,13 @@ class KDSLBranch(
             }
 
     override fun createValidationStamp(name: String, description: String): ValidationStamp =
-            ontrackConnector.post(
+            postAndConvert(
                     link("createValidationStamp"),
                     mapOf(
                             "name" to name,
                             "description" to description
                     )
-            )?.let { KDSLValidationStamp(it, ontrackConnector) } ?: throw MissingResponseException()
+            ) { KDSLValidationStamp(it, ontrackConnector) }
 
     override fun findBuildByName(name: String): Build? =
             ontrack.findBuildByName(
@@ -69,13 +68,13 @@ class KDSLBranch(
             )
 
     override fun createBuild(name: String, description: String): Build =
-            ontrackConnector.post(
+            postAndConvert(
                     link("createBuild"),
                     mapOf(
                             "name" to name,
                             "description" to description
                     )
-            )?.let { KDSLBuild(it, ontrackConnector) } ?: throw MissingResponseException()
+            ) { KDSLBuild(it, ontrackConnector) }
 
     override fun filter(filterType: String, filterConfig: Map<String, Any>): List<Build> {
         val url = "structure/branches/$id/view/$filterType"

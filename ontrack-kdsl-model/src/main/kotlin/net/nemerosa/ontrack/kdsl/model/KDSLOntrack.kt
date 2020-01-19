@@ -8,7 +8,6 @@ import net.nemerosa.ontrack.kdsl.core.GraphQLParamImpl
 import net.nemerosa.ontrack.kdsl.core.OntrackRoot
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
-import net.nemerosa.ontrack.kdsl.model.support.resources
 
 class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConnector), Ontrack {
 
@@ -18,10 +17,12 @@ class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConne
 
     override val settings: Settings = KDSLSettings(ontrackConnector)
 
+    override val labels: Labels = KDSLLabels(ontrackConnector)
+
     override val projects: List<Project>
-        get() = ontrackConnector.get("structure/projects")?.resources?.map {
+        get() = getResources("structure/projects") {
             KDSLProject(it, ontrackConnector)
-        } ?: emptyList()
+        }
 
     override fun getProjects(name: String?, favoritesOnly: Boolean, propertyType: String?, propertyValue: String?): List<Project> {
         val decl: String
@@ -68,15 +69,14 @@ class KDSLOntrack(ontrackConnector: OntrackConnector) : OntrackRoot(ontrackConne
             name: String,
             description: String,
             disabled: Boolean
-    ): Project =
-            ontrackConnector.post(
+    ): Project = postAndConvert(
                     "structure/projects/create",
                     mapOf(
                             "name" to name,
                             "description" to description,
                             "disabled" to disabled
                     )
-            )?.let { KDSLProject(it, ontrackConnector) } ?: throw MissingResponseException()
+            ) { KDSLProject(it, ontrackConnector) }
 
     override fun findBranchByName(project: String, branch: String): Branch? =
             ontrackConnector.get("structure/entity/branch/$project/$branch")

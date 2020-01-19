@@ -1,16 +1,16 @@
 package net.nemerosa.ontrack.kdsl.model
 
 import com.fasterxml.jackson.databind.JsonNode
-import net.nemerosa.ontrack.dsl.Branch
-import net.nemerosa.ontrack.dsl.Build
-import net.nemerosa.ontrack.dsl.Project
+import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
+import net.nemerosa.ontrack.kdsl.core.parse
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
-import net.nemerosa.ontrack.kdsl.model.support.description
-import net.nemerosa.ontrack.kdsl.model.support.name
+import net.nemerosa.ontrack.kdsl.model.KDSLLabels.Companion.GRAPHQL_LABEL
+import net.nemerosa.ontrack.kdsl.core.description
+import net.nemerosa.ontrack.kdsl.core.name
+import net.nemerosa.ontrack.kdsl.core.resources
 import net.nemerosa.ontrack.kdsl.model.support.query
-import net.nemerosa.ontrack.kdsl.model.support.resources
 
 class KDSLProject(
         json: JsonNode,
@@ -22,26 +22,61 @@ class KDSLProject(
     override val name: String = json.name
     override val description: String = json.description
 
+    override fun assignLabel(category: String?, name: String, createIfMissing: Boolean) {
+        val existingLabel = ontrack.labels.findLabel(category, name)
+        val label = when {
+            existingLabel != null -> existingLabel
+            createIfMissing -> ontrack.labels.createLabel(category, name)
+            else -> throw LabelNotFoundException(category, name)
+        }
+        ontrackConnector.put(
+                "/rest/labels/projects/${id}/assign/${label.id}",
+                emptyMap<String, String>()
+        )
+    }
+
+    override fun unassignLabel(category: String?, name: String, createIfMissing: Boolean) {
+        val label = ontrack.labels.findLabel(category, name)
+        if (label != null) {
+            ontrackConnector.put(
+                    "/rest/labels/projects/$id/unassign/${label.id}",
+                    emptyMap<String, String>()
+            )
+        }
+    }
+
+    override val labels: List<Label>
+        get() =
+            graphQLQuery(
+                    "ProjectLabels",
+                    """
+                        projects(id: ${"$"}id) {
+                            labels {
+                                $GRAPHQL_LABEL
+                            }
+                        }
+                    """,
+                    "id" type "Int" value id
+            ).data["projects"][0]["labels"].map { it.parse<Label>() }
+
     override val branches: List<Branch>
-        get() = ontrackConnector.get("structure/projects/$id/branches")?.resources?.map {
+        get() = getResources("structure/projects/$id/branches") {
             KDSLBranch(it, ontrackConnector)
-        } ?: emptyList()
+        }
 
     override fun createBranch(
             name: String,
             description: String,
             disabled: Boolean
     ): Branch =
-            ontrackConnector.post(
+            postAndParseAsObject(
                     "structure/projects/$id/branches/create",
                     mapOf(
                             "name" to name,
                             "description" to description,
                             "disabled" to disabled
                     )
-            )?.let {
-                KDSLBranch(it, ontrackConnector)
-            } ?: throw MissingResponseException()
+            )
 
     override fun branches(
             name: String

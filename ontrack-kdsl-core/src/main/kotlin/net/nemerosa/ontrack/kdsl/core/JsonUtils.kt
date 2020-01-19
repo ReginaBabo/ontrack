@@ -50,3 +50,10 @@ fun ObjectNode.removeDeepPath(path: String) {
 }
 
 fun JsonNode.getInt(name: String): Int = get("id").intValue()
+
+val JsonNode.id: Int get() = getInt("id")
+
+val JsonNode.name: String get() = this["name"].textValue()
+val JsonNode.description: String get() = this["description"].textValue()
+
+val JsonNode.resources: List<JsonNode> get() = this["resources"].toList()

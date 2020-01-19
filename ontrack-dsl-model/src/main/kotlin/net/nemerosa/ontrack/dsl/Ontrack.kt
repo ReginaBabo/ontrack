@@ -10,6 +10,11 @@ interface Ontrack {
     val settings: Settings
 
     /**
+     * Management of labels
+     */
+    val labels: Labels
+
+    /**
      * Gets the list of all projects
      */
     val projects: List<Project>

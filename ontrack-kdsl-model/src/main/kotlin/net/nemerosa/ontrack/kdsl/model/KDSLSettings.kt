@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.kdsl.model
 import net.nemerosa.ontrack.dsl.Settings
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.Connector
+import net.nemerosa.ontrack.kdsl.core.MissingResponseException
 
 class KDSLSettings(ontrackConnector: OntrackConnector) : Connector(ontrackConnector), Settings {
 

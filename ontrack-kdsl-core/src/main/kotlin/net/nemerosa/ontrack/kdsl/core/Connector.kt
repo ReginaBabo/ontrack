@@ -1,5 +1,6 @@
 package net.nemerosa.ontrack.kdsl.core
 
+import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.kdsl.client.GraphQLResponse
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 
@@ -9,6 +10,22 @@ import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 abstract class Connector(
         protected val ontrackConnector: OntrackConnector
 ) {
+
+    protected inline fun <reified T> postAndParseAsObject(path: String, payload: Any?): T =
+            ontrackConnector.post(path, payload)
+                    ?.parse()
+                    ?: throw MissingResponseException()
+
+    protected inline fun <reified T> postAndConvert(path: String, payload: Any?, mapper: (JsonNode) -> T): T =
+            ontrackConnector.post(path, payload)
+                    ?.let { mapper(it) }
+                    ?: throw MissingResponseException()
+
+    protected fun <T> getResources(path: String, mapper: (JsonNode) -> T): List<T> =
+            ontrackConnector.get(path)
+                    ?.resources
+                    ?.map(mapper)
+                    ?: throw MissingResponseException()
 
     /**
      * GraphQL query
