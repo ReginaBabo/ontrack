@@ -27,3 +27,17 @@ fun Branch.standardFilter(
                 "sinceValidationStampStatus" to sinceValidationStampStatus
         )
 )
+
+/**
+ * Interval filter
+ */
+fun Branch.intervalFilter(
+        from: String,
+        to: String
+): List<Build> = filter(
+        "net.nemerosa.ontrack.service.BuildIntervalFilterProvider",
+        mapOf(
+                "from" to from,
+                "to" to to
+        )
+)
