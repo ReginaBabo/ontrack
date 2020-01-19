@@ -1,7 +1,7 @@
 package net.nemerosa.ontrack.extension.stale.dsl
 
-import net.nemerosa.ontrack.dsl.Project
-import net.nemerosa.ontrack.dsl.property
+import net.nemerosa.ontrack.kdsl.model.Project
+import net.nemerosa.ontrack.kdsl.model.property
 
 /**
  * Representation of the stale property

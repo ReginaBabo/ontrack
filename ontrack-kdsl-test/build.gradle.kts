@@ -13,7 +13,7 @@ description = "Tests for Ontrack KDSL tests, including for core extensions."
 dependencies {
     testImplementation(project(":ontrack-test-support"))
     testImplementation(project(":ontrack-test-engine"))
-    testImplementation(project(":ontrack-kdsl-model"))
+    testImplementation(project(":ontrack-kdsl-impl"))
     testImplementation("org.springframework.boot:spring-boot-starter")
     testImplementation("org.springframework:spring-web")
 

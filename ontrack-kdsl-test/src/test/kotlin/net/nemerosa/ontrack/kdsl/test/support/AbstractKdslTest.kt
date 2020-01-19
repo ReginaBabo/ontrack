@@ -1,7 +1,7 @@
 package net.nemerosa.ontrack.kdsl.test.support
 
-import net.nemerosa.ontrack.dsl.*
-import net.nemerosa.ontrack.kdsl.model.KDSLOntrack
+import net.nemerosa.ontrack.kdsl.impl.KDSLOntrack
+import net.nemerosa.ontrack.kdsl.model.*
 import net.nemerosa.ontrack.test.support.uid
 
 abstract class AbstractKdslTest {

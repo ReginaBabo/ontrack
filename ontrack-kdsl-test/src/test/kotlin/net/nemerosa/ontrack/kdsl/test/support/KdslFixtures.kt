@@ -1,9 +1,9 @@
 package net.nemerosa.ontrack.kdsl.test.support
 
-import net.nemerosa.ontrack.dsl.Branch
-import net.nemerosa.ontrack.dsl.build
-import net.nemerosa.ontrack.dsl.promotionLevel
-import net.nemerosa.ontrack.dsl.validationStamp
+import net.nemerosa.ontrack.kdsl.model.Branch
+import net.nemerosa.ontrack.kdsl.model.build
+import net.nemerosa.ontrack.kdsl.model.promotionLevel
+import net.nemerosa.ontrack.kdsl.model.validationStamp
 
 fun AbstractKdslTest.withTestBranch(code: (Branch) -> Unit) {
     branch {

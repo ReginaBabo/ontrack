@@ -1,6 +1,5 @@
 package net.nemerosa.ontrack.kdsl.test.core
 
-import net.nemerosa.ontrack.dsl.branch
 import net.nemerosa.ontrack.kdsl.test.app.SpringTest
 import net.nemerosa.ontrack.kdsl.test.support.AbstractKdslTest
 import org.junit.Test

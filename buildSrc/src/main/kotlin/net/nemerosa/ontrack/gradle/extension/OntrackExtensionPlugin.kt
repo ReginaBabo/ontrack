@@ -150,7 +150,7 @@ class OntrackExtensionPlugin : Plugin<Project> {
             val dslImplementation by target.configurations.getting
 
             target.dependencies {
-                dslImplementation(project(":ontrack-kdsl-model"))
+                dslImplementation(project(":ontrack-kdsl-impl"))
                 dslImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
                 dslImplementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
             }

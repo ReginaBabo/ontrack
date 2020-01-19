@@ -1,6 +1,6 @@
 package net.nemerosa.ontrack.bdd.model.steps
 
-import net.nemerosa.ontrack.kdsl.model.KDSLOntrack
+import net.nemerosa.ontrack.kdsl.impl.KDSLOntrack
 
 abstract class AbstractOntrackDSL : AbstractSteps() {
 
