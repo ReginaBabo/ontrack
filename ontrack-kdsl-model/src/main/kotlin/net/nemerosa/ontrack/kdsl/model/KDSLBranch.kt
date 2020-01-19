@@ -3,8 +3,8 @@ package net.nemerosa.ontrack.kdsl.model
 import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
-import net.nemerosa.ontrack.kdsl.core.id
-import net.nemerosa.ontrack.kdsl.core.name
+import net.nemerosa.ontrack.kdsl.core.support.id
+import net.nemerosa.ontrack.kdsl.core.support.name
 import net.nemerosa.ontrack.kdsl.core.type
 import net.nemerosa.ontrack.kdsl.core.value
 

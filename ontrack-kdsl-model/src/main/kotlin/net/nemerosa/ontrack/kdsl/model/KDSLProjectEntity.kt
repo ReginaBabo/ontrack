@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.ProjectEntity
 import net.nemerosa.ontrack.dsl.Signature
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
-import net.nemerosa.ontrack.kdsl.core.parseInto
+import net.nemerosa.ontrack.kdsl.core.support.parseInto
 import net.nemerosa.ontrack.kdsl.model.support.signature
 import kotlin.reflect.KClass
 

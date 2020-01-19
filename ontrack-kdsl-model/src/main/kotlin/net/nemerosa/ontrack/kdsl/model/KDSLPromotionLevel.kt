@@ -3,8 +3,8 @@ package net.nemerosa.ontrack.kdsl.model
 import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.PromotionLevel
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
-import net.nemerosa.ontrack.kdsl.core.description
-import net.nemerosa.ontrack.kdsl.core.name
+import net.nemerosa.ontrack.kdsl.core.support.description
+import net.nemerosa.ontrack.kdsl.core.support.name
 
 class KDSLPromotionLevel(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjectEntity(json, ontrackConnector), PromotionLevel {
 

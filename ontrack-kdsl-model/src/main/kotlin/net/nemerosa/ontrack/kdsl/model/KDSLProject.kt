@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.*
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
 import net.nemerosa.ontrack.kdsl.core.*
+import net.nemerosa.ontrack.kdsl.core.support.description
+import net.nemerosa.ontrack.kdsl.core.support.name
+import net.nemerosa.ontrack.kdsl.core.support.resources
 import net.nemerosa.ontrack.kdsl.model.KDSLLabels.Companion.GRAPHQL_LABEL
 import net.nemerosa.ontrack.kdsl.model.support.query
 

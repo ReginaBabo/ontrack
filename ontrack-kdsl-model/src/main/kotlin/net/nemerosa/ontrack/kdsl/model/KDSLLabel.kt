@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.Label
 import net.nemerosa.ontrack.dsl.LabelProviderDescription
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
-import net.nemerosa.ontrack.kdsl.core.description
-import net.nemerosa.ontrack.kdsl.core.getOptionalText
-import net.nemerosa.ontrack.kdsl.core.getText
-import net.nemerosa.ontrack.kdsl.core.parse
+import net.nemerosa.ontrack.kdsl.core.support.description
+import net.nemerosa.ontrack.kdsl.core.support.getOptionalText
+import net.nemerosa.ontrack.kdsl.core.support.getText
+import net.nemerosa.ontrack.kdsl.core.support.parse
 
 class KDSLLabel(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLEntity(json, ontrackConnector), Label {
 

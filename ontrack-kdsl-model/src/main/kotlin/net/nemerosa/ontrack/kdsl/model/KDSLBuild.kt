@@ -5,8 +5,8 @@ import net.nemerosa.ontrack.dsl.Build
 import net.nemerosa.ontrack.dsl.PromotionRun
 import net.nemerosa.ontrack.dsl.ValidationRun
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
-import net.nemerosa.ontrack.kdsl.core.description
-import net.nemerosa.ontrack.kdsl.core.name
+import net.nemerosa.ontrack.kdsl.core.support.description
+import net.nemerosa.ontrack.kdsl.core.support.name
 
 class KDSLBuild(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLProjectEntity(json, ontrackConnector), Build {
 

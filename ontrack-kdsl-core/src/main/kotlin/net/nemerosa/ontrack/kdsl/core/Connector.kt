@@ -3,6 +3,7 @@ package net.nemerosa.ontrack.kdsl.core
 import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.kdsl.client.GraphQLResponse
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
+import net.nemerosa.ontrack.kdsl.core.support.resources
 
 /**
  * Object which gets an internal link to Ontrack through an [OntrackConnector].

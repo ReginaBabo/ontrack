@@ -1,4 +1,4 @@
-package net.nemerosa.ontrack.kdsl.core
+package net.nemerosa.ontrack.kdsl.core.support
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
