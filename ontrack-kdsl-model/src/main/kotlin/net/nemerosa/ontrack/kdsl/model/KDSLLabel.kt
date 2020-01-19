@@ -4,24 +4,16 @@ import com.fasterxml.jackson.databind.JsonNode
 import net.nemerosa.ontrack.dsl.Label
 import net.nemerosa.ontrack.dsl.LabelProviderDescription
 import net.nemerosa.ontrack.kdsl.client.OntrackConnector
-import net.nemerosa.ontrack.kdsl.core.support.description
-import net.nemerosa.ontrack.kdsl.core.support.getOptionalText
-import net.nemerosa.ontrack.kdsl.core.support.getText
-import net.nemerosa.ontrack.kdsl.core.support.parse
+import net.nemerosa.ontrack.kdsl.core.support.jsonObject
+import net.nemerosa.ontrack.kdsl.core.support.jsonOptionalText
+import net.nemerosa.ontrack.kdsl.core.support.jsonText
 
 class KDSLLabel(json: JsonNode, ontrackConnector: OntrackConnector) : KDSLEntity(json, ontrackConnector), Label {
-
-    override val category: String? by lazy { json.getOptionalText("category") }
-    override val name: String by lazy { json["name"].textValue() }
-    override val description: String? by lazy { json.description }
-    override val color: String by lazy { json.getText("color") }
-    override val computedBy: LabelProviderDescription? by lazy {
-        if (json.hasNonNull("computedBy")) {
-            json.get("computedBy").parse<LabelProviderDescription>()
-        } else {
-            null
-        }
-    }
-    override val foregroundColor: String by lazy { json.getText("foregroundColor") }
-    override val display: String by lazy { json.getText("display") }
+    override val category: String? by jsonOptionalText(json)
+    override val name: String by jsonText(json)
+    override val description: String? by jsonOptionalText(json)
+    override val color: String by jsonText(json)
+    override val computedBy: LabelProviderDescription? by jsonObject(json)
+    override val foregroundColor: String by jsonText(json)
+    override val display: String by jsonText(json)
 }
