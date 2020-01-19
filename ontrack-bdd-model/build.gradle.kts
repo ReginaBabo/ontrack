@@ -9,7 +9,7 @@ dependencies {
     api("net.serenity-bdd:serenity-spring:${serenityVersion}")
     api("net.serenity-bdd:serenity-cucumber:1.9.45")
     api("org.jetbrains.kotlin:kotlin-test")
-    api(project(":ontrack-kdsl-model"))
+    api(project(":ontrack-kdsl-impl"))
     api(project(":ontrack-test-support"))
     api("org.springframework.boot:spring-boot-starter")
 

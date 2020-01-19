@@ -32,12 +32,12 @@ include(":ontrack-test-utils")
 include(":ontrack-it-utils")
 
 // Abstract DSL
-include(":ontrack-dsl-model")
+include(":ontrack-kdsl-model")
 
 // Kotlin DSL
 include(":ontrack-kdsl-client")
 include(":ontrack-kdsl-core")
-include(":ontrack-kdsl-model")
+include(":ontrack-kdsl-impl")
 include(":ontrack-kdsl-test")
 
 // E2E testing
